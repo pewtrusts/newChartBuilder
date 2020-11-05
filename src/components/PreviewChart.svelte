@@ -2,14 +2,22 @@
     import Highcharts from 'highcharts';
     import config from '@Project/config.json';
     import { ChartConfig } from '@Project/store.js';
+import { resolve } from 'path';
 
     Highcharts.setOptions(config);
 </script>
 <script>
     let chart = undefined;
-    let chartContainer = undefined;
-    ChartConfig.subscribe(config => {
-        if ( config.series.length == 0 || chartContainer == undefined ){
+    let containerResolve;
+    let containerPromise = new Promise(resolve => {
+        containerResolve = resolve;
+    });
+    function containerUse(node){
+        containerResolve(node);
+    }
+    ChartConfig.subscribe(async config => {
+        const chartContainer = await containerPromise;
+        if ( config.series.length == 0 ){
             return; // the initial config object has no series
         }
         if ( chart ){
@@ -20,4 +28,4 @@
     });
 </script>
 <style></style>
-<div bind:this="{chartContainer}"></div>
+<div use:containerUse></div>
