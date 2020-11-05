@@ -1,17 +1,17 @@
-import { get } from 'svelte/store';
-import { ChartConfig } from '../store';
+import { SeriesData } from '../store';
 export default function _createSeriesData(data) {
     // return a HC series config object based on the data
-    const config = get(ChartConfig);
-    data[0].slice(1).forEach((valueColumn, i) => {
-        const serie = config.series[i] || {};
-        serie.data = data.slice(1).map(row => {
-            return {
+    const seriesData = data[0].slice(1).map((valueColumn, i) => {
+        return data.slice(1).map((row,j) => {
+            return j == 0 ? {
                 x: row[0],
                 y: row[i + 1],
-            };
+                seriesName: data[0][i + 1]
+            } : {
+                x: row[0],
+                y: row[i + 1],
+            }
         });
-        config.series[i] = serie;
     });
-    ChartConfig.set(config);
+    SeriesData.set(seriesData);
 }

@@ -36,6 +36,7 @@
     }
     function transpose(){
         data =  data[0].map((_, i) => [...data.map(row => row[i])]);
+        createSeriesData(data);
     }
 </script>
 <style>
