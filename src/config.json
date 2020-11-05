@@ -1,0 +1,6 @@
+{
+    "lang":{
+        "thousandsSep": ",",
+        "numericSymbols": ["k","m","b","t"]
+    }
+}

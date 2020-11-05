@@ -45,6 +45,7 @@ module.exports = env => {
                 svelte: path.resolve('node_modules', 'svelte'),
                 "@Submodule": path.resolve('submodules'),
                 "@Project": path.resolve('src'),
+                "@Script": path.resolve('src/scripts'),
                 "@Component": path.resolve('src/components'),
             },
             extensions: ['.mjs', '.js', '.svelte'],
