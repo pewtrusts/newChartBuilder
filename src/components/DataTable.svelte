@@ -2,6 +2,7 @@
     import Sprite from './Sprite.svelte';
     import _data from '@Project/data/gdp.csv';
     import createSeriesData from '@Script/create-series.js';
+    import EditableCell from '@Component/EditableCell.svelte';
     /* for testing data is being imported directly. will come from user input */
     const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     function returnColumnLetters(i){
@@ -88,39 +89,6 @@
     .bar-slot--column:last-child {
         border-right-width: 0;
     }
-    .string {
-        text-align: left;
-        color: orange;
-    }
-    .number {
-        font-family: monospace;
-        text-align: right;
-        color: blue;
-    }
-    .null {
-        text-align: center;
-        color: lightgray
-    }
-    .boolean {
-        font-family: monospace;
-        text-align: center;
-        color: darkred;
-    }
-    .head--number-column {
-        text-align: right;
-    }
-    .head--string-column {
-        text-align: left;
-    }
-    td,th {
-        width: 100px;
-        min-width: 100px;
-        height: 40px;
-        border-bottom: 1px solid lightgray;
-        border-right: 1px solid lightgray;
-        padding-right: 8px;
-        padding-left: 8px;
-    }
     .transpose {
         position: absolute;
         top: 0;
@@ -141,16 +109,16 @@
         <thead>
             <tr>
                 {#each data[0] as columnHead, i}
-                <th scope="column" class="{returnValueType(columnHead)} {returnHeadClass(i)}">{columnHead}</th>
+                <EditableCell bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
                 {/each}
             </tr>
         </thead>
         <tbody>
-            {#each data.slice(1) as row}
+            {#each data.slice(1) as row, i}
             <tr>
-                <td class="{returnValueType(row[0])}">{row[0] || '[empty]'}</td>
-                {#each row.slice(1) as datum}
-                <td class="{returnValueType(datum)}">{datum || '[empty]'}</td>
+                <EditableCell bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
+                {#each row.slice(1) as datum, j}
+                <EditableCell bind:value="{data[i + 1][j + 1]}" row="{i + 1}" column="{j + 1}" type="td" scope="{null}" klass="{returnValueType(datum)}" />
                 {/each}
             </tr>
             {/each}

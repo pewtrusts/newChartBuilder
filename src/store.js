@@ -1,6 +1,7 @@
 import baseChart from '@Project/base-chart-config.json';
 import { writable, readable, derived } from 'svelte/store';
 
+const CellBeingEdited = writable(null);
 const BaseConfig = readable(baseChart);
 const SeriesData = writable([]);
 const ChartConfig = derived([BaseConfig, SeriesData], ([baseConfig, seriesData]) => {
@@ -15,5 +16,5 @@ const ChartConfig = derived([BaseConfig, SeriesData], ([baseConfig, seriesData])
 });
 
 export {
-    ChartConfig, SeriesData
+    CellBeingEdited, ChartConfig, SeriesData
 };
