@@ -31,7 +31,9 @@
     }
 </style>
 {#if cell == cellBeingEdited}
+    {#if !showForm}
     <button on:click="{editCell}" class="edit-button">Edit</button>
+    {/if}
     {#if showForm }
     <input use:mountForm on:change="{changeHandler}" class="edit-input" type="text" bind:value="{valueString}">
     {/if}

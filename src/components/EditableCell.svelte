@@ -2,6 +2,7 @@
     import  { CellBeingEdited } from '@Project/store.js';
     import { createEventDispatcher } from 'svelte';
     import CellContents from './CellContents.svelte';
+    import Move from './../scripts/move-focus';
     //let previousValue = undefined;
     let _cellBeingEdited;
     CellBeingEdited.subscribe(v => {
@@ -27,6 +28,26 @@
     CellBeingEdited.subscribe(v => {
         cellBeingEdited = v;
     });
+    function keydownHandler(e){
+        console.log(e.keyCode);
+        if ( e.keyCode == 13 ){ //enter
+            clickHandler.call(this);
+        }
+        if ( e.keyCode == 37 ){
+            Move.left.call(this);
+        }
+        if ( e.keyCode == 38 ){
+            e.preventDefault();
+            Move.up.call(this);
+        }
+        if ( e.keyCode == 39 ){
+            Move.right.call(this);
+        }
+        if ( e.keyCode == 40 ){
+            e.preventDefault();
+            Move.down.call(this);
+        }
+    }
     function changeHandler(){
         showForm = false;
         dispatch('dataChange', {row, column, value});
@@ -105,11 +126,11 @@
     
 </style>
 {#if type == 'th' }
-<th bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
+<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
     <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
 </th>
 {:else}
-<td bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
+<td tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
     <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
 </td>
 {/if}
