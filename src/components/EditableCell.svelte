@@ -1,6 +1,6 @@
 <script context="module">
     import  { CellBeingEdited } from '@Project/store.js';
-    import  { get } from 'svelte/store';
+    import { createEventDispatcher } from 'svelte';
     let previousValue = undefined;
     let _cellBeingEdited;
     CellBeingEdited.subscribe(v => {
@@ -21,9 +21,17 @@
     export let column;
     let cell;
     let cellBeingEdited = null;
+    let showForm = false;
+    const dispatch = createEventDispatcher();
+    function editCell(){
+        showForm = true;
+    }
     CellBeingEdited.subscribe(v => {
         cellBeingEdited = v;
     });
+    function changeHandler(){
+        dispatch('dataChange', {row, column, value});
+    }
     function clickHandler(){
         if ( cellBeingEdited == this ) return; // do nothing if focusing into cell already being edited
         if ( cellBeingEdited ){
@@ -49,6 +57,7 @@
             }
         });
     }
+    // TODO: BELOW USE SLOTS, COMPONENTS WITH CHILDREN, TO BE MORE DRY?
 </script>
 <style>
     .string {
@@ -83,21 +92,38 @@
         border-right: 1px solid lightgray;
         padding-right: 8px;
         padding-left: 8px;
+        position: relative;
     }
     .isEditable {
         background-color: magenta;
     }
+    .edit-button {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+    }
+    .edit-input {
+        width: 100px;
+        position: absolute;
+        left: 0;
+    }
 </style>
 {#if type == 'th' }
-<th bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}"  scope="{scope}">{value}
+<th bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
     {#if cell == cellBeingEdited}
-    <button class="edit">Edit</button>
+    <button on:click="{editCell}" class="edit-button">Edit</button>
+    {#if showForm }
+    <input on:change="{changeHandler}" class="edit-input" type="text" bind:value="{value}">
+    {/if}
     {/if}
 </th>
 {:else}
-<td bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}" >{value}
+<td bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
     {#if cell == cellBeingEdited}
-    <button class="edit">Edit</button>
+    <button on:click="{editCell}" class="edit-button">Edit</button>
+    {#if showForm }
+    <input on:change="{changeHandler}" class="edit-input" type="text" bind:value="{value}">
+    {/if}
     {/if}
 </td>
 {/if}

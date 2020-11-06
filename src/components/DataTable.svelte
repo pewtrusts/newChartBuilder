@@ -39,6 +39,9 @@
         data =  data[0].map((_, i) => [...data.map(row => row[i])]);
         createSeriesData(data);
     }
+    function handleDataChange(){
+        console.log(data);
+    }
 </script>
 <style>
     .datatable-container {
@@ -109,16 +112,16 @@
         <thead>
             <tr>
                 {#each data[0] as columnHead, i}
-                <EditableCell bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
+                <EditableCell on:dataChange="{handleDataChange}" bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
                 {/each}
             </tr>
         </thead>
         <tbody>
             {#each data.slice(1) as row, i}
             <tr>
-                <EditableCell bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
+                <EditableCell on:dataChange="{handleDataChange}" bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
                 {#each row.slice(1) as datum, j}
-                <EditableCell bind:value="{data[i + 1][j + 1]}" row="{i + 1}" column="{j + 1}" type="td" scope="{null}" klass="{returnValueType(datum)}" />
+                <EditableCell on:dataChange="{handleDataChange}" bind:value="{data[i + 1][j + 1]}" row="{i + 1}" column="{j + 1}" type="td" scope="{null}" klass="{returnValueType(datum)}" />
                 {/each}
             </tr>
             {/each}
