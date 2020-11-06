@@ -41,6 +41,7 @@
     }
     function handleDataChange(e){
         console.log(e,data);
+        createSeriesData(data);
     }
 </script>
 <style>
