@@ -39,8 +39,8 @@
         data =  data[0].map((_, i) => [...data.map(row => row[i])]);
         createSeriesData(data);
     }
-    function handleDataChange(){
-        console.log(data);
+    function handleDataChange(e){
+        console.log(e,data);
     }
 </script>
 <style>

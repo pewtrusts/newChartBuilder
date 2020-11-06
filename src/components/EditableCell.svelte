@@ -1,7 +1,9 @@
 <script context="module">
     import  { CellBeingEdited } from '@Project/store.js';
     import { createEventDispatcher } from 'svelte';
-    let previousValue = undefined;
+    import CellContents from './CellContents.svelte';
+    import ParseDynamic from './../scripts/parse-dynamic.js';
+    //let previousValue = undefined;
     let _cellBeingEdited;
     CellBeingEdited.subscribe(v => {
         _cellBeingEdited = v;
@@ -11,6 +13,7 @@
             _cellBeingEdited.isEditable = false;
         }
     }
+    
 </script>
 <script>
     export let type;
@@ -30,6 +33,7 @@
         cellBeingEdited = v;
     });
     function changeHandler(){
+        value = ParseDynamic(value);
         dispatch('dataChange', {row, column, value});
     }
     function clickHandler(){
@@ -97,33 +101,14 @@
     .isEditable {
         background-color: magenta;
     }
-    .edit-button {
-        position: absolute;
-        bottom: 100%;
-        right: 0;
-    }
-    .edit-input {
-        width: 100px;
-        position: absolute;
-        left: 0;
-    }
+    
 </style>
 {#if type == 'th' }
 <th bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
-    {#if cell == cellBeingEdited}
-    <button on:click="{editCell}" class="edit-button">Edit</button>
-    {#if showForm }
-    <input on:change="{changeHandler}" class="edit-input" type="text" bind:value="{value}">
-    {/if}
-    {/if}
+    <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
 </th>
 {:else}
 <td bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{()=>{}}" on:click="{clickHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
-    {#if cell == cellBeingEdited}
-    <button on:click="{editCell}" class="edit-button">Edit</button>
-    {#if showForm }
-    <input on:change="{changeHandler}" class="edit-input" type="text" bind:value="{value}">
-    {/if}
-    {/if}
+    <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
 </td>
 {/if}
