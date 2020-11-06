@@ -2,17 +2,12 @@
     import  { CellBeingEdited } from '@Project/store.js';
     import { createEventDispatcher } from 'svelte';
     import CellContents from './CellContents.svelte';
-    import ParseDynamic from './../scripts/parse-dynamic.js';
     //let previousValue = undefined;
     let _cellBeingEdited;
     CellBeingEdited.subscribe(v => {
         _cellBeingEdited = v;
     });
-    function bodyClickHandler(){
-        if ( _cellBeingEdited ){
-            _cellBeingEdited.isEditable = false;
-        }
-    }
+    
     
 </script>
 <script>
@@ -33,8 +28,14 @@
         cellBeingEdited = v;
     });
     function changeHandler(){
-        value = ParseDynamic(value);
+        showForm = false;
         dispatch('dataChange', {row, column, value});
+    }
+    function bodyClickHandler(){
+        if ( _cellBeingEdited ){
+            _cellBeingEdited.isEditable = false;
+            showForm = false;
+        }
     }
     function clickHandler(){
         if ( cellBeingEdited == this ) return; // do nothing if focusing into cell already being edited
@@ -99,7 +100,7 @@
         position: relative;
     }
     .isEditable {
-        background-color: magenta;
+        outline: 2px solid magenta;
     }
     
 </style>
