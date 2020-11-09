@@ -1,5 +1,6 @@
 import 'normalize-css';
 import './css/styles.scss';
+import 'highcharts/css/highcharts.css';
 import App from './App.svelte';
 
 window.App = new App({
