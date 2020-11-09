@@ -1,3 +1,4 @@
+/* global require, process, __dirname */
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -35,7 +36,7 @@ const plugins = [
     }),
 ];
 
-module.exports = env => {
+module.exports = () => {
     return {
         entry: {
             app: './src/index.js',
@@ -103,7 +104,7 @@ module.exports = env => {
                     ]
                 },
                 {
-                    test: /\.(svg|png|jpe?g|gif)$/i,
+                    test: /\.(svg|png|jpe?g|gif|csv)$/i,
                     use: [
                       {
                         loader: 'file-loader',
@@ -119,7 +120,7 @@ module.exports = env => {
                     use: 'html-loader',
                     exclude: /index\.html/
                 },
-                {
+               /* {
                     test: /\.csv$/,
                     use: {
                         loader: 'csv-loader',
@@ -129,7 +130,7 @@ module.exports = env => {
                             skipEmptyLines: true
                         }
                     }
-                }
+                }*/
 
             ]
         },

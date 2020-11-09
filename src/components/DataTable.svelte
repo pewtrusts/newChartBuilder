@@ -1,6 +1,5 @@
 <script context="module">
     import Sprite from './Sprite.svelte';
-    import _data from '@Project/data/gdp.csv';
     import createSeriesData from '@Script/create-series.js';
     import EditableCell from '@Component/EditableCell.svelte';
     /* for testing data is being imported directly. will come from user input */
@@ -23,7 +22,7 @@
     
 </script>
 <script>
-    let data = _data;
+    export let data;
     createSeriesData(data);
     // TO DO:  add typing for boolean, null
     console.log(data); // for testing purpose, bringing data in as an import. later it will be parse from pasted in tsv

@@ -2,7 +2,6 @@
     import Highcharts from 'highcharts';
     import config from '@Project/config.json';
     import { ChartConfig } from '@Project/store.js';
-import { resolve } from 'path';
 
     Highcharts.setOptions(config);
 </script>
