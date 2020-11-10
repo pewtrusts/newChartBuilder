@@ -24,6 +24,7 @@
         } else {
             chart = Highcharts.chart(chartContainer, config); // if not construct a new one
         }
+        console.log(chart);
     });
 </script>
 <style></style>

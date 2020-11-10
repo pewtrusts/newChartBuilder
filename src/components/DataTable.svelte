@@ -2,6 +2,7 @@
     import Sprite from './Sprite.svelte';
     import createSeriesData from '@Script/create-series.js';
     import EditableCell from '@Component/EditableCell.svelte';
+    
     /* for testing data is being imported directly. will come from user input */
     const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     function returnColumnLetters(i){
@@ -19,7 +20,6 @@
             typeof d == 'boolean' ? 'boolean' : 
             'string';
     }
-    
 </script>
 <script>
     export let data;

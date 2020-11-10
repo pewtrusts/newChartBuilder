@@ -1,0 +1,6 @@
+{
+    "dateTimeLabelFormats": {
+        "day": "%b %e",
+        "week": "%b %e"
+    }
+}

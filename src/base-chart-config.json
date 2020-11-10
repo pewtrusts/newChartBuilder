@@ -8,5 +8,6 @@
   "subtitle": {
     "text": "subtitle"
   },
-  "series":[]
+  "series": [],
+  "xAxis": [{}]
 }

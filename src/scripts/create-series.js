@@ -1,17 +1,23 @@
-import { SeriesData } from '../store';
+import { SeriesData, XAxesTypes  } from '../store';
+import toDate from './coerce-to-date';
+// return a HC series config object based on the data
 export default function _createSeriesData(data) {
-    // return a HC series config object based on the data
-    const seriesData = data[0].slice(1).map((valueColumn, i) => {
-        return data.slice(1).map((row,j) => {
-            return j == 0 ? {
-                x: row[0],
-                y: row[i + 1],
-                seriesName: data[0][i + 1]
-            } : {
-                x: row[0],
-                y: row[i + 1],
-            }
-        });
+    // map of x-axis values as coerced to dates.
+    const asDateTime = data.slice(1).map(row => {
+        return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
     });
-    SeriesData.set(seriesData);
+    const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
+    const series = data[0].slice(1).map((valueColumn, i) => {
+        return {
+            name: valueColumn,
+            data: data.slice(1).map((row, j) => {
+                return {
+                    x: shouldBeDateTime ? asDateTime[j] : row[0],
+                    y: row[i + 1]
+                };
+            })
+        }
+    });
+    if (shouldBeDateTime) XAxesTypes.set('datetime');
+    SeriesData.set({series}); // eg { series: [{},{},{}] }
 }

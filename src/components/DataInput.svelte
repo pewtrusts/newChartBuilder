@@ -1,6 +1,8 @@
 <script context="module">
     import Papa from 'papaparse';
-    import dataFile from '@Project/data/gdp.csv';
+    //import dataFile from '@Project/data/gdp.csv';
+    import dataFile from '@Project/data/datetime-example.csv';
+
 </script>
 <script>
     export let dataResolve;
