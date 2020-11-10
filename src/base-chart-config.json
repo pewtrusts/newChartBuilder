@@ -1,13 +1,17 @@
 {
-  "chart": {
-    "styledMode": true
-  },
-  "title": {
-    "text": "title"
-  },
-  "subtitle": {
-    "text": "subtitle"
-  },
-  "series": [],
-  "xAxis": [{}]
+  "series": [
+    {
+      "name": "Series 1",
+      "data": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 2
+        }
+      ]
+    }
+  ]
 }

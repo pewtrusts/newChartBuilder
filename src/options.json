@@ -1,6 +1,24 @@
 {
-    "dateTimeLabelFormats": {
-        "day": "%b %e",
-        "week": "%b %e"
+    "chart": {
+        "styledMode": false
+    },
+    "lang": {
+        "thousandsSep": ",",
+        "numericSymbols": [
+            "k",
+            "m",
+            "b", 
+            "t"
+        ]
+    },
+    "tooltip": {
+        "dateTimeLabelFormats": {
+            "day": "%b %e",
+            "week": "%b %e"
+        },
+        "xDateFormat": "%Y-%m-%d"
+    },
+    "title": {
+        "text": "Foo bar"
     }
 }
