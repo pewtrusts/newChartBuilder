@@ -1,8 +1,21 @@
 //import { XAxesTypes  } from '../store';
 import toDate from './coerce-to-date';
+const timeUnits =
+{
+    millisecond: 1,
+    second:      1000,
+    minute:      60000,
+    hour:        3600000,
+    day:         86400000,
+    week:        604800000,
+    month:       2419200000,
+    year:        31449600000,
+};
 // return a HC series config object based on the data
 export default function _updateChartData(data, Chart) {
     // map of x-axis values as coerced to dates.
+    // info: intervals was used to set specific tick points until i found the more immediate
+    // and simpler issue was the startOfWeek setting. keeping here as comments for later
     var intervals;
     const asDateTime = data.slice(1).map(row => {
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
@@ -38,17 +51,27 @@ export default function _updateChartData(data, Chart) {
         // so you will not want to override explicitly set options
     }
     if (intervals && intervals.size == 1) {
-        newConfig.xAxis.tickPositions = series[0].data.map(d => d.x);
-        newConfig.xAxis.labels = {
-            formatter: function () {
-                this.dateTimeLabelFormat = '%b %e'; // TO DO: gonna need logic to select the right datetimeFormat
-                return Chart.xAxis[0].defaultLabelFormatter.call(this);
-            }
-        };
-        //newConfig.xAxis.labels = { formatter: () => 'foo bar' };
+        if ([...intervals][0] === timeUnits.week) {
+            let dayIndex = +Chart.time.dateFormat('%w', asDateTime[0]);
+            newConfig.xAxis.startOfWeek = dayIndex;
+            console.log({ dayIndex, newConfig });
+        }
     }
+    /* 
+     COMMENTING THIS OUT. startOfWeek SETTING WAS THE MORE IMMEDIATE ISSUE. SAVING FOR PSSIBLE ALETR USE
+    if (intervals && intervals.size == 1) {
+         let positions = series[0].data.map(d => d.x);
+         newConfig.xAxis.tickPositions = positions;
+         newConfig.xAxis.labels = {
+             formatter: function () {
+                 this.dateTimeLabelFormat = '%b %e'; // TO DO: gonna need logic to select the right datetimeFormat
+                 return Chart.xAxis[0].defaultLabelFormatter.call(this);
+             }
+         };
+         //newConfig.xAxis.labels = { formatter: () => 'foo bar' };
+     }*/
     //TODO: if datetime will have to adjust dateTimeLabelFormats for x-axis and tooltip, and tooltip.xDateFormat
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
-    console.log({Chart});
+    console.log({ Chart });
     Chart.update(newConfig, true, true); // p2: redraw; p3: one-to-one in order to add/remove series
 } 

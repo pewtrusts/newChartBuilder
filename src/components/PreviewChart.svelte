@@ -1,5 +1,6 @@
 <script context="module">
-    import Highcharts from 'highcharts';
+    // TO DO: SWITCH TO MINIFIED HC SRC
+    import Highcharts from 'highcharts/highcharts.src.js';
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
     Highcharts.setOptions(options);

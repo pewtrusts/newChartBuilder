@@ -27,7 +27,7 @@
        
         "dateTimeLabelFormats": {
             "day": "%b %e", 
-            "week": "%b %e"
+            "week": "%b %e" 
         }
        
     }
