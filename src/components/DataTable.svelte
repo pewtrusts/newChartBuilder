@@ -1,6 +1,6 @@
 <script context="module">
     import Sprite from './Sprite.svelte';
-    import createSeriesData from '@Script/create-series.js';
+    import updateChartData from '@Script/update-chart-data.js';
     import EditableCell from '@Component/EditableCell.svelte';
     
     /* for testing data is being imported directly. will come from user input */
@@ -23,9 +23,7 @@
 </script>
 <script>
     export let data;
-    createSeriesData(data);
-    // TO DO:  add typing for boolean, null
-    console.log(data); // for testing purpose, bringing data in as an import. later it will be parse from pasted in tsv
+    export let Chart;
     function returnHeadClass(i){
         if (data.slice(1).every(row => {
             return ( typeof row[i] === 'number' || row[i] == null );
@@ -36,11 +34,11 @@
     }
     function transpose(){
         data =  data[0].map((_, i) => [...data.map(row => row[i])]);
-        createSeriesData(data);
+        updateChartData(data, Chart);
     }
     function handleDataChange(e){
-        console.log(e,data);
-        createSeriesData(data);
+        console.log({e,data});
+        updateChartData(data, Chart);
     }
 </script>
 <style>

@@ -37,7 +37,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "localpreview": "cross-env NODE_ENV=localpreview webpack",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --content-base public --open",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --content-base public",
     "broadcast": "cross-env NODE_ENV=development webpack-dev-server --content-base public --open --host 0.0.0.0 --port 8000"
   }
 }

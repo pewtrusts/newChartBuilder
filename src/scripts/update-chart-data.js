@@ -1,7 +1,7 @@
 import { XAxesTypes  } from '../store';
 import toDate from './coerce-to-date';
 // return a HC series config object based on the data
-export default function _createSeriesData(data) {
+export default function _updateChartData(data, Chart) {
     // map of x-axis values as coerced to dates.
     const asDateTime = data.slice(1).map(row => {
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
@@ -19,8 +19,5 @@ export default function _createSeriesData(data) {
         }
     });
     if (shouldBeDateTime) XAxesTypes.set('datetime');
-    // TO DO SOMEWHERE NEED TO HANDLE UPDATING CHART BASED ON THIS SORT OF SETTING
-    // OK TO BE OPINIONATED RE ONLY ON XAXIS?
-    return series;
- /*   SeriesData.set({series}); // eg { series: [{},{},{}] }*/
+    Chart.update({ series: series }, true, true); // p2: redraw; p3: one-to-one in order to add/remove series
 }

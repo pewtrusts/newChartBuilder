@@ -29,7 +29,6 @@
         cellBeingEdited = v;
     });
     function keydownHandler(e){
-        console.log(e.keyCode);
         if ( e.keyCode == 13 ){ //enter
             clickHandler.call(this);
         }
@@ -64,7 +63,6 @@
             cellBeingEdited.isEditable = false;
         }
         this.isEditable = true;
-        console.log(cell, this, cellBeingEdited);
     }
     function setGetterSetter(node){
         cell = node;
