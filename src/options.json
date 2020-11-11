@@ -15,10 +15,20 @@
         "dateTimeLabelFormats": {
             "day": "%b %e",
             "week": "%b %e"
-        },
-        "xDateFormat": "%Y-%m-%d"
+        }
+    },
+    "time": {
+        "useUTC": false
     },
     "title": {
         "text": "Foo bar"
+    },
+    "xAxis": {
+       
+        "dateTimeLabelFormats": {
+            "day": "%b %e", 
+            "week": "%b %e"
+        }
+       
     }
 }
