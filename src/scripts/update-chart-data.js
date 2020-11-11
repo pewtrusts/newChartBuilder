@@ -1,4 +1,4 @@
-//import { XAxesTypes  } from '../store';
+import { IsDateTime  } from '../store';
 import toDate from './coerce-to-date';
 const timeUnits =
 {
@@ -22,6 +22,7 @@ export default function _updateChartData(data, Chart) {
     });
     const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
     if (shouldBeDateTime) {
+        IsDateTime.set(true);
         intervals = asDateTime.reduce(function (acc, cur, i, array) {
             if (i === 0) {
                 return acc;

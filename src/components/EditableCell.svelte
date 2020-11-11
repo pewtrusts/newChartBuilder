@@ -18,6 +18,7 @@
     export let value;
     export let row;
     export let column;
+    export let isDateTime;
     let cell;
     let cellBeingEdited = null;
     let showForm = false;
@@ -86,7 +87,8 @@
 <style>
     .string {
         text-align: left;
-        color: orange;
+        color: sienna;
+        font-size: 0.85rem;
     }
     .number {
         font-family: monospace;
@@ -100,7 +102,13 @@
     .boolean {
         font-family: monospace;
         text-align: center;
-        color: darkred;
+        color: purple;
+    }
+    .date {
+        color: midnightblue;
+    }
+    .head {
+        color: #333;
     }
     .head--number-column {
         text-align: right;
@@ -111,24 +119,30 @@
     td,th {
         width: 100px;
         min-width: 100px;
+        max-width: 100px;
         height: 40px;
         border-bottom: 1px solid lightgray;
         border-right: 1px solid lightgray;
         padding-right: 8px;
         padding-left: 8px;
         position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     .isEditable {
         outline: 2px solid magenta;
     }
-    
+    .isDateTime {
+        background-color: magenta;
+    }
 </style>
 {#if type == 'th' }
-<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
+<th class:isDateTime tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
     <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
 </th>
 {:else}
-<td tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
+<td class:isDateTime tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
     <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
 </td>
 {/if}

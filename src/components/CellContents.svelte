@@ -21,7 +21,7 @@
 <style>
     .edit-button {
         position: absolute;
-        bottom: 100%;
+        top: 0;
         right: 0;
     }
     .edit-input {
