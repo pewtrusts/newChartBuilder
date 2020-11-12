@@ -2,7 +2,7 @@
     import Sprite from './Sprite.svelte';
     import updateChartData from '@Script/update-chart-data.js';
     import EditableCell from '@Component/EditableCell.svelte';
-    import { IsDateTime } from '@Project/store';
+    import { XAxisType } from '@Project/store';
     
     /* for testing data is being imported directly. will come from user input */
     const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
@@ -25,7 +25,7 @@
 <script>
     export let data;
     export let Chart;
-    let isDateTime = false;
+    let xAxisType = 'linear';
     function returnHeadClass(i){
         if (data.slice(1).every(row => {
             return ( typeof row[i] === 'number' || row[i] == null );
@@ -42,8 +42,8 @@
         console.log({e,data});
         updateChartData(data, Chart);
     }
-    IsDateTime.subscribe(v => {
-        isDateTime = !!v;
+    XAxisType.subscribe(v => {
+        xAxisType = v;
     });
 </script>
 <style>
@@ -87,8 +87,8 @@
         border-bottom: 1px solid #fff;
     }
     .bar-slot--column {
-        width: 100px;
-        min-width: 100px;
+        width: 110px;
+        min-width: 110px;
         height: 40px;
         border-right: 1px solid #fff;
     }
@@ -112,26 +112,6 @@
 </style>
 <h2>DataTable</h2>
 <div class="datatable-container">
-    <table class="datatable">
-
-        <thead>
-            <tr>
-                {#each data[0] as columnHead, i}
-                <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
-                {/each}
-            </tr>
-        </thead>
-        <tbody>
-            {#each data.slice(1) as row, i}
-            <tr>
-                <EditableCell {isDateTime} on:dataChange="{handleDataChange}" bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
-                {#each row.slice(1) as datum, j}
-                <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[i + 1][j + 1]}" row="{i + 1}" column="{j + 1}" type="td" scope="{null}" klass="{returnValueType(datum)}" />
-                {/each}
-            </tr>
-            {/each}
-        </tbody>
-    </table>
     <div class="bar bar--top">
         {#each data[0] as _, i}
         <div class="bar-slot bar-slot--column"><span>{returnColumnLetters(i)}</span></div>
@@ -146,4 +126,23 @@
         <Sprite width="15" id="loop-circular" />
         <span class="visually-hidden">transpose data</span>
     </button>
+    <table class="datatable">
+        <thead>
+            <tr>
+                {#each data[0] as columnHead, i}
+                <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
+                {/each}
+            </tr>
+        </thead>
+        <tbody>
+            {#each data.slice(1) as row, i}
+            <tr>
+                <EditableCell isDateTime="{xAxisType == 'datetime'}" on:dataChange="{handleDataChange}" bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
+                {#each row.slice(1) as datum, j}
+                <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[i + 1][j + 1]}" row="{i + 1}" column="{j + 1}" type="td" scope="{null}" klass="{returnValueType(datum)}" />
+                {/each}
+            </tr>
+            {/each}
+        </tbody>
+    </table>
 </div>

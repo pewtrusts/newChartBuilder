@@ -3,6 +3,7 @@
     import { createEventDispatcher } from 'svelte';
     import CellContents from './CellContents.svelte';
     import Move from './../scripts/move-focus';
+    import Sprite from './Sprite.svelte';
     //let previousValue = undefined;
     let _cellBeingEdited;
     CellBeingEdited.subscribe(v => {
@@ -88,7 +89,7 @@
     .string {
         text-align: left;
         color: sienna;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
     .number {
         font-family: monospace;
@@ -117,13 +118,13 @@
         text-align: left;
     }
     td,th {
-        width: 100px;
-        min-width: 100px;
-        max-width: 100px;
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
         height: 40px;
         border-bottom: 1px solid lightgray;
         border-right: 1px solid lightgray;
-        padding-right: 8px;
+        padding-right: 25px;
         padding-left: 8px;
         position: relative;
         overflow: hidden;
@@ -133,16 +134,20 @@
     .isEditable {
         outline: 2px solid magenta;
     }
-    .isDateTime {
-        background-color: magenta;
-    }
+    
 </style>
 {#if type == 'th' }
-<th class:isDateTime tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
+<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
     <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
+    {#if isDateTime}
+    <Sprite width="15" id="calendar" style="position: absolute; right: 5; fill: lightgray;" />
+    {/if}
 </th>
 {:else}
-<td class:isDateTime tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
+<td tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
     <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
+    {#if isDateTime}
+    <Sprite width="15" id="calendar" style="position: absolute; right: 5; fill: lightgray;" />
+    {/if}
 </td>
 {/if}

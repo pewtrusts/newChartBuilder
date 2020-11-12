@@ -3,6 +3,7 @@
 		display: none;
 	}
 </style>
+<!-- open iconic https://useiconic.com/open -->
 <svg class="sprite" version="1.1" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <symbol id="account-login" viewBox="0 0 8 8">

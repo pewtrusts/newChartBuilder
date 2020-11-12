@@ -1,5 +1,11 @@
-import { IsDateTime  } from '../store';
+import { XAxisType } from '../store';
 import toDate from './coerce-to-date';
+/*
+ * TO DO: All of the infered axis types (linear, datetime, categorical) etc need to be
+ * able to be overridden by user choice. ie for evenly spaces dates it might be better to
+ * treat as categories rather than as dates. or for months or quarters especially
+ */
+ 
 const timeUnits =
 {
     millisecond: 1,
@@ -21,8 +27,9 @@ export default function _updateChartData(data, Chart) {
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
     });
     const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
+    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).every(row => typeof row[0] == 'string');
     if (shouldBeDateTime) {
-        IsDateTime.set(true);
+        XAxisType.set('datetime');
         intervals = asDateTime.reduce(function (acc, cur, i, array) {
             if (i === 0) {
                 return acc;
@@ -31,8 +38,22 @@ export default function _updateChartData(data, Chart) {
             return acc;
         }, new Set());
         console.log(intervals);
+    } else if (shouldBeCategorical) {
+        XAxisType.set('categorical');
+    } else {
+        XAxisType.set('linear');
     }
     const series = data[0].slice(1).map((valueColumn, i) => {
+        if (shouldBeCategorical) {
+            return {
+                name: valueColumn,
+                data: data.slice(1).map(row => {
+                    return {
+                        y: row[i + 1]
+                    };
+                })
+            };
+        }
         return {
             name: valueColumn,
             data: data.slice(1).map((row, j) => {
@@ -47,7 +68,10 @@ export default function _updateChartData(data, Chart) {
     if (shouldBeDateTime) {
         // to do this may not work if xAxis userOptions have already been passed to Chart
         newConfig.xAxis = { type: 'datetime' };
-    } else {
+    } else if (shouldBeCategorical) {
+        newConfig.xAxis = { type: 'category', categories: data.slice(1).map(row => row[0]) };
+    }
+    else {
         newConfig.xAxis = { type: 'linear' }; // TO DO : handle other data types ie categorical. will later be able to be set sepaarately, too
         // so you will not want to override explicitly set options
     }
