@@ -4,11 +4,14 @@
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
     Highcharts.setOptions(options);
+    export function createChart(node){
+        return Highcharts.chart(node, config);
+    }
 </script>
 <script>
     export let Chart;
     function containerUse(node){
-        Chart = Highcharts.chart(node, config);
+        Chart = createChart(node);
     }
 </script>
 <style></style>

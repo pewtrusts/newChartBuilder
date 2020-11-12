@@ -5,7 +5,7 @@ import toDate from './coerce-to-date';
  * able to be overridden by user choice. ie for evenly spaces dates it might be better to
  * treat as categories rather than as dates. or for months or quarters especially
  */
- 
+
 const timeUnits =
 {
     millisecond: 1,
@@ -67,12 +67,12 @@ export default function _updateChartData(data, Chart) {
     const newConfig = { series };
     if (shouldBeDateTime) {
         // to do this may not work if xAxis userOptions have already been passed to Chart
-        newConfig.xAxis = { type: 'datetime' };
+        newConfig.xAxis = { type: 'datetime', categories: null };
     } else if (shouldBeCategorical) {
         newConfig.xAxis = { type: 'category', categories: data.slice(1).map(row => row[0]) };
     }
     else {
-        newConfig.xAxis = { type: 'linear' }; // TO DO : handle other data types ie categorical. will later be able to be set sepaarately, too
+        newConfig.xAxis = { type: 'linear', categories: null }; // TO DO : handle other data types ie categorical. will later be able to be set sepaarately, too
         // so you will not want to override explicitly set options
     }
     if (intervals && intervals.size == 1) {

@@ -3,6 +3,7 @@
     import updateChartData from '@Script/update-chart-data.js';
     import EditableCell from '@Component/EditableCell.svelte';
     import { XAxisType } from '@Project/store';
+    import { createChart } from '@Component/PreviewChart.svelte';
     
     /* for testing data is being imported directly. will come from user input */
     const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
@@ -35,7 +36,10 @@
         return 'head head--string-column';
     }
     function transpose(){
+        const container = Chart.renderTo;
+        Chart.destroy();
         data =  data[0].map((_, i) => [...data.map(row => row[i])]);
+        Chart = createChart(container);
         updateChartData(data, Chart);
     }
     function handleDataChange(e){
