@@ -24,13 +24,13 @@
     let cellBeingEdited = null;
     let showForm = false;
     const dispatch = createEventDispatcher();
-    function editCell(){
-        showForm = true;
-    }
     CellBeingEdited.subscribe(v => {
         cellBeingEdited = v;
     });
-    function keydownHandler(e){
+    function keyupHandler(e){
+        if (e.keyCode == 9 ){// tab 
+            this.isEditable = false;
+        }
         if ( e.keyCode == 13 ){ //enter
             clickHandler.call(this);
         }
@@ -60,6 +60,7 @@
         }
     }
     function clickHandler(){
+        console.log({this: this});
         if ( cellBeingEdited == this ) return; // do nothing if focusing into cell already being edited
         if ( cellBeingEdited ){
             cellBeingEdited.isEditable = false;
@@ -131,21 +132,18 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .isEditable {
-        outline: 2px solid magenta;
-    }
     
 </style>
 {#if type == 'th' }
-<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
-    <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
+<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keyup="{keyupHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
+    <CellContents bind:value {cell} {cellBeingEdited} {showForm} {changeHandler} />
     {#if isDateTime}
     <Sprite width="15" id="calendar" style="position: absolute; right: 5; fill: lightgray;" />
     {/if}
 </th>
 {:else}
-<td tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keydown="{keydownHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
-    <CellContents bind:value {cell} {cellBeingEdited} {editCell} {showForm} {changeHandler} />
+<td tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keyup="{keyupHandler}" data-row="{row}" data-column="{column}" class="{klass}">{value}
+    <CellContents bind:value {cell} {cellBeingEdited} {showForm} {changeHandler} />
     {#if isDateTime}
     <Sprite width="15" id="calendar" style="position: absolute; right: 5; fill: lightgray;" />
     {/if}

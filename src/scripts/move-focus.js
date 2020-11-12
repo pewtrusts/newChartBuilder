@@ -5,6 +5,7 @@ function first() {
     this.children[0].focus();
 }
 function left() {
+    this.isEditable = false;
     if (this.previousElementSibling) {
         this.previousElementSibling.focus();
         return;
@@ -16,6 +17,7 @@ function left() {
     })
 }
 function right() {
+    this.isEditable = false;
     if (this.nextElementSibling) {
         this.nextElementSibling.focus();
         return;
@@ -27,6 +29,7 @@ function right() {
     })
 }
 function up() {
+    this.isEditable = false;
     return new Promise((resolve) => {
         const childIndex = Array.from(this.parentElement.children).findIndex(x => x == this);
         if (this.parentElement.previousElementSibling) {
@@ -41,6 +44,7 @@ function up() {
     });
 }
 function down() {
+    this.isEditable = false;
     return new Promise((resolve) => {
         const childIndex = Array.from(this.parentElement.children).findIndex(x => x == this);
         if (this.parentElement.nextElementSibling) {
