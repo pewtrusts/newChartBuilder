@@ -1,28 +1,35 @@
 <script context="module">
     import Papa from "papaparse";
+    import updateChartData from "@Script/update-chart-data.js";
     //import dataFile from '@Project/data/gdp.csv';
     //import dataFile from "@Project/data/datetime-example.csv";
     //import dataFile from "@Project/data/categorical-example.csv";
-    import updateChartData from "@Script/update-chart-data.js";
+    const dataFile = null;
 </script>
 
 <script>
     export let Chart;
-    export let rawData;
+    export let data;
     let textarea;
     function submitHandler(){
-        const inputString = textarea.value.replace(/\r/g, ''); // remove /\r/s from Windows text
-        if ( inputString === '' ){
+        const inputString = dataFile ? '' : textarea.value.replace(/\r/g, ''); // remove /\r/s from Windows text
+        if ( inputString === '' && !dataFile ){
             return; // TO DO: what should happen if empty string is submitted?
         }
-        Papa.parse(inputString, { // TO DO: error handling  
+        Papa.parse((dataFile || inputString), { // TO DO: error handling  
+            download: !!dataFile,
             dynamicTyping: true,
             complete(results) {
-                rawData = results.data;
-                updateChartData(rawData, Chart);
+                data = results.data;
+                updateChartData(data, Chart);
             },
             skipEmptyLines: true,
         });
+    }
+    updateChartData(data, Chart);
+    /* for dev only */
+    if ( dataFile ) {
+        submitHandler();
     }
 
 </script>

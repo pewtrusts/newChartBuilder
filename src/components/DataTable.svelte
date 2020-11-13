@@ -4,7 +4,7 @@
     import EditableCell from '@Component/EditableCell.svelte';
     import { XAxisType } from '@Project/store';
     import { createChart } from '@Component/PreviewChart.svelte';
-    
+    import DataInput from '@Component/DataInput.svelte';
     /* for testing data is being imported directly. will come from user input */
     const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     function returnColumnLetters(i){
@@ -24,9 +24,13 @@
     }
 </script>
 <script>
-    export let data;
+    let data = [['X values','Series 1', 'Series 2', 'Series 3'],
+        [1,2,3,4],
+        [2,4,6,8],
+    ];
     export let Chart;
     let xAxisType = 'linear';
+    let showDataInput = false;
     function returnHeadClass(i){
         if (data.slice(1).every(row => {
             return ( typeof row[i] === 'number' || row[i] == null );
@@ -114,16 +118,24 @@
 
     
 </style>
+{#if showDataInput }
+<DataInput bind:Chart bind:data />
+{/if}
+<button on:click="{() => showDataInput = true}" role="button" class="from-excel">Paste</button>
 <div class="datatable-container" >
     <div class="bar bar--top">
+        {#if data}
         {#each data[0] as _, i}
         <div class="bar-slot bar-slot--column"><span>{returnColumnLetters(i)}</span></div>
         {/each}
+        {/if}
     </div>
     <div class="bar bar--left">
+        {#if data}
         {#each data as _, i}
         <div class="bar-slot bar-slot--row">{i + 1}</div>
         {/each}
+        {/if}
     </div>
     <button role="button" on:click="{transpose}" title="transpose data" class="transpose">
         <Sprite width="15" id="loop-circular" />
@@ -132,12 +144,15 @@
     <table class="datatable">
         <thead>
             <tr>
+                {#if data}
                 {#each data[0] as columnHead, i}
                 <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
                 {/each}
+                {/if}
             </tr>
         </thead>
         <tbody>
+            {#if data}
             {#each data.slice(1) as row, i}
             <tr>
                 <EditableCell isDateTime="{xAxisType == 'datetime'}" on:dataChange="{handleDataChange}" bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
@@ -146,6 +161,7 @@
                 {/each}
             </tr>
             {/each}
+            {/if}
         </tbody>
     </table>
 </div>

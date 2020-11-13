@@ -4,6 +4,7 @@
 body {
 	color: var(--text-color, #000);
 	font-family: var(--font-primary, sans);
+	padding-top: var(--banner-height, 75px);
 }
 .visually-hidden {
 	position: absolute !important;
@@ -14,4 +15,17 @@ body {
 	height: 1px !important; 
 	width: 1px !important; 
 	overflow: hidden;
+}
+.ctn {
+	width: 100%;
+	margin: 0 auto;
+}
+.ctn--full {
+	max-width: 1600px;
+}
+.ctn--inner {
+	padding: 1rem;
+}
+.flex {
+	display: flex;
 }
