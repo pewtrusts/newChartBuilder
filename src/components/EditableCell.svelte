@@ -93,7 +93,7 @@
         font-size: 0.75rem;
     }
     .number {
-        font-family: monospace;
+        font-family: var(--mono, monospace);
         text-align: right;
         color: blue;
     }
@@ -102,7 +102,7 @@
         color: lightgray
     }
     .boolean {
-        font-family: monospace;
+        font-family: var(--mono, monospace);;
         text-align: center;
         color: purple;
     }

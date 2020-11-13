@@ -1,8 +1,9 @@
 * {
     box-sizing: border-box;
 }
-h1 {
-    color: BLUE;
+body {
+	color: var(--text-color, #000);
+	font-family: var(--font-primary, sans);
 }
 .visually-hidden {
 	position: absolute !important;

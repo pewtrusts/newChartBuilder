@@ -27,13 +27,15 @@
 
 </script>
 <style>
-        .datainput {
-            display: block;
-            width: 100%;
-            height: 300px;
-        }
+    .datainput {
+        display: block;
+        width: 100%;
+        height: 300px;
+        font-family: var(--mono, monospace);
+    }
 </style>
-<label for="tsv">Paste the table from Excel below</label>
-<textarea class="datainput" bind:this={textarea} id="tsv" name="tsv"></textarea>
-<input on:click="{submitHandler}" value="submit" id="submit" type="submit" />
-<!-- TODO -->
+<div>
+    <label for="tsv">Paste the table from Excel below</label>
+    <textarea class="datainput" bind:this={textarea} id="tsv" name="tsv"></textarea>
+    <input on:click="{submitHandler}" value="submit" id="submit" type="submit" />
+</div>
