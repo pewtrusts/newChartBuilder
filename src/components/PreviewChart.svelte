@@ -10,9 +10,14 @@
 </script>
 <script>
     export let Chart;
+    export let rawData; 
     function containerUse(node){
         Chart = createChart(node);
     }
 </script>
-<style></style>
-<div use:containerUse></div>
+<style>
+    .hidden {
+        visibility: hidden;
+    }
+</style>
+<div class:hidden="{!rawData}" use:containerUse></div>

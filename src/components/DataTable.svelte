@@ -115,7 +115,7 @@
     
 </style>
 <h2>DataTable</h2>
-<div class="datatable-container">
+<div class="datatable-container" >
     <div class="bar bar--top">
         {#each data[0] as _, i}
         <div class="bar-slot bar-slot--column"><span>{returnColumnLetters(i)}</span></div>

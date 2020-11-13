@@ -10,10 +10,10 @@
 </script>
 <style></style>
 <SpriteDefs />
-{#if Chart}
+{#if Chart && !rawData}
 <DataInput bind:Chart bind:rawData />
 {/if}
-<PreviewChart bind:Chart />
 {#if Chart && rawData}
 <DataTable bind:data="{rawData}" bind:Chart />
 {/if}
+<PreviewChart {rawData} bind:Chart />
