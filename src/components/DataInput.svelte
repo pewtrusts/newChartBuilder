@@ -1,6 +1,7 @@
 <script context="module">
     import Papa from "papaparse";
     import updateChartData from "@Script/update-chart-data.js";
+    import { fade } from 'svelte/transition';
     //import dataFile from '@Project/data/gdp.csv';
     //import dataFile from "@Project/data/datetime-example.csv";
     //import dataFile from "@Project/data/categorical-example.csv";
@@ -70,7 +71,7 @@
         font-family: var(--mono, monospace);
     }
 </style>
-<div class="container">
+<div transition:fade class="container">
     <div class="screen"></div>
     <div class="inner">
         <label for="tsv">Paste the table from Excel below</label>

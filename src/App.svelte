@@ -14,7 +14,7 @@
 <style>
     .table-chart-wrapper {
         display: flex;
-        align-items: flex-start;
+        align-items: stretch;
        
     }
 </style>
@@ -28,10 +28,12 @@
 {/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">   
-        <div style="flex-grow: 1;">
-            {#if Chart }
-        	<DataTable bind:showDataInput bind:Chart bind:data />
-            {/if}
+        <div class="ctn--inner flex flex-center" style="flex-grow: 1;">
+            <div>
+                {#if Chart }
+            	<DataTable bind:showDataInput bind:Chart bind:data />
+                {/if}
+            </div>
         </div>
         <ChartContainer bind:Chart />
     </div>

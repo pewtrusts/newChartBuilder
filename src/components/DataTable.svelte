@@ -1,5 +1,6 @@
 <script context="module">
     import Sprite from './Sprite.svelte';
+    import Button from "./Button.svelte";
     import updateChartData from '@Script/update-chart-data.js';
     import EditableCell from '@Component/EditableCell.svelte';
     import { XAxisType } from '@Project/store';
@@ -60,8 +61,9 @@
         display: inline-block;
         position: relative;
         max-width: 100%;
-        max-height: 100vh;
+        max-height: calc(100vh - var(--banner-height, 75px) - 2rem - 40px);
         overflow: auto;
+        border-top: 1px solid #fff;;
     }
     .datatable {
         position: absolute;
@@ -72,6 +74,7 @@
     }
     .bar {
         position: sticky;
+        z-index: 1;
     }
     .bar--left {
         left: 0;
@@ -88,7 +91,7 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        background-color: lightgray;
+        background-color: var(--background-medium, lightgray);;
     }
     .bar-slot--row {
         height: 40px;
@@ -112,14 +115,23 @@
         width: 40px;
         height: 40px;
         border-width: 0;
-        background: lightgray;
-        border-right: 1px solid #fff;
+        background: var(--background-medium, lightgray);
         border-bottom: 1px solid #fff;
     }
 
+    .actions {
+        display: inline-block;
+        padding-left: 40px;
+        display: flex;
+        background-image: linear-gradient(to right, var(--background-medium, lightgray), var(--background-medium, lightgray) 40px, transparent 41px);
+     
+    }
+    
     
 </style>
-<button on:click="{() => showDataInput = true}" role="button" class="from-excel">Paste</button>
+<div class="actions">
+    <Button clickHandler="{() => showDataInput = true}" iconID="" title="Import data" iconStyle="" type="secondary" style="border-bottom-width: 0;border-top-width: 0;"/>
+</div>
 <div class="datatable-container" >
     <div class="bar bar--top">
         {#if data}

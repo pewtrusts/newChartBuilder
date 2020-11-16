@@ -6,6 +6,7 @@ body {
 	font-family: var(--font-primary, sans);
 	padding-top: var(--banner-height, 75px);
 }
+
 .visually-hidden {
 	position: absolute !important;
 	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
@@ -28,4 +29,7 @@ body {
 }
 .flex {
 	display: flex;
+}
+.flex-center {
+	justify-content: center;
 }
