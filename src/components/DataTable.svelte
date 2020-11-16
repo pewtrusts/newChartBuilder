@@ -25,8 +25,8 @@
 </script>
 <script>
     let data = [['X values','Series 1', 'Series 2', 'Series 3'],
-        [1,2,3,4],
-        [2,4,6,8],
+        ['Apples',2,3,4],
+        ['Oranges',4,6,8],
     ];
     export let Chart;
     let xAxisType = 'linear';
@@ -53,6 +53,7 @@
     XAxisType.subscribe(v => {
         xAxisType = v;
     });
+    updateChartData(data, Chart);
 </script>
 <style>
     .datatable-container {
