@@ -10,6 +10,7 @@
 <script>
     export let Chart;
     export let data;
+    export let showDataInput;
     let textarea;
     function submitHandler(){
         const inputString = dataFile ? '' : textarea.value.replace(/\r/g, ''); // remove /\r/s from Windows text
@@ -25,6 +26,7 @@
             },
             skipEmptyLines: true,
         });
+        showDataInput = false;
     }
     updateChartData(data, Chart);
     /* for dev only */
@@ -34,15 +36,45 @@
 
 </script>
 <style>
+    .container {
+        position: fixed;
+        top: var(--banner-height, 75px);
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+    }
+    .inner {
+        width: 100%;
+        max-width: 800px;
+        padding: 2rem;
+        margin: auto;
+        background: #fff;
+        z-index: 1;
+    }
+    .screen {
+        position: absolute;
+        top: 0;
+        right: 0; 
+        bottom: 0;
+        left: 0;
+        background-color: var(--dark-background, #000);
+        opacity: 0.5;
+        z-index: -1;
+    }
     .datainput {
         display: block;
         width: 100%;
+        max-width: 100%;
         height: 300px;
         font-family: var(--mono, monospace);
     }
 </style>
-<div>
-    <label for="tsv">Paste the table from Excel below</label>
-    <textarea class="datainput" bind:this={textarea} id="tsv" name="tsv"></textarea>
-    <input on:click="{submitHandler}" value="submit" id="submit" type="submit" />
+<div class="container">
+    <div class="screen"></div>
+    <div class="inner">
+        <label for="tsv">Paste the table from Excel below</label>
+        <textarea class="datainput" bind:this={textarea} id="tsv" name="tsv"></textarea>
+        <input on:click="{submitHandler}" value="submit" id="submit" type="submit" />
+    </div>
 </div>

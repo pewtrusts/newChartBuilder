@@ -4,7 +4,7 @@
     import EditableCell from '@Component/EditableCell.svelte';
     import { XAxisType } from '@Project/store';
     import { createChart } from '@Component/PreviewChart.svelte';
-    import DataInput from '@Component/DataInput.svelte';
+    
     /* for testing data is being imported directly. will come from user input */
     const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     function returnColumnLetters(i){
@@ -24,13 +24,13 @@
     }
 </script>
 <script>
-    let data = [['X values','Series 1', 'Series 2', 'Series 3'],
+    export let data = [['X values','Series 1', 'Series 2', 'Series 3'],
         ['Apples',2,3,4],
         ['Oranges',4,6,8],
     ];
     export let Chart;
     let xAxisType = 'linear';
-    let showDataInput = false;
+    export let showDataInput;
     function returnHeadClass(i){
         if (data.slice(1).every(row => {
             return ( typeof row[i] === 'number' || row[i] == null );
@@ -119,9 +119,6 @@
 
     
 </style>
-{#if showDataInput }
-<DataInput bind:Chart bind:data />
-{/if}
 <button on:click="{() => showDataInput = true}" role="button" class="from-excel">Paste</button>
 <div class="datatable-container" >
     <div class="bar bar--top">

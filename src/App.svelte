@@ -4,10 +4,12 @@
     import SpriteDefs from './sprite.svelte';
     import brandOptions from './brand-options.json';
     import ChartContainer from "./components/ChartContainer.svelte";
+    import DataInput from '@Component/DataInput.svelte';
 </script>
 <script>
-
     let Chart = '';
+    let showDataInput = false;
+    let data;
 </script>
 <style>
     .table-chart-wrapper {
@@ -21,14 +23,16 @@
 </svelte:head>
 <SpriteDefs />
 <Banner />
+{#if showDataInput }
+    <DataInput bind:Chart bind:data bind:showDataInput />
+{/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">   
         <div style="flex-grow: 1;">
             {#if Chart }
-        	<DataTable bind:Chart />
+        	<DataTable bind:showDataInput bind:Chart bind:data />
             {/if}
         </div>
         <ChartContainer bind:Chart />
     </div>
-
 </div>
