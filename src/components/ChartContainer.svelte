@@ -9,7 +9,9 @@
         background-color: var(--background-shade, lightgray);
         display: flex;
         justify-content: center;
-        min-height: calc(100vh - var(--banner-height));
+        height: calc(100vh - var(--banner-height, 75px));
+        overflow-y: auto;
+        
     }
 </style>
 <div class="chart-container">

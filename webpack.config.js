@@ -12,6 +12,7 @@ const outputFolder = process.env.NODE_ENV === 'production' ? 'docs/' : process.e
 const isDev = mode === 'development';
 const repoName = 'newChartBuilder';
 const publicPath = ''; // no public path necessary bc build is to docs/ folder, similar to preview in other projects
+const title = 'Griffin Chart Builder 1.0.0'
 
 
 const plugins = [
@@ -22,7 +23,7 @@ const plugins = [
     }]),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-        title: 'Griffin Chart Builder 1.0.0',
+        title,
         template: './src/index.html',
         chunks: ['app'],
         inject: false,
@@ -36,7 +37,8 @@ const plugins = [
     }),
 ];
 
-module.exports = () => {
+module.exports = (env) => {
+    console.log(env)
     return {
         entry: {
             app: './src/index.js',

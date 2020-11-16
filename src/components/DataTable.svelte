@@ -64,6 +64,7 @@
         max-height: calc(100vh - var(--banner-height, 75px) - 2rem - 40px);
         overflow: auto;
         border-top: 1px solid #fff;;
+        border-bottom: 1px solid var(--background-medium, lightgray);
     }
     .datatable {
         position: absolute;
@@ -91,12 +92,15 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        background-color: var(--background-medium, lightgray);;
+        background-color: var(--background-medium, lightgray);
     }
     .bar-slot--row {
         height: 40px;
         width: 100%;
         border-bottom: 1px solid #fff;
+    }
+    .bar-slot--row:last-child {
+        border-bottom-width: 0;
     }
     .bar-slot--column {
         width: 110px;
