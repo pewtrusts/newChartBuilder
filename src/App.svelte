@@ -5,6 +5,8 @@
     import brandOptions from './brand-options.json';
     import ChartContainer from "./components/ChartContainer.svelte";
     import DataInput from '@Component/DataInput.svelte';
+    import SectionHead from '@Component/SectionHead.svelte';
+    import Nav from '@Component/Nav.svelte';
 </script>
 <script>
     let Chart = '';
@@ -26,6 +28,10 @@
     .left-column {
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
+        padding-left: 40px;
+    }
+    section {
+        margin-top: 1rem;
     }
 </style>
 <svelte:head>
@@ -33,21 +39,23 @@
 </svelte:head>
 <SpriteDefs />
 <Banner />
+<Nav />
 {#if showDataInput }
     <DataInput bind:Chart bind:data bind:showDataInput />
 {/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">   
         <div class="left-column ctn--inner flex flex-column flex-ac" style="flex-grow: 1;">
-            <div>
+            <section>
+                <SectionHead text="Data" />
                 {#if Chart }
             	<DataTable bind:showDataInput bind:Chart bind:data />
                 {/if}
-            </div>
-            <div class="dummy"></div>
-            <div class="dummy"></div>
-            <div class="dummy"></div>
-            <div class="dummy"></div>
+            </section>
+            <section class="dummy"></section>
+            <section class="dummy"></section>
+            <section class="dummy"></section>
+            <section class="dummy"></section>
         </div>
         <ChartContainer bind:Chart />
     </div>
