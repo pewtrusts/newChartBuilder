@@ -67,7 +67,15 @@ module.exports = (env) => {
                         options: {
                             emitCss: !isDev,
                             hotReload: isDev,
-                            dev: isDev
+                            dev: isDev,
+                            onwarn: function (warning, handleWarning) {
+
+                                if (warning.code === 'a11y-no-onchange') { return }
+
+                                // process as usual 
+
+                                handleWarning(warning);
+                            }
                            /* preprocess: {
                                 style: sass({}, {name: 'scss'})
                             }*/
