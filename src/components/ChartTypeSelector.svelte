@@ -1,3 +1,6 @@
+<script context="module">
+    let count = -1;
+</script>
 <script>
     import Dropdown from './Dropdown.svelte';
     import {ChartType} from './../store';
@@ -8,6 +11,7 @@
     let options = isLimited ? preferred.sort() : [preferred.sort(), chartTypes.filter(d => !preferred.includes(d))];
     let label = 'Chart type:';
     let selected;
+    count++;
     ChartType.subscribe(v => {
         selected = v;
     });
@@ -16,4 +20,4 @@
     }
 </script>
 <style></style>
-<Dropdown {changeHandler} {options} {selected} {label} />
+<Dropdown {changeHandler} {options} {selected} {label} {count} />
