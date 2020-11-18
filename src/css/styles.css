@@ -7,7 +7,10 @@ body {
 	padding-top: var(--banner-height, 75px);
 }
 section {
-        margin-bottom: 1rem;
+		position: relative;
+		width: 100%;
+		margin-bottom: 1rem;
+		min-height: calc(100vh - var(--banner-height, 75px) - 80px - 1rem);
     }
 section h2:first-of-type {
         margin-top: 0;

@@ -8,6 +8,7 @@
     import SectionHead from "@Component/SectionHead.svelte";
     import Nav from "@Component/Nav.svelte";
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
+    import {ActiveSection} from './store';
 
     /*
      * TO DO: USING THIS proxy url probably not sufficient for production
@@ -26,9 +27,18 @@
     let Chart = "";
     let showDataInput = false;
     let data;
+    let leftColumn;
+    ActiveSection.subscribe(v => {
+        if (!leftColumn) return;
+        const anchor = leftColumn.querySelector(`a#${v}`);
+        anchor.scrollIntoView();
+    });
 </script>
 
 <style>
+    section {
+        outline: 1px solid magenta;
+    }
     h1 {
         width: 100%;
         background-color: #fff;
@@ -44,15 +54,12 @@
         align-items: stretch;
     }
     .dummy {
-        width: 100%;
-        min-height: 300px;
         background-color: #f0f0f0;
-        margin-bottom: 2rem;
     }
     .left-column {
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
-        padding-left: 40px;
+        padding-left: calc(40px + 1rem);
     }
     .chart-container {
         flex-grow: 1;
@@ -82,7 +89,7 @@
 {/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">
-        <div
+        <div bind:this="{leftColumn}"
             class="left-column ctn--inner flex flex-column flex-ac"
             style="flex-grow: 1;">
             <h1>Griffin Chart Builder</h1>
@@ -92,10 +99,13 @@
                     <DataTable bind:showDataInput bind:Chart bind:data />
                 {/if}
             </section>
-            <section class="dummy" />
-            <section class="dummy" />
-            <section class="dummy" />
-            <section class="dummy" />
+            <section class="dummy">
+                <SectionHead text="Settings" />
+            </section>
+            <section class="dummy">
+                <SectionHead text="Colors" />
+            </section>
+            
         </div>
         <div class="chart-container">
             {#await HighchartsAPI}
