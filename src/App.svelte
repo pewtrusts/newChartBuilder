@@ -9,6 +9,7 @@
     import Nav from "@Component/Nav.svelte";
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
     import {ActiveSection} from './store';
+    import { onMount } from 'svelte';
 
     /*
      * TO DO: USING THIS proxy url probably not sufficient for production
@@ -21,17 +22,38 @@
     fetch(proxyURL + "https://api.highcharts.com/highcharts/tree.json")
         .then((response) => response.json())
         .then((data) => resolveAPI(data));
+
 </script>
 
 <script>
     let Chart = "";
     let showDataInput = false;
     let data;
-    let leftColumn;
+    let leftColumn;  
+    let sections = [];
+    function pushSection(node){
+        sections.push(node);
+    }
     ActiveSection.subscribe(v => {
         if (!leftColumn) return;
         const anchor = leftColumn.querySelector(`a#${v}`);
         anchor.scrollIntoView();
+    });
+    function intersectionHandler(e){
+        if ( e[0].isIntersecting ){
+            ActiveSection.set(e[0].target.name);
+        }
+    }
+    onMount(() => {
+        const observerOptions = {
+            root: leftColumn,
+            rootMargin: '0px',
+            threshold: 1
+        }
+        const observer = new IntersectionObserver(intersectionHandler, observerOptions);
+        sections.forEach(section => {
+            observer.observe(section.querySelector('a.section-anchor'));
+        });
     });
 </script>
 
@@ -93,16 +115,16 @@
             class="left-column ctn--inner flex flex-column flex-ac"
             style="flex-grow: 1;">
             <h1>Griffin Chart Builder</h1>
-            <section>
+            <section use:pushSection>
                 <SectionHead text="Data" />
                 {#if Chart}
                     <DataTable bind:showDataInput bind:Chart bind:data />
                 {/if}
             </section>
-            <section class="dummy">
+            <section use:pushSection class="dummy">
                 <SectionHead text="Settings" />
             </section>
-            <section class="dummy">
+            <section use:pushSection class="dummy">
                 <SectionHead text="Colors" />
             </section>
             
