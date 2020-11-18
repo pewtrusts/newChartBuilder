@@ -1,6 +1,7 @@
 <script context="module">
     import Papa from "papaparse";
     import updateChartData from "@Script/update-chart-data.js";
+    import Button from './Button.svelte';
     import { fade } from 'svelte/transition';
     //import dataFile from '@Project/data/gdp.csv';
     //import dataFile from "@Project/data/datetime-example.csv";
@@ -13,7 +14,18 @@
     export let data;
     export let showDataInput;
     export let datatableContainer;
+    $: (function(){
+        console.log(showDataInput);
+    })();
     let textarea;
+    function keydownHandler(e){
+        if ( e.keyCode == 27 ){ //ESC
+            showDataInput  = false;
+        }
+    }
+    function focusInput(node){
+        node.focus();
+    }
     function submitHandler(){
         const inputString = dataFile ? '' : textarea.value.replace(/\r/g, ''); // remove /\r/s from Windows text
         if ( inputString === '' && !dataFile ){
@@ -34,6 +46,9 @@
         },{timeout:100});
        
     }
+    function closeHandler(){
+        showDataInput = false;
+    }
     updateChartData(data, Chart);
     /* for dev only */
     if ( dataFile ) {
@@ -42,6 +57,15 @@
 
 </script>
 <style>
+    .button-container-outer {
+        width: 100%;
+        position: relative;
+    }
+    .button-container {
+        position: absolute;
+        top: -7px;
+        right: -1rem;
+    }
     .container {
         position: fixed;
         top: var(--banner-height, 75px);
@@ -53,7 +77,7 @@
     .inner {
         width: 100%;
         max-width: 800px;
-        padding: 2rem;
+        padding: 1rem;
         margin: auto;
         background: #fff;
         z-index: 1;
@@ -74,13 +98,24 @@
         max-width: 100%;
         height: 300px;
         font-family: var(--mono, monospace);
+        margin-bottom: 1rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 1rem;
     }
 </style>
+<svelte:body on:keydown="{showDataInput ? keydownHandler : null}" />
 <div transition:fade class="container">
     <div class="screen"></div>
     <div class="inner">
-        <label for="tsv">Paste the table from Excel below</label>
-        <textarea class="datainput" bind:this={textarea} id="tsv" name="tsv"></textarea>
-        <input on:click="{submitHandler}" value="submit" id="submit" type="submit" />
+        <div class="button-container-outer">
+            <div class="button-container">
+                <Button clickHandler="{closeHandler}" iconID="circle-x" title="close" />
+            </div>
+        </div>
+        <label for="tsv">Paste the spreadsheet data below</label>
+        <textarea use:focusInput class="datainput" bind:this={textarea} id="tsv" name="tsv"></textarea>
+        <Button clickHandler="{submitHandler}" title="Import" type="primary" />
     </div>
 </div>

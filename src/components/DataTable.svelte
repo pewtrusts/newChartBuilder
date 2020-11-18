@@ -135,7 +135,7 @@
     
 </style>
 <div class="actions">
-    <Button clickHandler="{() => showDataInput = true}" iconID="" title="Import data" iconStyle="" type="secondary" style="border-bottom-width: 0;border-top-width: 0;"/>
+    <Button clickHandler="{() => showDataInput = true}" showIconAndText="true" iconID="spreadsheet" title="Import" iconStyle="top:2px;" type="secondary" style="border-bottom-width: 0;border-top-width: 0;"/>
 </div>
 <div bind:this="{datatableContainer}" class="datatable-container" >
     <div class="bar bar--top">
