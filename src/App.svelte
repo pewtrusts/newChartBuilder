@@ -30,6 +30,7 @@
     let showDataInput = false;
     let data;
     let leftColumn;  
+    let datatableContainer = null;
     let sections = [];
     function pushSection(node){
         sections.push(node);
@@ -108,7 +109,7 @@
 <Banner />
 <Nav />
 {#if showDataInput}
-    <DataInput bind:Chart bind:data bind:showDataInput />
+    <DataInput bind:datatableContainer bind:Chart bind:data bind:showDataInput />
 {/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">
@@ -119,7 +120,7 @@
             <section use:pushSection>
                 <SectionHead text="Data" />
                 {#if Chart}
-                    <DataTable bind:showDataInput bind:Chart bind:data />
+                    <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data />
                 {/if}
             </section>
             <section use:pushSection class="dummy">

@@ -12,6 +12,7 @@
     export let Chart;
     export let data;
     export let showDataInput;
+    export let datatableContainer;
     let textarea;
     function submitHandler(){
         const inputString = dataFile ? '' : textarea.value.replace(/\r/g, ''); // remove /\r/s from Windows text
@@ -28,6 +29,10 @@
             skipEmptyLines: true,
         });
         showDataInput = false;
+        requestIdleCallback(() => {
+            datatableContainer.scrollTop = 0;
+        },{timeout:100});
+       
     }
     updateChartData(data, Chart);
     /* for dev only */

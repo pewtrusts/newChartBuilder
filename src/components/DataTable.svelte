@@ -30,8 +30,9 @@
         ['Oranges',4,6,8],
     ];
     export let Chart;
-    let xAxisType = 'linear';
     export let showDataInput;
+    let xAxisType = 'linear';
+    export let datatableContainer;
     function returnHeadClass(i){
         if (data.slice(1).every(row => {
             return ( typeof row[i] === 'number' || row[i] == null );
@@ -136,7 +137,7 @@
 <div class="actions">
     <Button clickHandler="{() => showDataInput = true}" iconID="" title="Import data" iconStyle="" type="secondary" style="border-bottom-width: 0;border-top-width: 0;"/>
 </div>
-<div class="datatable-container" >
+<div bind:this="{datatableContainer}" class="datatable-container" >
     <div class="bar bar--top">
         {#if data}
         {#each data[0] as _, i}
