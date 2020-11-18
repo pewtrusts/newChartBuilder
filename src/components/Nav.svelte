@@ -21,11 +21,11 @@
 
         }
     ];
-    ActiveSection.subscribe(v => {
-        activeSection = v;
+    ActiveSection.subscribe(({value}) => {
+        activeSection = value;
     });
     function clickHandler(){
-        ActiveSection.set(slugger(this.title));
+        ActiveSection.set({method: 'click', value: slugger(this.title)});
     }
 </script>
 <style>

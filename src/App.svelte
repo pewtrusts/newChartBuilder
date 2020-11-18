@@ -36,12 +36,15 @@
     }
     ActiveSection.subscribe(v => {
         if (!leftColumn) return;
-        const anchor = leftColumn.querySelector(`a#${v}`);
-        anchor.scrollIntoView();
+        if ( v.method == 'click'){
+            let anchor = leftColumn.querySelector(`a#${v.value}`);
+            anchor.scrollIntoView();
+        }
     });
     function intersectionHandler(e){
-        if ( e[0].isIntersecting ){
-            ActiveSection.set(e[0].target.name);
+        const intersecting = e.find(_e => _e.isIntersecting);
+        if ( intersecting ){
+            ActiveSection.set({method: 'scroll', value: intersecting.target.dataset.section});
         }
     }
     onMount(() => {
@@ -52,15 +55,13 @@
         }
         const observer = new IntersectionObserver(intersectionHandler, observerOptions);
         sections.forEach(section => {
-            observer.observe(section.querySelector('a.section-anchor'));
+            observer.observe(section.querySelector('div.observer'));
         });
     });
 </script>
 
 <style>
-    section {
-        outline: 1px solid magenta;
-    }
+   
     h1 {
         width: 100%;
         background-color: #fff;
