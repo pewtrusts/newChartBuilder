@@ -25,7 +25,6 @@
 
             <div class="ctn ctn--inner flex flex-ac flex-sb">
                 <img src="./assets/logo.png" alt="The Pew Charitable Trusts" class="logo" />
-                <h1>Griffin Chart Builder</h1>
                 <div></div>
             </div>
         </div>

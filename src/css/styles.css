@@ -6,6 +6,12 @@ body {
 	font-family: var(--font-primary, sans);
 	padding-top: var(--banner-height, 75px);
 }
+section {
+        margin-bottom: 1rem;
+    }
+section h2:first-of-type {
+        margin-top: 0;
+    }
 #app-container {
 	position: relative;
 }

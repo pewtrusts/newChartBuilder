@@ -61,7 +61,7 @@
         display: inline-block;
         position: relative;
         max-width: 100%;
-        max-height: calc(100vh - var(--banner-height, 75px) - 2rem - 40px);
+        max-height: calc(100vh - var(--banner-height, 75px) - 2rem - 150px);
         overflow: auto;
         border-top: 1px solid #fff;;
         border-bottom: 1px solid var(--background-medium, lightgray);

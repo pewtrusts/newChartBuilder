@@ -17,11 +17,9 @@
     const HighchartsAPI = new Promise(function (resolve) {
         resolveAPI = resolve;
     });
-    setTimeout(() => {
-        fetch(proxyURL + "https://api.highcharts.com/highcharts/tree.json")
-            .then((response) => response.json())
-            .then((data) => resolveAPI(data));
-    }, 2000);
+    fetch(proxyURL + "https://api.highcharts.com/highcharts/tree.json")
+        .then((response) => response.json())
+        .then((data) => resolveAPI(data));
 </script>
 
 <script>
@@ -31,6 +29,16 @@
 </script>
 
 <style>
+    h1 {
+        width: 100%;
+        background-color: #fff;
+        text-align: center;
+        position: sticky;
+        padding: 0.67em 0;
+        margin: 0;
+        top: 0;
+        z-index: 2;
+    }
     .table-chart-wrapper {
         display: flex;
         align-items: stretch;
@@ -60,9 +68,7 @@
     .loading-placeholder {
         height: 23px;
     }
-    section {
-        margin-top: 1rem;
-    }
+    
 </style>
 
 <svelte:head>
@@ -79,6 +85,7 @@
         <div
             class="left-column ctn--inner flex flex-column flex-ac"
             style="flex-grow: 1;">
+            <h1>Griffin Chart Builder</h1>
             <section>
                 <SectionHead text="Data" />
                 {#if Chart}
