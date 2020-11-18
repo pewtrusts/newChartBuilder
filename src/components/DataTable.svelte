@@ -1,62 +1,97 @@
 <script context="module">
-    import Sprite from './Sprite.svelte';
+    import Sprite from "./Sprite.svelte";
     import Button from "./Button.svelte";
-    import updateChartData from '@Script/update-chart-data.js';
-    import EditableCell from '@Component/EditableCell.svelte';
-    import { XAxisType } from '@Project/store';
-    import { createChart } from '@Component/PreviewChart.svelte';
-    
+    import updateChartData from "@Script/update-chart-data.js";
+    import EditableCell from "@Component/EditableCell.svelte";
+    import { XAxisType } from "@Project/store";
+    import { createChart } from "@Component/PreviewChart.svelte";
+
     /* for testing data is being imported directly. will come from user input */
-    const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-    function returnColumnLetters(i){
-        var letters = '';
+    const alphabet = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+    ];
+    function returnColumnLetters(i) {
+        var letters = "";
         const iterations = Math.floor(i / 26);
         const letterIndex = i % 26;
-        for ( let i = 0; i <= iterations; i++){
+        for (let i = 0; i <= iterations; i++) {
             letters += alphabet[letterIndex];
         }
         return letters;
     }
-    function returnValueType(d){
-        return typeof d == 'number' ? 'number' :
-            typeof d == 'object' ? 'null' : 
-            typeof d == 'boolean' ? 'boolean' : 
-            'string';
+    function returnValueType(d) {
+        return typeof d == "number"
+            ? "number"
+            : typeof d == "object"
+            ? "null"
+            : typeof d == "boolean"
+            ? "boolean"
+            : "string";
     }
 </script>
+
 <script>
-    export let data = [['X values','Series 1', 'Series 2', 'Series 3'],
-        ['Apples',2,3,4],
-        ['Oranges',4,6,8],
+    export let data = [
+        ["X values", "Series 1", "Series 2", "Series 3"],
+        ["Apples", 2, 3, 4],
+        ["Oranges", 4, 6, 8],
     ];
     export let Chart;
     export let showDataInput;
-    let xAxisType = 'linear';
+    let xAxisType = "linear";
     export let datatableContainer;
-    function returnHeadClass(i){
-        if (data.slice(1).every(row => {
-            return ( typeof row[i] === 'number' || row[i] == null );
-         })){
-            return 'head head--number-column';
+    function returnHeadClass(i) {
+        if (
+            data.slice(1).every((row) => {
+                return typeof row[i] === "number" || row[i] == null;
+            })
+        ) {
+            return "head head--number-column";
         }
-        return 'head head--string-column';
+        return "head head--string-column";
     }
-    function transpose(){
+    function transpose() {
         const container = Chart.renderTo;
         Chart.destroy();
-        data =  data[0].map((_, i) => [...data.map(row => row[i])]);
+        data = data[0].map((_, i) => [...data.map((row) => row[i])]);
         Chart = createChart(container);
         updateChartData(data, Chart);
     }
-    function handleDataChange(e){
-        console.log({e,data});
+    function handleDataChange(e) {
+        console.log({ e, data });
         updateChartData(data, Chart);
     }
-    XAxisType.subscribe(v => {
+    XAxisType.subscribe((v) => {
         xAxisType = v;
     });
     updateChartData(data, Chart);
 </script>
+
 <style>
     .datatable-container {
         display: inline-block;
@@ -64,7 +99,7 @@
         max-width: 100%;
         max-height: calc(100vh - var(--banner-height, 75px) - 2rem - 150px);
         overflow: auto;
-        border-top: 1px solid #fff;;
+        border-top: 1px solid #fff;
         border-bottom: 1px solid var(--background-medium, lightgray);
     }
     .datatable {
@@ -72,7 +107,6 @@
         top: 40px;
         left: 40px;
         table-layout: fixed;
-        
     }
     .bar {
         position: sticky;
@@ -86,8 +120,8 @@
         top: 0;
         height: 40px;
         width: 100%;
-        padding-left: 41px;
         display: flex;
+        z-index: 2;
     }
     .bar-slot {
         display: inline-flex;
@@ -113,8 +147,7 @@
         border-right-width: 0;
     }
     .transpose {
-        position: absolute;
-        top: 0;
+        position: sticky; 
         left: 0;
         appearance: none;
         width: 40px;
@@ -122,60 +155,101 @@
         border-width: 0;
         background: var(--background-medium, lightgray);
         border-bottom: 1px solid #fff;
+        border-right: 1px solid #fff;
     }
 
     .actions {
         display: inline-block;
         padding-left: 40px;
         display: flex;
-        background-image: linear-gradient(to right, var(--background-medium, lightgray), var(--background-medium, lightgray) 40px, transparent 41px);
-     
+        background-image: linear-gradient(
+            to right,
+            var(--background-medium, lightgray),
+            var(--background-medium, lightgray) 40px,
+            transparent 41px
+        );
     }
-    
-    
 </style>
+
 <div class="actions">
-    <Button clickHandler="{() => showDataInput = true}" showIconAndText="true" iconID="spreadsheet" title="Import" iconStyle="top:2px;" type="secondary" style="border-bottom-width: 0;border-top-width: 0;"/>
+    <Button
+        clickHandler={() => (showDataInput = true)}
+        showIconAndText="true"
+        iconID="spreadsheet"
+        title="Import"
+        iconStyle="top:2px;"
+        type="secondary"
+        style="border-bottom-width: 0;border-top-width: 0;" />
 </div>
-<div bind:this="{datatableContainer}" class="datatable-container" >
+<div bind:this={datatableContainer} class="datatable-container">
     <div class="bar bar--top">
+        <button
+            role="button"
+            on:click={transpose}
+            title="transpose data"
+            class="transpose">
+            <Sprite width="15" id="loop-circular" />
+            <span class="visually-hidden">transpose data</span>
+        </button>
         {#if data}
-        {#each data[0] as _, i}
-        <div class="bar-slot bar-slot--column"><span>{returnColumnLetters(i)}</span></div>
-        {/each}
+            {#each data[0] as _, i}
+                <div class="bar-slot bar-slot--column">
+                    <span>{returnColumnLetters(i)}</span>
+                </div>
+            {/each}
         {/if}
     </div>
     <div class="bar bar--left">
         {#if data}
-        {#each data as _, i}
-        <div class="bar-slot bar-slot--row">{i + 1}</div>
-        {/each}
+            {#each data as _, i}
+                <div class="bar-slot bar-slot--row">{i + 1}</div>
+            {/each}
         {/if}
     </div>
-    <button role="button" on:click="{transpose}" title="transpose data" class="transpose">
-        <Sprite width="15" id="loop-circular" />
-        <span class="visually-hidden">transpose data</span>
-    </button>
     <table class="datatable">
         <thead>
             <tr>
                 {#if data}
-                {#each data[0] as columnHead, i}
-                <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[0][i]}" row="0" column="{i}" type="th" scope="column" klass="{returnValueType(columnHead)} {returnHeadClass(i)}"  />
-                {/each}
+                    {#each data[0] as columnHead, i}
+                        <EditableCell
+                            isDateTime={false}
+                            on:dataChange={handleDataChange}
+                            bind:value={data[0][i]}
+                            row="0"
+                            column={i}
+                            type="th"
+                            scope="column"
+                            klass="{returnValueType(columnHead)} {returnHeadClass(i)}" />
+                    {/each}
                 {/if}
             </tr>
         </thead>
         <tbody>
             {#if data}
-            {#each data.slice(1) as row, i}
-            <tr>
-                <EditableCell isDateTime="{xAxisType == 'datetime'}" on:dataChange="{handleDataChange}" bind:value="{data[i + 1][0]}" row="{i + 1}" column="0" type="td" scope="{null}" klass="{returnValueType(row[0])}"  />
-                {#each row.slice(1) as datum, j}
-                <EditableCell isDateTime={false} on:dataChange="{handleDataChange}" bind:value="{data[i + 1][j + 1]}" row="{i + 1}" column="{j + 1}" type="td" scope="{null}" klass="{returnValueType(datum)}" />
+                {#each data.slice(1) as row, i}
+                    <tr>
+                        <EditableCell
+                            isDateTime={xAxisType == 'datetime'}
+                            on:dataChange={handleDataChange}
+                            bind:value={data[i + 1][0]}
+                            row={i + 1}
+                            column="0"
+                            type="td"
+                            scope={null}
+                            klass={returnValueType(row[0])} />
+                        {#each row.slice(1) as datum, j}
+                            <EditableCell
+                                isDateTime={false}
+                                on:dataChange={handleDataChange}
+                                bind:value={data[i + 1][j + 1]}
+                                row={i + 1}
+                                column={j + 1}
+                                type="td"
+                                scope={null}
+                                klass={returnValueType(datum)} />
+                        {/each}
+                    </tr>
                 {/each}
-            </tr>
-            {/each}
             {/if}
         </tbody>
     </table>
