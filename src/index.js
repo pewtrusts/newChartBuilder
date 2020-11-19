@@ -8,7 +8,6 @@ window.App = new App({
 	target: document.querySelector('#app-container'),
 	props: {},
 });
-
 if (module.hot) {
 	module.hot.accept('./css/styles.css', function () {
 		console.log('accepted');

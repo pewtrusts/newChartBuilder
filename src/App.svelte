@@ -12,19 +12,7 @@
     import {ActiveSection} from './store';
     import { onMount } from 'svelte';
 
-    /*
-     * TO DO: USING THIS proxy url probably not sufficient for production
-     */
-    const proxyURL = 'https://cors-anywhere.herokuapp.com/'; 
-    let resolveAPI;
-    const HighchartsAPI = new Promise(function (resolve) {
-        resolveAPI = resolve;
-    });
-    fetch(proxyURL + "https://api.highcharts.com/highcharts/tree.json")
-        .then((response) => response.json())
-        .then((data) => resolveAPI(data));
-
-</script>
+</script> 
 
 <script>
     let Chart = "";
@@ -97,14 +85,16 @@
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
     }
-    .loading-placeholder {
-        height: 23px;
-    }
-    
+   
 </style>
 
 <svelte:head>
     {@html brandOptions.googleFonts || ''}
+    {#if brandOptions.externalStylesheets[process.env.NODE_ENV].length > 0 }
+    {#each brandOptions.externalStylesheets[process.env.NODE_ENV] as sheet}
+        <link rel="stylesheet" href="{sheet}" />
+    {/each}
+    {/if}
 </svelte:head>
 <SpriteDefs />
 <Banner />
@@ -132,18 +122,12 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Code" />
-                <Code userOptions="{Chart ? Chart.userOptions : {}}" />
+                <Code />
             </section>
             
         </div>
         <div class="chart-container">
-            {#await HighchartsAPI}
-            <div class="loading-placeholder">loading . . .</div>
-            {:then APIData}
-            <ChartTypeSelector {APIData} preferred={brandOptions.preferredChartTypes} isLimited="{brandOptions.limitToPreferredTypes}" />
-            {:catch error}
-            <div class="loading-placeholder">There was a problem loading the Highcharts API: {error}</div>
-            {/await}
+            <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
             <div>
                 <PreviewChart bind:Chart />
             </div>

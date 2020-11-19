@@ -1,4 +1,4 @@
-/* global require, process, __dirname */
+/* global require, __dirname */
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -129,7 +129,7 @@ module.exports = (env) => {
                     test: /\.html$/,
                     use: 'html-loader',
                     exclude: /index\.html/
-                },
+                }
                /* {
                     test: /\.csv$/,
                     use: {

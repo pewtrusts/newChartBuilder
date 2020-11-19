@@ -6,6 +6,7 @@ module.exports = {
     },
     "parserOptions": {
         "sourceType": "module", // allows import and export
+        
     },
     "rules": {
          "no-console": "off"
@@ -13,6 +14,7 @@ module.exports = {
     "globals": {
         "console": "readonly",
         "PUBLICPATH": "readonly",
-        "module": "readonly"
+        "module": "readonly",
+        "process": "readonly"
     }
 }
