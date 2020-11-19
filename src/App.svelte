@@ -8,6 +8,7 @@
     import SectionHead from "@Component/SectionHead.svelte";
     import Nav from "@Component/Nav.svelte";
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
+    import Code from '@Component/Code.svelte';
     import {ActiveSection} from './store';
     import { onMount } from 'svelte';
 
@@ -128,6 +129,10 @@
             </section>
             <section use:pushSection class="dummy">
                 <SectionHead text="Colors" />
+            </section>
+            <section use:pushSection>
+                <SectionHead text="Code" />
+                <Code {Chart} />
             </section>
             
         </div>

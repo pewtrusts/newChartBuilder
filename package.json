@@ -2,6 +2,7 @@
   "name": "chart-builder",
   "version": "0.1.0",
   "devDependencies": {
+    "alphabetize-object-keys": "^3.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^5.2.0",

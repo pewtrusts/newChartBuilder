@@ -19,6 +19,11 @@
             name: 'Colors',
             icon: 'droplet',
 
+        },
+        {
+            name: 'Code',
+            icon: 'code',
+
         }
     ];
     ActiveSection.subscribe(({value}) => {
