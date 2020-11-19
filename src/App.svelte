@@ -72,7 +72,7 @@
         padding: 0.67em 0;
         margin: 0;
         top: 0;
-        z-index: 2;
+        z-index: 3;
     }
     .table-chart-wrapper {
         display: flex;
