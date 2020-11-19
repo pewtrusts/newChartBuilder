@@ -1,4 +1,5 @@
 import { XAxisType } from '../store';
+import { UserOptions } from '../store';
 import toDate from './coerce-to-date';
 /*
  * TO DO: All of the infered axis types (linear, datetime, categorical) etc need to be
@@ -99,4 +100,5 @@ export default function _updateChartData(data, Chart) {
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
     console.log({ Chart });
     Chart.update(newConfig, true, true); // p2: redraw; p3: one-to-one in order to add/remove series
+    UserOptions.set(Chart.userOptions);
 } 

@@ -14,9 +14,6 @@
     .logo {
         height: calc(var(--banner-height, 75px) - 10px);
     }
-    h1 {
-        color: #fff;
-    }
 </style>
 
 <div class="banner">

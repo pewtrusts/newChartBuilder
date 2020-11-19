@@ -4,6 +4,7 @@
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
     import {ChartType} from './../store';
+    import {UserOptions} from './../store';
     Highcharts.setOptions(options);
     export function createChart(node){
         return Highcharts.chart(node, config);
@@ -13,10 +14,12 @@
     export let Chart;
     function containerUse(node){
         Chart = createChart(node);
+        UserOptions.set(Chart.userOptions);
     }
     ChartType.subscribe(v => {
         if ( Chart ){
             Chart.update({chart: {type: v}}, true, true);
+            UserOptions.set(Chart.userOptions);
         }
     });
 </script>

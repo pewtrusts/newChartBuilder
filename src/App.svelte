@@ -132,7 +132,7 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Code" />
-                <Code {Chart} />
+                <Code userOptions="{Chart ? Chart.userOptions : {}}" />
             </section>
             
         </div>

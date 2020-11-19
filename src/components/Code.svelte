@@ -1,7 +1,10 @@
 <script>
     import alphabetize from 'alphabetize-object-keys';
-    export let Chart;
-    $: stringified = Chart ? JSON.stringify(alphabetize(Chart.userOptions), null, 2) : '';
+    import {UserOptions} from './../store';
+    let userOptions;
+    UserOptions.subscribe(v => {
+        userOptions = alphabetize(v);
+    });
 </script>
 <style>
     textarea {
@@ -10,4 +13,4 @@
         height: calc(100% - 40px);
     }
 </style>
-<textarea bind:value="{stringified}"></textarea>
+<textarea value="{JSON.stringify(userOptions, null, 2)}"></textarea>
