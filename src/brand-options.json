@@ -6,5 +6,6 @@
     },
     "pathToDevCSS": "./dev.css",
     "chartTypes": ["area", "bar", "column", "line", "pie", "scatter"],
-    "defaultChartType": "line"
+    "defaultChartType": "line",
+    "additionalColorPalettes": ["pew-blue","gray","teal","orange","blue","red"]
 }

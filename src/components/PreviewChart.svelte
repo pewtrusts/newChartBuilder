@@ -5,6 +5,7 @@
     import config from '@Project/base-chart-config.json';
     import {ChartType} from './../store';
     import {UserOptions} from './../store';
+    import {ColorPalette} from './../store';
     Highcharts.setOptions(options);
     export function createChart(node){
         return Highcharts.chart(node, config);
@@ -12,6 +13,10 @@
 </script>
 <script>
     export let Chart;
+    let colorPalette;
+    ColorPalette.subscribe(v => {
+        colorPalette = v;
+    });
     function containerUse(node){
         Chart = createChart(node);
         UserOptions.set(Chart.userOptions);
@@ -28,4 +33,4 @@
         margin-top: 1rem;
     }
 </style>
-<div class="container" use:containerUse></div>
+<div class="container {colorPalette}" use:containerUse></div>

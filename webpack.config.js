@@ -25,9 +25,15 @@ const plugins = [
     new HtmlWebpackPlugin({
         title,
         template: './src/index.html',
-        chunks: ['app'],
+        chunks: ['chart-builder'],
         inject: false,
        // scriptLoading: 'defer'
+    }),
+    new HtmlWebpackPlugin({
+        title: 'Griffin Tester',
+        template: './src/griffin/tester.html',
+        chunks: ['griffin'],
+        filename: './tester/index.html'
     }),
     new MiniCssExtractPlugin({
         filename: '[name].css'
@@ -41,7 +47,8 @@ module.exports = (env) => {
     console.log(env)
     return {
         entry: {
-            app: './src/index.js',
+            'chart-builder': './src/index.js',
+            'griffin': './src/griffin/griffin.js'
         },
         resolve: {
             alias: {
@@ -56,7 +63,7 @@ module.exports = (env) => {
         },
         output: {
             path: __dirname + '/' + outputFolder,
-            filename: '[name].js',
+            filename: '[name].js?v[hash]',
             chunkFilename: '[name].[id].js'
         },
         module: {

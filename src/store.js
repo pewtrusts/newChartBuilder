@@ -5,9 +5,9 @@ const XAxisType = writable('linear');
 const ChartType = writable(brandOptions.defaultChartType);
 const ActiveSection = writable('data');
 const UserOptions = writable({});
-
+const ColorPalette = writable('default');
 
 
 export {
-    ActiveSection, CellBeingEdited, ChartType, UserOptions, XAxisType
+    ActiveSection, CellBeingEdited, ColorPalette, ChartType, UserOptions, XAxisType
 };

@@ -9,12 +9,14 @@
     import Nav from "@Component/Nav.svelte";
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
     import Code from '@Component/Code.svelte';
+    import Colors from '@Component/Colors.svelte';
     import {ActiveSection} from './store';
     import { onMount } from 'svelte';
 
 </script> 
 
-<script>
+<script>import { Color } from "highcharts/highcharts.src";
+
     let Chart = "";
     let showDataInput = false;
     let data;
@@ -47,6 +49,7 @@
         sections.forEach(section => {
             observer.observe(section.querySelector('div.observer'));
         });
+
     });
 </script>
 
@@ -85,6 +88,7 @@
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
     }
+
    
 </style>
 
@@ -117,8 +121,9 @@
             <section use:pushSection class="dummy">
                 <SectionHead text="Settings" />
             </section>
-            <section use:pushSection class="dummy">
+            <section use:pushSection>
                 <SectionHead text="Colors" />
+                <Colors />
             </section>
             <section use:pushSection>
                 <SectionHead text="Code" />

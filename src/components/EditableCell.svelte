@@ -84,6 +84,7 @@
             }
         });
     }
+    
     // TODO: BELOW USE SLOTS, COMPONENTS WITH CHILDREN, TO BE MORE DRY?
 </script>
 <style>
