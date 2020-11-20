@@ -3,9 +3,8 @@
     import Highcharts from 'highcharts/highcharts.src.js';
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
-    import {ChartType} from './../store';
-    import {UserOptions} from './../store';
-    import {ColorPalette} from './../store';
+    import {ChartType, ColorIndeces, UserOptions, SelectedColorPalette} from './../store';
+    import { get } from 'svelte/store';
     Highcharts.setOptions(options);
     export function createChart(node){
         return Highcharts.chart(node, config);
@@ -14,7 +13,7 @@
 <script>
     export let Chart;
     let colorPalette;
-    ColorPalette.subscribe(v => {
+    SelectedColorPalette.subscribe(v => {
         colorPalette = v;
     });
     function containerUse(node){
@@ -26,6 +25,15 @@
             Chart.update({chart: {type: v}}, true, true);
             UserOptions.set(Chart.userOptions);
         }
+    });
+    ColorIndeces.subscribe(v => {
+        if (!v) return;
+        const series = get(UserOptions).series;
+        series.forEach((s,i) => {
+            s.colorIndex = v[i];
+        });
+        Chart.update({series}, true, true);
+        UserOptions.set(Chart.userOptions);
     });
 </script>
 <style>
