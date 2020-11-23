@@ -6,6 +6,10 @@ body {
 	font-family: var(--font-primary, sans);
 	padding-top: var(--banner-height, 75px);
 }
+p {
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+}
 section {
 		position: relative;
 		width: 100%;
@@ -52,4 +56,10 @@ section h2:first-of-type {
 }
 .flex-sb {
 	justify-content: space-between;
+}
+.note {
+	color: #767676;
+	margin-top: -1rem;
+	font-size: 0.85rem;
+	letter-spacing: 0.2px;
 }

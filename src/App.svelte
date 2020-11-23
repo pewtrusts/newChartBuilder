@@ -76,6 +76,7 @@
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
         padding-left: calc(40px + 1rem);
+        max-width: 42%;
     }
     .chart-container {
         flex-grow: 1;

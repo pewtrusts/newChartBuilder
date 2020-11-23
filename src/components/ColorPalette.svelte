@@ -5,6 +5,9 @@
         console.log(e.target.value);
         SelectedColorPalette.set(e.target.value);
     }
+    function swatchClick(){
+        SelectedColorPalette.set(this.dataset.value);
+    }
     function selectEvenlySpacedColors({seriesCount, colorCount}){
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i,arr) => 0 + Math.round(i * (colorCount - 1) / (arr.length - 1)));
         console.log(colorIndeces);
@@ -39,26 +42,42 @@
            }
        }
     }
+    
 </script>
 <style>
+    .selector {
+        display: flex;
+        align-items: flex-end;
+        line-height: 1;
+    }
     .swatch-container {
         position: relative;
         top: 1px;
-        display: inline-block;
+        line-height: 1;
+        
     }
     .swatch {
         width: 20px;
         height: 20px;
         display: inline-block;
-        margin-right: 4px;
+        margin-right: 2px;
+    }
+    .input {
+        margin-right: 3px;
+        height: 23px;
+    }
+    label {
+        line-height: 1;
     }
 </style>
 <div class="selector">
-    <div class="swatch-container {palette}">
-        {#each new Array(colorCount) as _, i}
-            <div class="swatch highcharts-color-{i}"></div>
-        {/each}
-    </div>
     <input checked="{selectedPalette == palette ? true : null}" on:change="{changeHandler}" value="{palette}" name="color-palette" id="input-{palette}" class="input" type="radio">
-    <label for="input-{palette}">{palette.replace(/-/g,' ').replace(/^(\w)/, v => v.toUpperCase())}</label>
+    <div>
+        <label for="input-{palette}">{palette.replace(/-/g,' ').replace(/^(\w)/, v => v.toUpperCase())}</label>
+        <div on:click="{swatchClick}" class="swatch-container {palette}" data-value="{palette}">
+            {#each new Array(colorCount) as _, i}
+                <div class="swatch highcharts-color-{i}"></div>
+            {/each}
+        </div>
+    </div>
 </div>
