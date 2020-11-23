@@ -15,7 +15,7 @@
 
 </script> 
 
-<script>import { Color } from "highcharts/highcharts.src";
+<script>
 
     let Chart = "";
     let showDataInput = false;
@@ -123,7 +123,7 @@
                 <SectionHead text="Settings" />
             </section>
             <section use:pushSection>
-                <SectionHead text="Colors" />
+                <SectionHead {Chart} text="Colors" indicators="{[{name: 'colorByPoint', condition: true}]}" />
                 <Colors />
             </section>
             <section use:pushSection>

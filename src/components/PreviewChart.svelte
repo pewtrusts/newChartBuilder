@@ -5,6 +5,7 @@
     import config from '@Project/base-chart-config.json';
     import {ChartType, ColorIndeces, UserOptions, SelectedColorPalette} from './../store';
     import { get } from 'svelte/store';
+    import updateChartConfig from '../scripts/update-chart-config';
     Highcharts.setOptions(options);
     export function createChart(node){
         return Highcharts.chart(node, config);
@@ -18,12 +19,12 @@
     });
     function containerUse(node){
         Chart = createChart(node);
+        window.chart = Chart;
         UserOptions.set(Chart.userOptions);
     }
     ChartType.subscribe(v => {
         if ( Chart ){
-            Chart.update({chart: {type: v}}, true, true);
-            UserOptions.set(Chart.userOptions);
+            updateChartConfig(Chart, {chart: {type: v}});
         }
     });
     ColorIndeces.subscribe(v => {
@@ -32,8 +33,8 @@
         series.forEach((s,i) => {
             s.colorIndex = v[i];
         });
-        Chart.update({series}, true, true);
-        UserOptions.set(Chart.userOptions);
+        updateChartConfig(Chart, {series});
+        
     });
 </script>
 <style>

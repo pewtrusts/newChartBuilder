@@ -1,8 +1,11 @@
 <script context="module">
     import slugger from 'slugger';
+    import Indicator from './Indicator.svelte';
 </script>
 <script>
     export let text;
+    export let indicators = [];
+    export let Chart;
 </script>
 <style>
     .section-anchor {
@@ -20,3 +23,8 @@
 <a name="{slugger(text)}" id="{slugger(text)}" class="section-anchor"><span class="visually-hidden">{text}</span></a>
 <div class="observer" data-section="{slugger(text)}"></div>
 <h2>{text}</h2>
+{#if Chart}
+{#each indicators as indicatorArr}
+<Indicator {Chart} {indicatorArr} />
+{/each}
+{/if}

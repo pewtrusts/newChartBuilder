@@ -7,6 +7,7 @@ const ActiveSection = writable('data');
 const UserOptions = writable({});
 const SelectedColorPalette = writable('default');
 const ColorIndeces = writable(undefined);
+const Indicators = writable({});
 
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 
@@ -16,6 +17,7 @@ export {
     CellBeingEdited, 
     ChartType, 
     ColorIndeces,
+    Indicators,
     SelectedColorPalette, 
     SeriesCount,
     UserOptions, 
