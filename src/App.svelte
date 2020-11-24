@@ -123,7 +123,7 @@
                 <SectionHead text="Settings" />
             </section>
             <section use:pushSection>
-                <SectionHead {Chart} text="Colors" indicators="{[{name: 'colorByPoint', condition: true}]}" />
+                <SectionHead text="Colors" />
                 <Colors />
             </section>
             <section use:pushSection>
