@@ -67,8 +67,8 @@ section h2:first-of-type {
 	letter-spacing: 0.2px;
 }
 .tippy-box {
-	background-color: var(--brand-primary);
+	background-color: #153164;
 }
 .tippy-arrow {
-	color: var(--brand-primary);
+	color: #153164;
 }

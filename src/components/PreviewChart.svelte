@@ -3,13 +3,38 @@
     import Highcharts from 'highcharts/highcharts.src.js';
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
-    import {ChartType, ColorIndeces, UserOptions, SelectedColorPalette} from './../store';
+    import {ChartType, ColorIndeces, UserOptions, SelectedColorPalette, ColorByPoint} from './../store';
     import { get } from 'svelte/store';
     import updateChartConfig from '../scripts/update-chart-config';
     Highcharts.setOptions(options);
     export function createChart(node){
         return Highcharts.chart(node, config);
     }
+    //console.log(Highcharts.SVGElement.prototype.addClass);
+    
+    Highcharts.SVGElement.prototype.addClass = function (className, replace) {
+        var currentClassName = replace ? '' : (this.attr('class') || '');
+        // Trim the string and remove duplicates
+        className = (className || '')
+            .split(/ /g)
+            .reduce(function (newClassName, name) {
+                if (currentClassName.indexOf(name) === -1) {
+                    if (name.indexOf('highcharts-color-') !== -1) {
+                        newClassName[0] = newClassName[0].replace(/highcharts-color-\d+/, '');
+                    }
+                    newClassName.push(name);
+                }
+                return newClassName;
+            }, (currentClassName ?
+                [currentClassName] :
+                []))
+            .join(' ');
+        if (className !== currentClassName) {
+            this.attr('class', className);
+        }
+        return this;
+    };
+            
 </script>
 <script>
     export let Chart;
@@ -30,8 +55,19 @@
     ColorIndeces.subscribe(v => {
         if (!v) return;
         const series = get(UserOptions).series;
+        const colorByPoint = get(ColorByPoint);
         series.forEach((s,i) => {
-            s.colorIndex = v[i];
+            if ( colorByPoint[i]){
+                s.colorIndex = undefined;
+                s.data.forEach((d,j) => {
+                    d.colorIndex = v[j];
+                });
+            } else {
+                s.colorIndex = v[i];
+                s.data.forEach(d => {
+                    d.colorIndex = undefined;
+                });
+            }
         });
         updateChartConfig(Chart, {series});
         
