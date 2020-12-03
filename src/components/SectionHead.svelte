@@ -16,6 +16,9 @@
         position: absolute;
         top: calc(25vh - var(--banner-height, 75px));
     }
+    h2 {
+        margin-bottom: 0.83em;
+    }
 </style>
 <a name="{slugger(text)}" id="{slugger(text)}" class="section-anchor"><span class="visually-hidden">{text}</span></a>
 <div class="observer" data-section="{slugger(text)}"></div>

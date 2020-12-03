@@ -63,3 +63,12 @@ section h2:first-of-type {
 	font-size: 0.85rem;
 	letter-spacing: 0.2px;
 }
+.tippy-content {
+	letter-spacing: 0.2px;
+}
+.tippy-box {
+	background-color: var(--brand-primary);
+}
+.tippy-arrow {
+	color: var(--brand-primary);
+}

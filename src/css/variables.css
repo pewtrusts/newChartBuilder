@@ -11,4 +11,9 @@
     --font-primary: Lato;
 
     --banner-height: 60px;
+
+
+    --info: #767676;
+    --warning: #C05126;
+    --error: #B52224;
 }

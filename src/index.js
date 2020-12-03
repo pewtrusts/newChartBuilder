@@ -1,4 +1,5 @@
 import 'normalize-css';
+import 'tippy.js/dist/tippy.css';
 import './css/variables.css';
 import './css/styles.css';
 import 'highcharts/css/highcharts.css';

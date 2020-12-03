@@ -1,5 +1,5 @@
 <script context="module">
-    import {ColorByPoint, ColorIndeces, SelectedColorPalette, SeriesCount} from './../store';
+    import {ColorIndeces, SelectedColorPalette, SeriesCount} from './../store';
     import { get } from 'svelte/store';
     function changeHandler(e){
         console.log(e.target.value);
@@ -17,9 +17,6 @@
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i) => i);
         ColorIndeces.set(colorIndeces);
     }
-    ColorByPoint.subscribe(v => {
-        console.log({colorByPoint: v});
-    })
     
 </script>
 <script>
