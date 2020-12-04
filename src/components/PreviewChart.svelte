@@ -19,8 +19,10 @@
             .split(/ /g)
             .reduce(function (newClassName, name) {
                 if (currentClassName.indexOf(name) === -1) {
-                    if (name.indexOf('highcharts-color-') !== -1) {
-                        newClassName[0] = newClassName[0].replace(/highcharts-color-\d+/, '');
+                    let split = name.split(/-\d+$/);
+                    if (split.length > 1 ) {
+                        let regex = new RegExp(split[0] + '-\\d+$');
+                        newClassName[0] = newClassName[0].replace(regex, '');
                     }
                     newClassName.push(name);
                 }
