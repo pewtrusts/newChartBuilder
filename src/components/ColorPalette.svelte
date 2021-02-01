@@ -22,7 +22,14 @@
 <script>
     export let palette;
     export let colorCount;
+    let customSwatchStep = 360 / colorCount;
     let selectedPalette;
+    let colorOrder = Array.apply(null, Array(colorCount)).map((_,i) => i + 1);
+   /* $:colorOrderCoerced = (function(){
+        console.log(colorOrder);
+        return colorOrder.map(d => +d);
+    })();*/
+    
     SelectedColorPalette.subscribe(v => {
         selectedPalette = v;
         if ( selectedPalette == palette){
@@ -35,16 +42,23 @@
     });
     function checkColorIndeces(seriesCount){
         if (seriesCount  && selectedPalette == palette){
-           if ( seriesCount < colorCount && palette !== 'default'){
+           if ( seriesCount < colorCount && !['default','custom'].includes(palette)){
                selectEvenlySpacedColors({seriesCount, colorCount});
            } else {
                resetColorIndeces(seriesCount);
            }
        }
     }
+    function customSwatchColor({palette, i}){
+        if (palette !== 'custom') return null;
+        return `background-image: linear-gradient(to right, hsl(${ i * customSwatchStep}, 100%, 50%), hsl(${ (i + 1) * customSwatchStep}, 100%, 50%));`;
+
+    }
+    
     
 </script>
 <style>
+    
     .selector {
         display: flex;
         align-items: flex-end;
@@ -62,22 +76,28 @@
         display: inline-block;
         margin-right: 2px;
     }
+
     .input {
         margin-right: 3px;
         height: 23px;
     }
+    
     label {
         line-height: 1;
     }
+    
+    
 </style>
-<div class="selector">
-    <input checked="{selectedPalette == palette ? true : null}" on:change="{changeHandler}" value="{palette}" name="color-palette" id="input-{palette}" class="input" type="radio">
-    <div>
-        <label for="input-{palette}">{palette.replace(/-/g,' ').replace(/^(\w)/, v => v.toUpperCase())}</label>
-        <div on:click="{swatchClick}" class="swatch-container {palette}" data-value="{palette}">
-            {#each new Array(colorCount) as _, i}
-                <div class="swatch highcharts-color-{i}"></div>
-            {/each}
+<div class="wrapper">
+    <div class="selector">
+        <input checked="{selectedPalette == palette ? true : null}" on:change="{changeHandler}" value="{palette}" name="color-palette" id="input-{palette}" class="input" type="radio">
+        <div>
+            <label for="input-{palette}">{palette.replace(/-/g,' ').replace(/^(\w)/, v => v.toUpperCase())}</label>
+            <div on:click="{swatchClick}" class="swatch-container {palette}" data-value="{palette}">
+                {#each new Array(colorCount) as _, i}
+                    <div class="swatch highcharts-color-{i} {palette}" style="{customSwatchColor({palette, i})}"></div>
+                {/each}
+            </div>
         </div>
     </div>
 </div>

@@ -1,11 +1,17 @@
 <script>
     import ColorPalette from './ColorPalette.svelte';
+    import SeriesColorSelectors from './SeriesColorSelectors.svelte';
     import brandOptions from '../brand-options.json';
     import griffinConfig from './../griffin/griffin-config.json';
-    import {ColorByPoint} from './../store';
+    import {ColorByPoint, SelectedColorPalette} from './../store';
     import Notices from './Notices.svelte';
-    let palettes = ['default', ...brandOptions.additionalColorPalettes];
+    let palettes = ['default', ...brandOptions.additionalColorPalettes, 'custom'];
     let notices = new Set();
+    let selectedPalette;
+    SelectedColorPalette.subscribe(v => {
+        if (!v) return;
+        selectedPalette = v;
+    });
     const colorByPointNotice = {
         label: 'colorByPoint',
         description: 'The data points in one or more series will have colors assigned individually.  ' + 
@@ -24,14 +30,18 @@
         grid-column-gap: 5px;
         grid-row-gap: 5px;
    }
+  
 </style>
 <div class="container">
     <Notices {notices} />
-    <p>1. Select from the default palettes below</p>
-    <p class="note">The monochrome palettes will automatically space series or points as uniformly as possible across the range of values</p>
+    <p>1. Select from preset palettes below or make a custom palette.</p>
+    <!--<p class="note">Change the numbers beneath the colors in the default palette to change which series or points they apply to.
+        The monochrome palettes will automatically space series or points as uniformly as possible across the range of values.
+    </p>-->
     <div class="grid-container">
         {#each palettes as palette}
         <ColorPalette {palette} colorCount="{griffinConfig.numberOfColors}" />
         {/each}
     </div>
+    <SeriesColorSelectors {selectedPalette} colorCount="{griffinConfig.numberOfColors}" />
 </div>
