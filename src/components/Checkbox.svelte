@@ -1,6 +1,5 @@
 <script>
     import {SelectedColorPalette, ColorIndeces} from './../store';
-    import get from 'svelte/store';
     export let seriesIndex;
     export let colorIndex;
     let selectedPalette;

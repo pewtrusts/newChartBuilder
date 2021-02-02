@@ -1,5 +1,5 @@
 <script context="module">
-    import {ColorIndeces, SelectedColorPalette, SeriesCount} from './../store';
+    import {ColorIndeces, SelectedColorPalette, ColorCount} from './../store';
     import { get } from 'svelte/store';
     function changeHandler(e){
         console.log(e.target.value);
@@ -24,20 +24,15 @@
     export let colorCount;
     let customSwatchStep = 360 / colorCount;
     let selectedPalette;
-    let colorOrder = Array.apply(null, Array(colorCount)).map((_,i) => i + 1);
-   /* $:colorOrderCoerced = (function(){
-        console.log(colorOrder);
-        return colorOrder.map(d => +d);
-    })();*/
-    
+       
     SelectedColorPalette.subscribe(v => {
         selectedPalette = v;
         if ( selectedPalette == palette){
-            let seriesCount = get(SeriesCount);
-            checkColorIndeces(seriesCount);
+            let colorCount = get(ColorCount);
+            checkColorIndeces(colorCount);
         }
     });
-    SeriesCount.subscribe(v => {
+    ColorCount.subscribe(v => {
         checkColorIndeces(v);
     });
     function checkColorIndeces(seriesCount){

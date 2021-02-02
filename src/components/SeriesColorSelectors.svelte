@@ -1,30 +1,26 @@
 <script>
-    import { SeriesCount, ColorIndeces, SelectedColorPalette, ColorByPoint } from './../store';
+    import { SeriesCount, SelectedColorPalette, ColorByPoint, MaxPointCount } from './../store';
     import Checkbox from './Checkbox.svelte';
     export let selectedPalette;
     export let colorCount;
     let seriesArray = [];
-    let colorIndeces;
-    let colorByPoint;
+    let maxPointCountArray = [];
+    let colorByPoint = false;
     SeriesCount.subscribe(v => {
         if (!v) return;
         seriesArray = Array.apply(null, Array(v)).map((_,i) => i + 1);
-    });
-    ColorIndeces.subscribe(v => {
-        if (!v) return;
-        colorIndeces = v;
     });
     SelectedColorPalette.subscribe(v => {
         if (!v) return;
         selectedPalette = v;
     });
     ColorByPoint.subscribe(v => {
-        colorByPoint = v;
+        colorByPoint = v[0] == true; // TO DO. here we are only handling the first series being colorByPoint
+                                     // no support yet for a mix of color by point vs not color by point
     });
-    function isChecked(j,i){
-        console.log(colorIndeces,j,i);
-        return colorIndeces[j] == i ? 'checked' : null;
-    }
+    MaxPointCount.subscribe(v => {
+        maxPointCountArray = Array.apply(null, Array(v)).map((_,i) => i + 1);
+    });
     
 </script>
 <style>
@@ -41,10 +37,10 @@
     
 </style>
 <div class="container {selectedPalette}">
-    <p class="instruction-step">2. Assign a color to each series.</p>
-    {#each seriesArray as series, j}
+    <p class="instruction-step">2. Assign a color to each {colorByPoint ? 'point' : 'series'}.</p>
+    {#each (colorByPoint ? maxPointCountArray : seriesArray) as index, j}
     <div class="series-container">
-        <p class="series-label {selectedPalette}">Series {series}: </p>
+        <p class="series-label {selectedPalette}">{colorByPoint ? 'Point' : 'Series'} {index}: </p>
             {#each new Array(colorCount) as _, i }
                 <Checkbox seriesIndex="{j}" colorIndex="{i}" />
             {/each}
