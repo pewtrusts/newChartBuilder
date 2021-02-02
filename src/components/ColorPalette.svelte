@@ -22,6 +22,7 @@
 <script>
     export let palette;
     export let colorCount;
+    export let defaultPaletteColorCount;
     let customSwatchStep = 360 / colorCount;
     let selectedPalette;
        
@@ -58,6 +59,8 @@
         display: flex;
         align-items: flex-end;
         line-height: 1;
+        cursor: pointer;
+        border: 2px solid transparent;
     }
     .swatch-container {
         position: relative;
@@ -75,21 +78,27 @@
     .input {
         margin-right: 3px;
         height: 23px;
+        cursor: pointer;
     }
     
     label {
         line-height: 1;
+        cursor: pointer;
+    }
+    .isSelected label {
+        font-weight: 900;
+        color: #000;
     }
     
     
 </style>
 <div class="wrapper">
-    <div class="selector">
+    <div class="selector" class:isSelected="{selectedPalette == palette ? true : null}">
         <input checked="{selectedPalette == palette ? true : null}" on:change="{changeHandler}" value="{palette}" name="color-palette" id="input-{palette}" class="input" type="radio">
         <div>
             <label for="input-{palette}">{palette.replace(/-/g,' ').replace(/^(\w)/, v => v.toUpperCase())}</label>
             <div on:click="{swatchClick}" class="swatch-container {palette}" data-value="{palette}">
-                {#each new Array(colorCount) as _, i}
+                {#each new Array(palette == 'default' ? defaultPaletteColorCount : colorCount) as _, i}
                     <div class="swatch highcharts-color-{i} {palette}" style="{customSwatchColor({palette, i})}"></div>
                 {/each}
             </div>

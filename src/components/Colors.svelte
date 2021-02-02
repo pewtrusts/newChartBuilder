@@ -5,7 +5,7 @@
     import griffinConfig from './../griffin/griffin-config.json';
     import {ColorByPoint, SelectedColorPalette} from './../store';
     import Notices from './Notices.svelte';
-    let palettes = ['default', ...brandOptions.additionalColorPalettes, 'custom'];
+    let palettes = ['default', ...brandOptions.additionalColorPalettes];
     let notices = new Set();
     let selectedPalette;
     SelectedColorPalette.subscribe(v => {
@@ -29,8 +29,11 @@
         grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
         grid-column-gap: 5px;
         grid-row-gap: 5px;
+        margin-bottom: 5px;
    }
-  
+   .default-wrapper {
+       margin-bottom: 1.5rem;
+   }
 </style>
 <div class="container">
     <Notices {notices} />
@@ -38,10 +41,28 @@
     <!--<p class="note">Change the numbers beneath the colors in the default palette to change which series or points they apply to.
         The monochrome palettes will automatically space series or points as uniformly as possible across the range of values.
     </p>-->
+    <div class="default-wrapper">
+        <ColorPalette palette="{palettes[0]}" 
+                colorCount="{griffinConfig.numberOfColors}"
+                defaultPaletteColorCount="{griffinConfig.numberOfColorsInDefaultPalette}"
+            />
+    </div>
     <div class="grid-container">
-        {#each palettes as palette}
-        <ColorPalette {palette} colorCount="{griffinConfig.numberOfColors}" />
+        {#each palettes.slice(1) as palette}
+        <ColorPalette {palette} 
+            colorCount="{griffinConfig.numberOfColors}"
+            defaultPaletteColorCount="{griffinConfig.numberOfColorsInDefaultPalette}"
+        />
         {/each}
     </div>
-    <SeriesColorSelectors {selectedPalette} colorCount="{griffinConfig.numberOfColors}" />
+    <div class="default-wrapper">
+        <ColorPalette palette="custom"
+                colorCount="{griffinConfig.numberOfColors}"
+                defaultPaletteColorCount="{griffinConfig.numberOfColorsInDefaultPalette}"
+        />
+    </div>
+    <SeriesColorSelectors {selectedPalette}
+        colorCount="{griffinConfig.numberOfColors}"
+        defaultPaletteColorCount="{griffinConfig.numberOfColorsInDefaultPalette}"
+    />
 </div>

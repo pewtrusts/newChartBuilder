@@ -78,3 +78,24 @@
   fill: var(--color-9, #91e8e1);
   stroke: var(--color-9, #91e8e1);
 }
+.swatch.highcharts-color-10 {
+  background-color: var(--color-10, #91e8e1);
+}
+.highcharts-color-10 {
+  fill: var(--color-10, #91e8e1);
+  stroke: var(--color-10, #91e8e1);
+}
+.swatch.highcharts-color-11 {
+  background-color: var(--color-11, #91e8e1);
+}
+.highcharts-color-11 {
+  fill: var(--color-11, #91e8e1);
+  stroke: var(--color-11, #91e8e1);
+}
+.swatch.highcharts-color-12 {
+  background-color: var(--color-12, #91e8e1);
+}
+.highcharts-color-12 {
+  fill: var(--color-12, #91e8e1);
+  stroke: var(--color-12, #91e8e1);
+}

@@ -12,7 +12,7 @@ const ColorByPoint = writable([]);
 const SeriesCountFromTable = writable(0); /* SeriesCountFromTable is # of series from data passed in by user.
                                              SeriesCount is # series sent to the Chart instance. e.g., pie charts
                                              only pass in one series regardless of the SeriesCountFromTable */
-
+const CustomColors = writable([]);
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 const MaxPointCount = derived([UserOptions], ([userOptions]) => {
@@ -35,6 +35,7 @@ export {
     ColorByPoint,
     ColorCount,
     ColorIndeces,
+    CustomColors,
     Indicators,
     MaxPointCount,
     SelectedColorPalette, 

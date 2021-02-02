@@ -7,5 +7,5 @@
     "pathToDevCSS": "./dev.css",
     "chartTypes": ["area", "bar", "column", "line", "pie", "scatter"],
     "defaultChartType": "line",
-    "additionalColorPalettes": ["pew-blue","gray","teal","orange","blue","red"]
+    "additionalColorPalettes": ["gray", "pew-blue","blue","teal","orange","red", "green", "pink"]
 }

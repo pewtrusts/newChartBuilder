@@ -1,3 +1,4 @@
 {
-    "numberOfColors": 6
+    "numberOfColors": 6,
+    "numberOfColorsInDefaultPalette": 10
 }

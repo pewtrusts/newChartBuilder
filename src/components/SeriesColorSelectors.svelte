@@ -1,8 +1,10 @@
 <script>
     import { SeriesCount, SelectedColorPalette, ColorByPoint, MaxPointCount } from './../store';
     import Checkbox from './Checkbox.svelte';
+    import CustomColorInput from './CustomColorInput.svelte';
     export let selectedPalette;
     export let colorCount;
+    export let defaultPaletteColorCount;
     let seriesArray = [];
     let maxPointCountArray = [];
     let colorByPoint = false;
@@ -30,7 +32,6 @@
     }
     .series-label {
         margin: 0;
-        display: inline-block;
         position: relative;
         bottom: 4px;
     }
@@ -41,9 +42,13 @@
     {#each (colorByPoint ? maxPointCountArray : seriesArray) as index, j}
     <div class="series-container">
         <p class="series-label {selectedPalette}">{colorByPoint ? 'Point' : 'Series'} {index}: </p>
-            {#each new Array(colorCount) as _, i }
+        {#if selectedPalette !== 'custom'}
+            {#each new Array(selectedPalette == 'default' ? defaultPaletteColorCount : colorCount) as _, i }
                 <Checkbox seriesIndex="{j}" colorIndex="{i}" />
             {/each}
+        {:else}
+            <CustomColorInput seriesIndex="{j}" />
+        {/if}
         </div>
     {/each}
 </div>
