@@ -72,3 +72,6 @@ section h2:first-of-type {
 .tippy-arrow {
 	color: #153164;
 }
+.instruction-step {
+	font-weight: bold;
+}

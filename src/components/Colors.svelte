@@ -34,7 +34,7 @@
 </style>
 <div class="container">
     <Notices {notices} />
-    <p>1. Select from preset palettes below or make a custom palette.</p>
+    <p class="instruction-step">1. Select from preset palettes below or make a custom palette.</p>
     <!--<p class="note">Change the numbers beneath the colors in the default palette to change which series or points they apply to.
         The monochrome palettes will automatically space series or points as uniformly as possible across the range of values.
     </p>-->
