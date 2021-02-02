@@ -10,7 +10,12 @@
     let id = `dropdown-${slugger(label)}-${count}`;
     let isGrouped = Array.isArray(options[0]);
 </script>
-<div>
+<style>
+	.container {
+		z-index: 1;
+	}
+</style>
+<div class="container">
 	
 	{#if label}
 	<label for="{id}">{label}</label>

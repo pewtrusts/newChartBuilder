@@ -1,9 +1,10 @@
 <script context="module">
     import Sprite from "./Sprite.svelte";
     import Button from "./Button.svelte";
+    import Notices from './Notices.svelte';
     import updateChartData from "@Script/update-chart-data.js";
     import EditableCell from "@Component/EditableCell.svelte";
-    import { XAxisType } from "@Project/store";
+    import { XAxisType, SeriesCountMismatch } from "@Project/store";
     import { createChart } from "@Component/PreviewChart.svelte";
 
     /* for testing data is being imported directly. will come from user input */
@@ -65,6 +66,8 @@
     export let showDataInput;
     let xAxisType = "linear";
     export let datatableContainer;
+    let notices = new Set();
+    export let seriesCountMismatchNotice;
     function returnHeadClass(i) {
         if (
             data.slice(1).every((row) => {
@@ -88,6 +91,10 @@
     }
     XAxisType.subscribe((v) => {
         xAxisType = v;
+    });
+    SeriesCountMismatch.subscribe(v => {
+        notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
+        notices = notices;
     });
     updateChartData(data, Chart);
 </script>
@@ -170,7 +177,7 @@
         );
     }
 </style>
-
+<Notices {notices} />
 <div class="actions">
     <Button
         clickHandler={() => (showDataInput = true)}

@@ -11,7 +11,7 @@ const Indicators = writable({});
 const ColorByPoint = writable([]);
 
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
-
+const SeriesCountMismatch = derived([SeriesCount, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 
 export {
     ActiveSection, 
@@ -22,6 +22,7 @@ export {
     Indicators,
     SelectedColorPalette, 
     SeriesCount,
+    SeriesCountMismatch,
     UserOptions, 
     XAxisType
 };

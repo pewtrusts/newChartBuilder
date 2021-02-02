@@ -16,7 +16,11 @@
 </script> 
 
 <script>
-
+    let seriesCountMismatchNotice = {
+        label: 'Unused series',
+        description: 'The selected chart type can only render one series; the data supplied has more than one. Only the first series will be rendered.',
+        type: 'warning'
+    };
     let Chart = "";
     let showDataInput = false;
     let data;
@@ -116,7 +120,7 @@
             <section use:pushSection>
                 <SectionHead text="Data" />
                 {#if Chart}
-                    <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data />
+                    <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data {seriesCountMismatchNotice} />
                 {/if}
             </section>
             <section use:pushSection class="dummy">
@@ -135,7 +139,7 @@
         <div class="chart-container">
             <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
             <div>
-                <PreviewChart bind:Chart />
+                <PreviewChart bind:Chart {seriesCountMismatchNotice}/>
             </div>
         </div>
     </div>

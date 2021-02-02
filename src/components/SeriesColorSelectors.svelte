@@ -1,10 +1,11 @@
 <script>
-    import { SeriesCount, ColorIndeces, SelectedColorPalette } from './../store';
+    import { SeriesCount, ColorIndeces, SelectedColorPalette, ColorByPoint } from './../store';
     import Checkbox from './Checkbox.svelte';
     export let selectedPalette;
     export let colorCount;
     let seriesArray = [];
     let colorIndeces;
+    let colorByPoint;
     SeriesCount.subscribe(v => {
         if (!v) return;
         seriesArray = Array.apply(null, Array(v)).map((_,i) => i + 1);
@@ -16,7 +17,10 @@
     SelectedColorPalette.subscribe(v => {
         if (!v) return;
         selectedPalette = v;
-    })
+    });
+    ColorByPoint.subscribe(v => {
+        colorByPoint = v;
+    });
     function isChecked(j,i){
         console.log(colorIndeces,j,i);
         return colorIndeces[j] == i ? 'checked' : null;
