@@ -1,4 +1,4 @@
-import { XAxisType } from '../store';
+import { XAxisType, SeriesCountFromTable } from '../store';
 import updateChart from './update-chart-config';
 import toDate from './coerce-to-date';
 /*
@@ -19,10 +19,16 @@ const timeUnits =
     year:        31449600000,
 };
 // return a HC series config object based on the data
-export default function _updateChartData(data, Chart) {
+export default function _updateChartData(data, Chart, datatableData = null) { // pass in third arg when the chart uses fewer series than what's in the
+                                                                       // datatable, e.g., pie charts 
     // map of x-axis values as coerced to dates.
     // info: intervals was used to set specific tick points until i found the more immediate
     // and simpler issue was the startOfWeek setting. keeping here as comments for later
+    if ( datatableData ){
+        SeriesCountFromTable.set(datatableData.length - 1);
+    } else {
+        SeriesCountFromTable.set(data.length - 1);
+    }
     var intervals;
     const asDateTime = data.slice(1).map(row => {
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';

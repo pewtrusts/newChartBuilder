@@ -9,9 +9,12 @@ const SelectedColorPalette = writable('default');
 const ColorIndeces = writable(undefined);
 const Indicators = writable({});
 const ColorByPoint = writable([]);
+const SeriesCountFromTable = writable(0); /* SeriesCountFromTable is # of series from data passed in by user.
+                                             SeriesCount is # series sent to the Chart instance. e.g., pie charts
+                                             only pass in one series regardless of the SeriesCountFromTable */
 
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
-const SeriesCountMismatch = derived([SeriesCount, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
+const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 
 export {
     ActiveSection, 
@@ -22,6 +25,7 @@ export {
     Indicators,
     SelectedColorPalette, 
     SeriesCount,
+    SeriesCountFromTable,
     SeriesCountMismatch,
     UserOptions, 
     XAxisType

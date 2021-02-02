@@ -4,7 +4,7 @@
     import Notices from './Notices.svelte';
     import updateChartData from "@Script/update-chart-data.js";
     import EditableCell from "@Component/EditableCell.svelte";
-    import { XAxisType, SeriesCountMismatch } from "@Project/store";
+    import { ChartType, XAxisType, SeriesCountMismatch } from "@Project/store";
     import { createChart } from "@Component/PreviewChart.svelte";
 
     /* for testing data is being imported directly. will come from user input */
@@ -60,7 +60,7 @@
     export let data = [
         ["X values", "Series 1", "Series 2", "Series 3"],
         ["Apples", 2, 3, 4],
-        ["Oranges", 4, 6, 8],
+        ["Oranges", 4, 7, 10],
     ];
     export let Chart;
     export let showDataInput;
@@ -78,10 +78,13 @@
         }
         return "head head--string-column";
     }
+    function _transpose(data){
+        return data[0].map((_, i) => [...data.map((row) => row[i])]);
+    }
     function transpose() {
         const container = Chart.renderTo;
         Chart.destroy();
-        data = data[0].map((_, i) => [...data.map((row) => row[i])]);
+        data = _transpose(data);
         Chart = createChart(container);
         updateChartData(data, Chart);
     }
@@ -89,6 +92,14 @@
         console.log({ e, data });
         updateChartData(data, Chart);
     }
+    ChartType.subscribe(v => {
+        if (v == 'pie') {
+            let _data = _transpose(data);
+            updateChartData(_transpose(_data.slice(0,2)), Chart, data);
+        } else {
+            updateChartData(data, Chart);
+        }
+    });
     XAxisType.subscribe((v) => {
         xAxisType = v;
     });

@@ -18,7 +18,7 @@
 <script>
     let seriesCountMismatchNotice = {
         label: 'Unused series',
-        description: 'The selected chart type can only render one series; the data supplied has more than one. Only the first series will be rendered.',
+        description: 'The selected chart type can only render one series, but the data supplied has more than one. Only the first series will be rendered.',
         type: 'warning'
     };
     let Chart = "";
