@@ -11,7 +11,7 @@ const path = require('path');
 const outputFolder = process.env.NODE_ENV === 'production' ? 'docs/' : process.env.NODE_ENV === 'localpreview' ? 'preview/' : 'dist/';
 const isDev = mode === 'development';
 const repoName = 'newChartBuilder';
-const publicPath = ''; // no public path necessary bc build is to docs/ folder, similar to preview in other projects
+const publicPath = process.env.NODE_ENV === 'production' ? '/' + repoName + '/' : '/';
 const title = 'Griffin Chart Builder 1.0.0'
 
 
@@ -20,8 +20,30 @@ const plugins = [
         from: 'assets/',
         context: 'src',
         to: 'assets/',
+    },{
+        from: 'griffin/assets/',
+        context: 'src',
+        to: 'tester/assets/',
+        ignore: ['Pew/css/**/*.*']
+    },{
+        from: 'griffin/assets/Pew/css/',
+        context: 'src',
+        to: 'tester/assets/Pew/css/',
+        transform(content) {
+            if (process.env.NODE_ENV === 'production') {
+                // this modifies the content of the files being copied; here making sure url('/...') is changed so that it will
+                // work on gitHub pages where oublic path is /{repoName}/
+                // also changes references to 'pew' to refer to 'Pew'
+                return content.toString().replace(/url\("\/([^/])/g, 'url("/' + repoName + '/tester/$1').replace(/\/pew\//g, '/Pew/');
+            } else {
+                return content.toString().replace(/url\("\/([^/])/g, 'url("/tester/$1').replace(/\/pew\//g, '/Pew/');
+            }
+        }
+    },{
+        from: 'griffin/-/',
+        context: 'src',
+        to: 'tester/-/',
     }]),
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
         title,
         template: './src/index.html',
@@ -31,9 +53,11 @@ const plugins = [
     }),
     new HtmlWebpackPlugin({
         title: 'Griffin Tester',
-        template: './src/griffin/tester.html',
+        template: './src/griffin/index-70-30.html',
         chunks: ['griffin'],
-        filename: './tester/index.html'
+        filename: './tester/index.html',
+        inject: false,
+        publicPath: 'tester/'
     }),
     new MiniCssExtractPlugin({
         filename: '[name].css'
@@ -67,7 +91,11 @@ module.exports = (env) => {
             chunkFilename: '[name].[id].js'
         },
         module: {
-            rules: [{
+            rules: [
+                {
+                    test: /\.(woff|woff2)$/,
+                    use: ['file-loader']
+                },{
                     test: /\.svelte$/,
                     use: {
                         loader: 'svelte-loader-hot',
@@ -106,7 +134,8 @@ module.exports = (env) => {
                          * */
                         !isDev ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader',
-                    ]
+                    ],
+
                 },
                 {
                     test: /\.scss$/,
@@ -135,7 +164,7 @@ module.exports = (env) => {
                 {
                     test: /\.html$/,
                     use: 'html-loader',
-                    exclude: /index\.html/
+                    exclude: /index.*\.html/
                 }
                /* {
                     test: /\.csv$/,
