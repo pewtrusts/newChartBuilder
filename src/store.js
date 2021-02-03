@@ -1,3 +1,4 @@
+import hash from './griffin/scripts/hash';
 import { writable, derived } from 'svelte/store';
 import brandOptions from './brand-options.json';
 const CellBeingEdited = writable(null);
@@ -27,10 +28,15 @@ const ColorCount = derived([MaxPointCount,ColorByPoint, SeriesCount], ([maxPoint
     }
     return seriesCount;
 });
+const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([selectedPalette, customColors]) => {
+    if (selectedPalette !== 'custom') return selectedPalette;
+    return `cc${hash(customColors.join(''))}`;
+});
 
 export {
     ActiveSection, 
     CellBeingEdited, 
+    ChartPaletteClassname,
     ChartType, 
     ColorByPoint,
     ColorCount,

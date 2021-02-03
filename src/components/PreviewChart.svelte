@@ -3,7 +3,7 @@
     import Highcharts from 'highcharts/highcharts.src.js';
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
-    import {ChartType, ColorIndeces, UserOptions, SelectedColorPalette, ColorByPoint, SeriesCountMismatch} from './../store';
+    import {ChartType, ColorIndeces, UserOptions, ChartPaletteClassname, ColorByPoint, SeriesCountMismatch} from './../store';
     import { get } from 'svelte/store';
     import updateChartConfig from '../scripts/update-chart-config';
     import Notices from './Notices.svelte';
@@ -42,14 +42,14 @@
 <script>
     export let Chart;
     export let seriesCountMismatchNotice;
-    let colorPalette;
+    let colorPaletteClass;
     let notices = new Set();
     SeriesCountMismatch.subscribe(v => {
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;
     });
-    SelectedColorPalette.subscribe(v => {
-        colorPalette = v;
+    ChartPaletteClassname.subscribe(v => {
+        colorPaletteClass = v;
     });
     function containerUse(node){
         Chart = createChart(node);
@@ -91,4 +91,4 @@
 
 <Notices {notices} />
 
-<div class="container {colorPalette}" use:containerUse></div>
+<div class="container {colorPaletteClass}" use:containerUse></div>
