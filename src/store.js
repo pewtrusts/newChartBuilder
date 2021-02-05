@@ -55,6 +55,7 @@ const CodeExport = derived([
     ChartDescription, 
     ChartLabel, 
     ChartNotes,
+    ChartPaletteClassname,
     ChartTitle, 
     ChartSources,
     ChartSubtitle, 
@@ -65,6 +66,7 @@ const CodeExport = derived([
     chartDescription,
     chartLabel, 
     chartNotes,
+    chartPaletteClassname,
     chartTitle, 
     chartSources,
     chartSubtitle, 
@@ -86,7 +88,7 @@ const CodeExport = derived([
         griffinConfig 
     })}
     </pre>
-    <div aria-hidden="true" class="js-hc-container"></div>${ chartNotes || chartSources || chartCredit ? `
+    <div aria-hidden="true" class="js-hc-container ${chartPaletteClassname}"></div>${ chartNotes || chartSources || chartCredit ? `
     <figcaption>${chartNotes ? `
         <p class="figure-note">
             ${chartNotes}
