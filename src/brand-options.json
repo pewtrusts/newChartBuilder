@@ -7,5 +7,8 @@
     "pathToDevCSS": "./dev.css",
     "chartTypes": ["area", "bar", "column", "line", "pie", "scatter"],
     "defaultChartType": "line",
-    "additionalColorPalettes": ["gray", "pew-blue","blue","teal","orange","red", "green", "pink"]
+    "additionalColorPalettes": ["gray", "pew-blue","blue","teal","orange","red", "green", "pink"],
+    "chartLabelName": "Label",
+    "chartTitleName": "Hed",
+    "chartSubtitleName": "Dek"
 }

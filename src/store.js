@@ -14,6 +14,13 @@ const SeriesCountFromTable = writable(0); /* SeriesCountFromTable is # of series
                                              SeriesCount is # series sent to the Chart instance. e.g., pie charts
                                              only pass in one series regardless of the SeriesCountFromTable */
 const CustomColors = writable([]);
+const ChartCredit = writable(`© ${new Date().getFullYear()} The Pew Charitable Trusts`);
+const ChartDescription = writable('');
+const ChartLabel = writable('');
+const ChartNotes = writable('');
+const ChartTitle = writable('');
+const ChartSources = writable('');
+const ChartSubtitle = writable('');
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 const MaxPointCount = derived([UserOptions], ([userOptions]) => {
@@ -32,12 +39,81 @@ const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([sel
     if (selectedPalette !== 'custom') return selectedPalette;
     return `cc${hash(customColors.join(''))}`;
 });
+const GriffinConfig = derived([
+    ChartPaletteClassname, 
+    CustomColors, 
+    ChartLabel, 
+    ChartTitle, 
+    ChartSubtitle
+], ([chartPaletteClassname, customColors, chartLabel, chartTitle, chartSubtitle]) => {
+    return {
+        chartPaletteClassname, customColors, chartLabel, chartTitle, chartSubtitle
+    };
+});
+const CodeExport = derived([
+    ChartCredit,
+    ChartDescription, 
+    ChartLabel, 
+    ChartNotes,
+    ChartTitle, 
+    ChartSources,
+    ChartSubtitle, 
+    UserOptions, 
+    GriffinConfig
+], ([
+    chartCredit,
+    chartDescription,
+    chartLabel, 
+    chartNotes,
+    chartTitle, 
+    chartSources,
+    chartSubtitle, 
+    userOptions, 
+    griffinConfig
+]) => {
+    const hashTitle = chartTitle ? hash(chartTitle) : null;
+    return `<figure${chartTitle ? ' aria-labelledby="heading-' + hashTitle + '"' : ''}${chartDescription ? ` aria-describedby="description-${hashTitle || hash(chartDescription)}"` : ''} class="ai2html-griffin-figure griffin-figure js-griffin">
+    <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
+    <header>${chartLabel ? `
+        <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
+        <h1 id="heading-${hashTitle}">${chartTitle}</h1>` : ''}${chartSubtitle ? `
+        <p class="figure-dek">${chartSubtitle}</p>` : ''}
+    </header>` : ''}${chartDescription ? `
+    <p id="description-${hashTitle ? hashTitle : hash(chartDescription)}" class="visually-hidden">${chartDescription}</p>` : ''}
+    <pre class="js-griffin-config" style="display: none;">
+    ${JSON.stringify({
+        highchartsConfig: userOptions,
+        griffinConfig 
+    })}
+    </pre>
+    <div aria-hidden="true" class="js-hc-container"></div>${ chartNotes || chartSources || chartCredit ? `
+    <figcaption>${chartNotes ? `
+        <p class="figure-note">
+            ${chartNotes}
+        </p>` : ''}${chartSources ? `
+        <p class="figure-note figure-note--source">
+            ${chartSources}
+        </p>` : ''}${chartCredit ? `
+        <p class="figure-note figure-note--source">
+            ${chartCredit}
+        </p>` : ''}
+    </figcaption>` : ''}
+</figure>`;
+});
 
 export {
     ActiveSection, 
     CellBeingEdited, 
+    ChartCredit,
+    ChartDescription,
     ChartPaletteClassname,
+    ChartLabel,
+    ChartNotes,
+    ChartSources,
+    ChartSubtitle,
+    ChartTitle,
     ChartType, 
+    CodeExport,
     ColorByPoint,
     ColorCount,
     ColorIndeces,

@@ -1,9 +1,8 @@
 <script>
-    import alphabetize from 'alphabetize-object-keys';
-    import {UserOptions} from './../store';
-    let userOptions;
-    UserOptions.subscribe(v => {
-        userOptions = alphabetize(v);
+    import {CodeExport} from './../store';
+    let codeExport;
+    CodeExport.subscribe(v => {
+        codeExport = v;
     });
 </script>
 <style>
@@ -13,4 +12,6 @@
         height: calc(100% - 40px);
     }
 </style>
-<textarea value="{JSON.stringify(userOptions, null, 2)}"></textarea>
+<!-- to do: remove spacing to minimize output -->
+<!--<textarea value="{JSON.stringify(codeExport, null, 2)}"></textarea>-->
+<textarea value="{codeExport}"></textarea>

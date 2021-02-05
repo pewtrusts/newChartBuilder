@@ -1,5 +1,6 @@
 <script context="module">
     import Banner from "./components/Banner.svelte";
+    import Settings from './components/Settings.svelte';
     import DataTable from "@Component/DataTable.svelte";
     import SpriteDefs from "./sprite.svelte";
     import brandOptions from "./brand-options.json";
@@ -123,8 +124,9 @@
                     <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data {seriesCountMismatchNotice} />
                 {/if}
             </section>
-            <section use:pushSection class="dummy">
+            <section use:pushSection>
                 <SectionHead text="Settings" />
+                <Settings />
             </section>
             <section use:pushSection>
                 <SectionHead text="Colors" />

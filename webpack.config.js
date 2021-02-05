@@ -56,7 +56,7 @@ const plugins = [
         template: './src/griffin/index-70-30.html',
         chunks: ['griffin'],
         filename: './tester/index.html',
-        inject: false,
+        inject: true,
         publicPath: 'tester/'
     }),
     new MiniCssExtractPlugin({
