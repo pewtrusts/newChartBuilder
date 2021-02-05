@@ -165,6 +165,14 @@ module.exports = (env) => {
                     test: /\.html$/,
                     use: 'html-loader',
                     exclude: /index.*\.html/
+                }, {
+                    test: /index\.html$/,
+                    use: [{
+                        loader: 'ejs-loader',
+                        options: {
+                            esModule: false
+                        }
+                    }]
                 }
                /* {
                     test: /\.csv$/,
