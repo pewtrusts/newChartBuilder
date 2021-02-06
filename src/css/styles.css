@@ -13,8 +13,9 @@ p {
 section {
 		position: relative;
 		width: 100%;
-		margin-bottom: 1rem;
+		margin-bottom: 15vh;
 		min-height: calc(100vh - var(--banner-height, 75px) - 80px - 1rem);
+		flex-shrink: 0;
     }
 section h2:first-of-type {
         margin-top: 0;
@@ -74,4 +75,17 @@ section h2:first-of-type {
 }
 .instruction-step {
 	font-weight: bold;
+}
+.button {
+	appearance: none;
+	background: none;
+	border: none;
+	font-weight: bold;
+	padding: 0.2em 0.5em;
+	line-height: 1.5;
+	letter-spacing: 0.3px;
+}
+.button--primary {
+	background-color: var(--brand-primary, #000);
+	color: #fff
 }
