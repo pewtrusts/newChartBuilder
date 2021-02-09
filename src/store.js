@@ -6,6 +6,7 @@ const XAxisType = writable('linear');
 const ChartType = writable(brandOptions.defaultChartType);
 const ActiveSection = writable('data');
 const UserOptions = writable({});
+const ImageDataUri = writable('');
 const SelectedColorPalette = writable('default');
 const ColorIndeces = writable(undefined);
 const Indicators = writable({});
@@ -59,6 +60,7 @@ const CodeExport = derived([
     ChartTitle, 
     ChartSources,
     ChartSubtitle, 
+    ImageDataUri,
     UserOptions, 
     GriffinConfig
 ], ([
@@ -69,7 +71,8 @@ const CodeExport = derived([
     chartPaletteClassname,
     chartTitle, 
     chartSources,
-    chartSubtitle, 
+    chartSubtitle,
+    imageDataUri,
     userOptions, 
     griffinConfig
 ]) => {
@@ -88,7 +91,9 @@ const CodeExport = derived([
         griffinConfig 
     })}
     </pre>
-    <div aria-hidden="true" class="js-hc-container ${chartPaletteClassname}"></div>${ chartNotes || chartSources || chartCredit ? `
+    <div aria-hidden="true" class="js-hc-container ${chartPaletteClassname}">
+        <img src="${imageDataUri}" />
+    </div>${ chartNotes || chartSources || chartCredit ? `
     <figcaption>${chartNotes ? `
         <p class="figure-note">
             ${chartNotes}
@@ -120,6 +125,7 @@ export {
     ColorCount,
     ColorIndeces,
     CustomColors,
+    ImageDataUri,
     Indicators,
     MaxPointCount,
     SelectedColorPalette, 

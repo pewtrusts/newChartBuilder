@@ -1,3 +1,9 @@
 {
-  
+  "title": null,
+  "credits": {
+    "enabled": false
+  },
+  "yAxis": {
+      "title": null
+  }
 }

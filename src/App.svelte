@@ -89,7 +89,7 @@
         background-color: var(--background-shade, lightgray);
         display: flex;
         justify-content: flex-start;
-        align-items: center;
+        align-items: stretch;
         flex-direction: column;
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
@@ -140,9 +140,7 @@
         </div>
         <div class="chart-container">
             <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-            <div>
-                <PreviewChart bind:Chart {seriesCountMismatchNotice}/>
-            </div>
+            <PreviewChart bind:Chart {seriesCountMismatchNotice}/>
         </div>
     </div>
 </div>

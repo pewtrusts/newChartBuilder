@@ -8,10 +8,10 @@
     export let notices;
 </script>
 <style>
-    .container {
+/*    .container {
         margin-top: -1em;
         margin-bottom: -1em;
-    }
+    }*/
     dl {
         display: flex;
         justify-content: flex-end;

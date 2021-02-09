@@ -1,4 +1,5 @@
 <script context="module">
+    import '@Submodule/shared-css/styles.css';
     // TO DO: SWITCH TO MINIFIED HC SRC
     import Highcharts from 'highcharts/highcharts.src.js';
     import options from '@Project/options.json';
@@ -40,9 +41,16 @@
             
 </script>
 <script>
+    import {ChartLabel, ChartTitle, ChartSubtitle, ChartNotes, ChartSources, ChartCredit} from './../store';
     export let Chart;
     export let seriesCountMismatchNotice;
     let colorPaletteClass;
+    let chartLabel;
+    let chartTitle;
+    let chartSubtitle;
+    let chartNotes;
+    let chartSources;
+    let chartCredit;
     let notices = new Set();
     SeriesCountMismatch.subscribe(v => {
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
@@ -56,6 +64,24 @@
         window.chart = Chart;
         UserOptions.set(Chart.userOptions);
     }
+    ChartLabel.subscribe(v => {
+        chartLabel = v;
+    });
+    ChartTitle.subscribe(v => {
+        chartTitle = v;
+    });
+    ChartSubtitle.subscribe(v => {
+        chartSubtitle = v;
+    });
+    ChartNotes.subscribe(v => {
+        chartNotes = v;
+    });
+    ChartSources.subscribe(v => {
+        chartSources = v;
+    });
+    ChartCredit.subscribe(v => {
+        chartCredit = v;
+    });
     ChartType.subscribe(v => {
         if ( Chart ){
             updateChartConfig(Chart, {chart: {type: v}});
@@ -86,9 +112,49 @@
     .container {
         margin-top: 1rem;
     }
-    
+    .griffin-figure {
+        margin: 0 auto;
+        box-sizing: content-box;
+        border: 21px solid #fff;
+        background-color: #fff;
+    }
 </style>
 
 <Notices {notices} />
-
-<div class="container {colorPaletteClass}" use:containerUse></div>
+<div>
+    <div class="wrapper">
+        <figure style="min-width:650px;max-width:650px;" class="ai2html-griffin-figure griffin-figure js-griffin">
+            <meta name="format-detection" content="telephone=no">
+            {#if chartLabel || chartTitle || chartSubtitle}
+            <header>
+                {#if chartLabel}
+                <span class="figure-label">{chartLabel}</span>
+                {/if}
+                {#if chartTitle}
+                <h1>{chartTitle}</h1>
+                {/if}
+                {#if chartSubtitle}
+                <p class="figure-dek">{chartSubtitle}</p>
+                {/if}
+            </header>
+            {/if}
+        <div class="container {colorPaletteClass}" use:containerUse></div>
+        <figcaption>
+            {#if chartNotes}
+            <p class="figure-note">
+                {chartNotes}
+            </p>
+            {/if}
+            {#if chartSources}
+            <p class="figure-note figure-note--source">
+                {chartSources}
+            </p>
+            {/if}
+            {#if chartCredit}
+            <p class="figure-note figure-note--source">
+                {chartCredit}
+            </p>
+            {/if}
+        </figcaption>
+    </div>
+</div>
