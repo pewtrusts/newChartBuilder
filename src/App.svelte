@@ -11,23 +11,33 @@
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
     import Code from '@Component/Code.svelte';
     import Colors from '@Component/Colors.svelte';
-    import {ActiveSection} from './store';
+    import {ActiveSection, IsWorking} from './store';
     import { onMount } from 'svelte';
 
 </script> 
 
 <script>
+
     let seriesCountMismatchNotice = {
         label: 'Unused series',
         description: 'The selected chart type can only render one series, but the data supplied has more than one. Only the first series will be rendered.',
         type: 'warning'
     };
+    let pictureIsMissingOrOldNotice = {
+        label: 'Old or missing images',
+        description: 'The images of the charts have not yet been generated or have become out of sync with changes made since they were last updated.' + 
+                     ' Click on the notice to update the images ot navigate to the images section.',
+        type: 'warning'
+    }
     let Chart = "";
     let showDataInput = false;
     let data;
     let leftColumn;  
     let datatableContainer = null;
     let sections = [];
+    IsWorking.subscribe(v => {
+        document.body.classList[v ? 'add' : 'remove']('isWorking');
+    });
     function pushSection(node){
         sections.push(node);
     }
@@ -38,6 +48,7 @@
             anchor.scrollIntoView();
         }
     });
+    
     function intersectionHandler(e){
         const intersecting = e.find(_e => _e.isIntersecting);
         if ( intersecting ){
@@ -91,7 +102,6 @@
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
     }
-
    
 </style>
 
@@ -103,6 +113,7 @@
     {/each}
     {/if}
 </svelte:head>
+
 <SpriteDefs />
 <Banner />
 <Nav />
@@ -131,7 +142,7 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Code" />
-                <Code />
+                <Code {pictureIsMissingOrOldNotice} />
             </section>
             
         </div>

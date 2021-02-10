@@ -6,6 +6,33 @@ body {
 	color: var(--text-color, #000);
 	font-family: var(--font-primary, sans);
 	padding-top: var(--banner-height, 75px);
+	position: relative;
+}
+body::after {
+	content: 'Working on it . . .';
+	display: none;
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translateX(-50%);
+	color: #fff;
+	z-index: 5;
+	font-size: 36px;
+
+}
+body::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: rgba(0,0,0,0.5);
+	display: none;
+	z-index: 4;
+	cursor: not-allowed;
+}
+body.isWorking::before, body.isWorking::after {
+	display: block;
 }
 p {
 	margin-block-start: 1em;

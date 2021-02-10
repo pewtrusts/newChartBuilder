@@ -1,11 +1,12 @@
 <script context="module">
     import tippy from 'tippy.js';
-    function initTippy(node, content){
+    function initTippy(node, {content}){
         tippy(node, {content});
     }
 </script>
 <script>
     export let notices;
+    console.log(notices);
 </script>
 <style>
 /*    .container {
@@ -41,12 +42,15 @@
         background-color: var(--error, red);
         border-color: var(--error, red);
     }
+    .isActive {
+        cursor: pointer;
+    }
 </style>
 <div class="container">
     <p class="visually-hidden">Notices</p>
     <dl>
         {#each [...notices] as notice}
-    <dt use:initTippy={notice.description} class="{notice.type}">{notice.label}</dt>
+    <dt class:isActive="{!!notice.onclick}" on:click="{!!notice.onclick ? notice.onclick : null}" use:initTippy={{content: notice.description}} class="{notice.type}">{notice.label}</dt>
         <dd class="visually-hidden">{notice.description}</dd>
         {/each}
     </dl>

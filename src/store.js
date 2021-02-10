@@ -10,6 +10,7 @@ const ImageDataUri = writable('');
 const SelectedColorPalette = writable('default');
 const ColorIndeces = writable(undefined);
 const Indicators = writable({});
+const IsWorking = writable(false);
 const ColorByPoint = writable([]);
 const SeriesCountFromTable = writable(0); /* SeriesCountFromTable is # of series from data passed in by user.
                                              SeriesCount is # series sent to the Chart instance. e.g., pie charts
@@ -23,6 +24,7 @@ const ChartTitle = writable('Most State Tax Revenue Comes from Personal Income T
 const ChartSources = writable('Sources: Pew’s analysis of information from J.T. Brown and D.J. Richardson, “FEMA’s Public Assistance Grant Program: Background and Considerations for Congress” (2015), <a href="https://crsreports.congress.gov/product/pdf/R/R43990">https://​crsreports.​congress.​gov/​product/​pdf/​R/​R43990</a>; U.S. Government Accountability Office, “Budgeting for Disasters: Approaches to Budgeting for Disasters in Selected States” (2015), <a href="https://www.gao.gov/products/GAO-15-424">https://​www.​gao.​gov/​products/​GAO-​15-​424</a>; Federal Emergency Management Agency, “FEMA Public Assistance Guide” (2007), <a href="http://www.fema.gov/pdf/government/grant/pa/paguide07.pdf">http://​www.​fema.​gov/​pdf/​government/​grant/​pa/​paguide07.​pdf</a>');
 const ChartSubtitle = writable('Mix of tax sources by state');
 const Picture = writable('');
+const PictureIsMissingOrOld = writable(true);
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 const MaxPointCount = derived([UserOptions], ([userOptions]) => {
@@ -42,15 +44,43 @@ const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([sel
     return `cc${hash(customColors.join(''))}`;
 });
 const GriffinConfig = derived([
-    ChartPaletteClassname, 
-    CustomColors, 
+    ChartCredit,
+    ChartDescription, 
     ChartLabel, 
-    ChartTitle, 
-    ChartSubtitle
-], ([chartPaletteClassname, customColors, chartLabel, chartTitle, chartSubtitle]) => {
-    return {
-        chartPaletteClassname, customColors, chartLabel, chartTitle, chartSubtitle
+    ChartNotes,
+    ChartPaletteClassname, 
+    ChartSources, 
+    ChartSubtitle,
+    ChartTitle,
+    CustomColors, 
+], ([
+    chartCredit,
+    chartDescription, 
+    chartLabel, 
+    chartNotes,
+    chartPaletteClassname, 
+    chartSources, 
+    chartSubtitle,
+    chartTitle,
+    customColors, 
+]) => {
+    const obj =  {
+        chartCredit,
+        chartDescription, 
+        chartLabel, 
+        chartNotes,
+        chartPaletteClassname, 
+        chartSources, 
+        chartSubtitle,
+        chartTitle,
+        customColors, 
     };
+    delete obj.chartCredit;
+    delete obj.chartDescription;
+    delete obj.chartNotes;
+    delete obj.chartSources;
+    PictureIsMissingOrOld.set(true);
+    return obj;
 });
 const CodeExport = derived([
     ChartCredit,
@@ -128,8 +158,10 @@ export {
     CustomColors,
     ImageDataUri,
     Indicators,
+    IsWorking,
     MaxPointCount,
     Picture,
+    PictureIsMissingOrOld,
     SelectedColorPalette, 
     SeriesCount,
     SeriesCountFromTable,
