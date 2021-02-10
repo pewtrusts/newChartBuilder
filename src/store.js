@@ -17,11 +17,12 @@ const SeriesCountFromTable = writable(0); /* SeriesCountFromTable is # of series
 const CustomColors = writable([]);
 const ChartCredit = writable(`© ${new Date().getFullYear()} The Pew Charitable Trusts`);
 const ChartDescription = writable('');
-const ChartLabel = writable('');
-const ChartNotes = writable('');
-const ChartTitle = writable('');
-const ChartSources = writable('');
-const ChartSubtitle = writable('');
+const ChartLabel = writable('Figure 1');
+const ChartNotes = writable('Notes: Funding flows are representative and reflect mainly post-disaster activity for a declared major disaster. They do not reflect funding amounts or the process for all federal and state programs. State and local funds include cost share payments related to federal programs.');
+const ChartTitle = writable('Most State Tax Revenue Comes from Personal Income Tax and Sales Tax');
+const ChartSources = writable('Sources: Pew’s analysis of information from J.T. Brown and D.J. Richardson, “FEMA’s Public Assistance Grant Program: Background and Considerations for Congress” (2015), <a href="https://crsreports.congress.gov/product/pdf/R/R43990">https://​crsreports.​congress.​gov/​product/​pdf/​R/​R43990</a>; U.S. Government Accountability Office, “Budgeting for Disasters: Approaches to Budgeting for Disasters in Selected States” (2015), <a href="https://www.gao.gov/products/GAO-15-424">https://​www.​gao.​gov/​products/​GAO-​15-​424</a>; Federal Emergency Management Agency, “FEMA Public Assistance Guide” (2007), <a href="http://www.fema.gov/pdf/government/grant/pa/paguide07.pdf">http://​www.​fema.​gov/​pdf/​government/​grant/​pa/​paguide07.​pdf</a>');
+const ChartSubtitle = writable('Mix of tax sources by state');
+const Picture = writable('');
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 const MaxPointCount = derived([UserOptions], ([userOptions]) => {
@@ -60,7 +61,7 @@ const CodeExport = derived([
     ChartTitle, 
     ChartSources,
     ChartSubtitle, 
-    ImageDataUri,
+    Picture,
     UserOptions, 
     GriffinConfig
 ], ([
@@ -72,7 +73,7 @@ const CodeExport = derived([
     chartTitle, 
     chartSources,
     chartSubtitle,
-    imageDataUri,
+    picture,
     userOptions, 
     griffinConfig
 ]) => {
@@ -91,8 +92,8 @@ const CodeExport = derived([
         griffinConfig 
     })}
     </pre>
-    <div aria-hidden="true" class="js-hc-container ${chartPaletteClassname}">
-        <img src="${imageDataUri}" />
+    <div aria-hidden="true" class="js-hc-container hc-container ${chartPaletteClassname}">
+        ${picture}
     </div>${ chartNotes || chartSources || chartCredit ? `
     <figcaption>${chartNotes ? `
         <p class="figure-note">
@@ -128,6 +129,7 @@ export {
     ImageDataUri,
     Indicators,
     MaxPointCount,
+    Picture,
     SelectedColorPalette, 
     SeriesCount,
     SeriesCountFromTable,

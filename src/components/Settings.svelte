@@ -50,6 +50,12 @@
         */
         console.log(e, this);
     }
+    function replaceFn(url){
+        return `<a href="${url}">${url.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;')}</a>`;
+    }
+    function parseLinks(string){
+        return string.replace(/https?:[^ ;,:]+/g, replaceFn);
+    }
     function initQuill(node,{controls, placeholder}){
         const formats = ['bold','italic','link', 'list'];
         const editor = new Quill(node, {
@@ -68,7 +74,7 @@
             */
 
             console.log(editor.root.innerHTML, delta, oldDelta, source);
-            mapStores[controls].set(sanitizeHtml(editor.root.innerHTML, sanitizeOptions));
+            mapStores[controls].set(parseLinks(sanitizeHtml(editor.root.innerHTML, sanitizeOptions)));
         });
     }
     ChartCredit.subscribe(v => {

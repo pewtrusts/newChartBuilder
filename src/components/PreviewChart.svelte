@@ -44,6 +44,8 @@
     import {ChartLabel, ChartTitle, ChartSubtitle, ChartNotes, ChartSources, ChartCredit} from './../store';
     export let Chart;
     export let seriesCountMismatchNotice;
+    export let chartWidth;
+    export let size;
     let colorPaletteClass;
     let chartLabel;
     let chartTitle;
@@ -64,6 +66,15 @@
         window.chart = Chart;
         UserOptions.set(Chart.userOptions);
     }
+    /*function replaceFn(_, p1, p2){
+        return `<a href="${p1}">${p2.replace(/\//g, '/&#8203')}</a>`;
+    }*/
+    /* '<a href="$1">$2</a><span class="print-only">, $1</span>')
+            .replace(/(\/)/g, '/&#8203;' )*/
+    /*$:modifiedChartSources = (function(){
+        //return chartSources.replace(/<a href="(.*?)">(.*?)<\/a>/g, replaceFn);
+        return chartSources.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;');
+    })();*/
     ChartLabel.subscribe(v => {
         chartLabel = v;
     });
@@ -114,16 +125,22 @@
     }
     .griffin-figure {
         margin: 0 auto;
-        box-sizing: content-box;
-        border: 21px solid #fff;
         background-color: #fff;
+    }
+    .wrapper {
+        position: relative;
+    }
+    .wrapper::before {
+        content: attr(data-width) 'px';
+        position: absolute;
+        top: -10px;
     }
 </style>
 
 <Notices {notices} />
 <div>
-    <div class="wrapper">
-        <figure style="min-width:650px;max-width:650px;" class="ai2html-griffin-figure griffin-figure js-griffin">
+    <div data-width="{chartWidth}" class="wrapper js-figure-wrapper">
+        <figure style="min-width:{chartWidth}px;max-width:{chartWidth}px;" class="ai2html-griffin-figure griffin-figure js-griffin js-{size}">
             <meta name="format-detection" content="telephone=no">
             {#if chartLabel || chartTitle || chartSubtitle}
             <header>
@@ -138,21 +155,21 @@
                 {/if}
             </header>
             {/if}
-        <div class="container {colorPaletteClass}" use:containerUse></div>
+        <div class="container js-hc-container {colorPaletteClass}" use:containerUse></div>
         <figcaption>
             {#if chartNotes}
             <p class="figure-note">
-                {chartNotes}
+                {@html chartNotes}
             </p>
             {/if}
             {#if chartSources}
             <p class="figure-note figure-note--source">
-                {chartSources}
+                {@html chartSources}
             </p>
             {/if}
             {#if chartCredit}
             <p class="figure-note figure-note--source">
-                {chartCredit}
+                {@html chartCredit}
             </p>
             {/if}
         </figcaption>

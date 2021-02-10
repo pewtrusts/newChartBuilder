@@ -74,9 +74,6 @@
         display: flex;
         align-items: stretch;
     }
-    .dummy {
-        background-color: #f0f0f0;
-    }
     .left-column {
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
@@ -86,7 +83,7 @@
     .chart-container {
         flex-grow: 1;
         padding: 1rem;
-        background-color: var(--background-shade, lightgray);
+        border-left: 1px solid var(--medium-gray, gray);
         display: flex;
         justify-content: flex-start;
         align-items: stretch;
@@ -140,7 +137,8 @@
         </div>
         <div class="chart-container">
             <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-            <PreviewChart bind:Chart {seriesCountMismatchNotice}/>
+            <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
+            <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
         </div>
     </div>
 </div>
