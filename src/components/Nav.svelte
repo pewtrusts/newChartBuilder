@@ -11,9 +11,8 @@
             icon: 'spreadsheet'
         },
         {
-            name: 'Settings',
-            icon: 'settings',
-            style: 'bottom: 2px;'
+            name: 'Text',
+            icon: 'text',
         },
         {
             name: 'Colors',

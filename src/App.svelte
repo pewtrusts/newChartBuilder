@@ -122,7 +122,7 @@
                 {/if}
             </section>
             <section use:pushSection>
-                <SectionHead text="Settings" />
+                <SectionHead text="Text" />
                 <Settings />
             </section>
             <section use:pushSection>
@@ -138,7 +138,7 @@
         <div class="chart-container">
             <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
             <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
-            <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+            <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
         </div>
     </div>
 </div>

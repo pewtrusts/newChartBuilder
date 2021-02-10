@@ -12,6 +12,7 @@
     export function createChart(node){
         return Highcharts.chart(node, config);
     }
+    window.Charts = [];
     //console.log(Highcharts.SVGElement.prototype.addClass);
     
     Highcharts.SVGElement.prototype.addClass = function (className, replace) {
@@ -63,7 +64,7 @@
     });
     function containerUse(node){
         Chart = createChart(node);
-        window.chart = Chart;
+        window.Charts.push(Chart);
         UserOptions.set(Chart.userOptions);
     }
     /*function replaceFn(_, p1, p2){
