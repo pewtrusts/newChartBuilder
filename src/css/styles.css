@@ -112,10 +112,15 @@ section h2:first-of-type {
 	padding: 0.2em 0.5em;
 	line-height: 1.5;
 	letter-spacing: 0.3px;
+	transition: background-color 0.2s ease-in-out;
 }
 .button--primary {
 	background-color: var(--brand-primary, #000);
 	color: #fff
+}
+.button[disabled] {
+	background-color: var(--medium-gray, #767676);
+	cursor: not-allowed;
 }
 .griffin-figure a {
 	background: 0 0;

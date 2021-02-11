@@ -13,6 +13,20 @@
     import Quill from 'quill';
     import brandOptions from "./../brand-options.json";
     import {ChartCredit, ChartDescription, ChartLabel, ChartNotes, ChartTitle, ChartSources, ChartSubtitle} from './../store';
+    import Sprite from './Sprite.svelte';
+    import Notices from './Notices.svelte';
+    let isDirtyNotice = {
+        label: 'Unsaved changes',
+        description: 'The form has changes that have not been applied yet to the chart. Hit the submit button for the changes to take effect.',
+        type: 'warning'
+    };
+    $:notices = (function(){
+        const _notices = notices || new Set();
+        _notices[isDirty ? 'add' : 'delete'](isDirtyNotice);
+        return _notices;
+    })();
+    let isDirty = false;
+    let isSubmitting = false;
     let sanitizeOptions = {
         allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'ul', 'ol', 'li'],
         allowedAttributes: {
@@ -37,12 +51,20 @@
         'chartSources': '',
         'chartSubtitle': ''
     };
+    function inputHandler(){
+        isDirty = true;
+    }
     function submitHandler(e){
         const data =  new FormData(this);
         for (let [name,value] of data) {
             console.log(name,value);
             mapStores[name].set(parseLinks(value));
         }
+        isSubmitting = true;
+        setTimeout(() => {
+            isSubmitting = false;
+            isDirty = false;
+        }, 500);
     }
     function replaceFn(url){
         return `<a href="${url}">${url.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;')}</a>`;
@@ -149,9 +171,19 @@
     :global(.ql-editor){
         font-family: var(--font-primary, sans);
     }
-    
+    .checkmark {
+        display: inline-block;
+        position: relative;
+        top: 2px;
+        transition: opacity 100ms ease-in;
+        opacity: 0;
+    }
+    .isSubmitting .checkmark {
+        opacity: 1;
+    }
 </style>
-<form on:submit|preventDefault="{submitHandler}">
+<Notices {notices} />
+<form class:isDirty class:isSubmitting on:input="{inputHandler}" on:submit|preventDefault="{submitHandler}">
     <label>{brandOptions.chartLabelName}:<br /><input bind:value="{localValues.chartLabel}" placeholder="e.g., Figure 1" name="chartLabel" type="text"></label>
     <label>{brandOptions.chartTitleName}:<br /><input bind:value="{localValues.chartTitle}" placeholder="e.g., Most Apple Are Harvested in the Fall" name="chartTitle" type="text"></label>
     <label>{brandOptions.chartSubtitleName}:<br /><input bind:value="{localValues.chartSubtitle}" placeholder="e.g., Mix of fruit harvest by season" name="chartSubtitle" type="text"></label>
@@ -163,6 +195,8 @@
     <textarea bind:value="{localValues.chartSources}" name="chartSources" type="text"></textarea>
     <div class="quill-container" use:initQuill="{{controls: 'chartSources', placeholder: 'e.g., Source: John Adams, ABCs Are Easy, 1955'}}"></div>
     <label>Credit:<br /><input bind:value="{localValues.chartCredit}" placeholder="e.g., © 2021 The Pew Charitable Trusts" name="chartCredit" type="text"></label>
-    <input class="button button--primary" type="submit">
-
+    <input disabled="{isDirty ? null : 'disabled'}" class="button button--primary" type="submit">
+    <div class="checkmark">
+        <Sprite width="20" id="check" brandPrimary="{true}" />
+    </div>
 </form>
