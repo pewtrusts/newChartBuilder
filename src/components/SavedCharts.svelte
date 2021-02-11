@@ -23,27 +23,69 @@
         }).then(function (v) {
             console.log(v);
             instance = gapi.auth2.getAuthInstance();
-            console.log(instance);
-            // TO DO: continue. init is working. need to work out the rest.
-            /*// Listen for sign-in state changes.
             instance.isSignedIn.listen(updateSigninStatus);
             instance.currentUser.listen(updateCurrentUser);
-
-            // Handle the initial sign-in state.
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-            authorizeButton.onclick = handleAuthClick;
-            signoutButton.onclick = handleSignoutClick;
-            saveButton.onclick = handleSaveClick;
-
-            refreshValues();
-            */
+            const isSignedIn = instance.isSignedIn.get();
+            console.log({isSignedIn});
+            if (!isSignedIn){
+                gapi.auth2.getAuthInstance().signIn();
+            } else {
+                getSavedCharts();
+            }
         }, function(error) {
             console.log(JSON.stringify(error, null, 2));
         });
     }
-        
+    /**
+     *  Called when the signed in status changes, to update the UI
+     *  appropriately. After a sign-in, the API is called.
+     */
+    function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+            getSavedCharts();
+        } else {
+            
+        }
+    } 
+    function updateCurrentUser(user){
+        console.log(user.getBasicProfile());
+    }
     function loadHandler(){
         gapi.load('client:auth2', initClient);
+    }
+    /**
+     *  This fn gets data from the Google Sheets document
+     * 
+     */
+    function getSavedCharts() {
+    gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: s.GoogleSheets.sheetId,
+        range: 'Sheet1',
+    }).then(function(response) {
+        const data = response.result.values.slice(1).map(function(d){
+            return d.reduce(function(acc,cur,i){
+                acc[response.result.values[0][i]] = cur;
+                return acc;
+            },{})
+        });
+        
+        console.log(data);
+        /*if (range.values.length > 0) {
+        renderResults(range.values);
+        populateProjectDatalist(range.values)
+        populateCreatorOptions(range.values);
+        console.log(range.values);
+        /*for (let i = 0; i < range.values.length; i++) {
+            var row = range.values[i];
+            // Print columns A and E, which correspond to indices 0 and 4.
+            appendPre(row[0] + ', ' + row[4]);
+        }*/
+        /*} else {
+        console.log('No data found.');
+        }*/
+    }, function(response) {
+            alert('You may not have permission to edit the Google Sheet document. Error: ' + response.result.error.message);
+    });
     }
 </script>
 <svelte:head>
