@@ -1,5 +1,9 @@
 <script context="module">
     import s from './../secrets.json';
+    let resolveSaved;
+    const savedCharts = new Promise(function(resolve){
+        resolveSaved = resolve;
+    });
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -68,8 +72,8 @@
                 return acc;
             },{})
         });
-        
         console.log(data);
+        resolveSaved(data);
         /*if (range.values.length > 0) {
         renderResults(range.values);
         populateProjectDatalist(range.values)
@@ -91,4 +95,8 @@
 <svelte:head>
     <script async defer src="https://apis.google.com/js/api.js" on:load="{loadHandler}"></script>
 </svelte:head>
-<p>hello</p>
+{#await savedCharts then charts}
+{#each charts as chart}
+<img width="200" src="{chart.thumbnail}" alt="thumbnail" />
+{/each}
+{/await}

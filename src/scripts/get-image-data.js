@@ -1,11 +1,14 @@
 /* global CanvasPngCompression */
 import html2canvas from 'html2canvas';
 import 'canvas-png-compression';
-import {IsWorking, Picture, PictureIsMissingOrOld} from './../store';
+import {IsWorking, Picture, PictureIsMissingOrOld, Thumbnail} from './../store';
 CanvasPngCompression.replaceToDataURL();
 // polyfill to add PNG compression level to Canvas toDataUri method
 // 0 => high compression; 1 => none;
-
+Thumbnail.subscribe(v => {
+    if (!v) return;
+    window.open(v, '_blank');
+});
 export default function _getImageData(){
     const fullscreenContainer = document.querySelector('.js-griffin.js-fullscreen');
     const fullscreenChart = document.querySelector('.js-griffin.js-fullscreen .js-hc-container');
@@ -57,9 +60,17 @@ export default function _getImageData(){
                     wrapper.classList.add('image-export');
                 });
             }
-        })
+        }),
+        html2canvas(fullscreenContainer, {
+            scale: 0.45,
+            onclone: function (_document) {
+                _document.querySelectorAll('.js-figure-wrapper').forEach(wrapper => {
+                    wrapper.classList.add('image-export');
+                });
+            }
+        }),
     ];
-    Promise.all(promises).then(([full2,full1,mobile2,mobile1]) => {
+    Promise.all(promises).then(([full2,full1,mobile2,mobile1, thumbnail]) => {
         Picture.set(`
         <picture class="fullscreen">
             <source srcset="${full1.toDataURL("image/webp", 0.3)} 1x, ${full2.toDataURL("image/webp", 0.3)} 2x"> 
@@ -70,6 +81,7 @@ export default function _getImageData(){
             <img style="${mbMargins}" width="100%" src="${mobile1.toDataURL("image/webp", 0.3)}">
         </picture>
         `);
+        Thumbnail.set(thumbnail.toDataURL("image/png", 0));
         IsWorking.set(false);
         PictureIsMissingOrOld.set(false);
     });

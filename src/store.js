@@ -25,6 +25,7 @@ const ChartSources = writable('');
 const ChartSubtitle = writable('');
 const Picture = writable('');
 const PictureIsMissingOrOld = writable(true);
+const Thumbnail = writable('');
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
 const MaxPointCount = derived([UserOptions], ([userOptions]) => {
@@ -166,6 +167,7 @@ export {
     SeriesCount,
     SeriesCountFromTable,
     SeriesCountMismatch,
+    Thumbnail,
     UserOptions, 
     XAxisType
 };
