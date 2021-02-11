@@ -41,14 +41,15 @@
         const data =  new FormData(this);
         for (let [name,value] of data) {
             console.log(name,value);
-            mapStores[name].set(value);
+            mapStores[name].set(parseLinks(value));
         }
     }
     function replaceFn(url){
         return `<a href="${url}">${url.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;')}</a>`;
     }
     function parseLinks(string){
-        return string.replace(/https?:[^ ;,:]+/g, replaceFn);
+                                // negative lookbehind after anything but quote or close tage
+        return string.replace(/(?<![">])https?:[^ ;,:]+/g, replaceFn);
     }
     function initQuill(node,{controls, placeholder}){
         const formats = ['bold','italic','link', 'list'];
@@ -68,7 +69,7 @@
             */
 
             console.log(editor.root.innerHTML, delta, oldDelta, source);
-            localValues[controls] = parseLinks(sanitizeHtml(editor.root.innerHTML, sanitizeOptions));
+            localValues[controls] = sanitizeHtml(editor.root.innerHTML, sanitizeOptions);
         });
     }
     ChartCredit.subscribe(v => {
