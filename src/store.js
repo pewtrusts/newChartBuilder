@@ -4,7 +4,7 @@ import brandOptions from './brand-options.json';
 const CellBeingEdited = writable(null);
 const XAxisType = writable('linear');
 const ChartType = writable(brandOptions.defaultChartType);
-const ActiveSection = writable('data');
+const ActiveSection = writable('start');
 const UserOptions = writable({});
 const ImageDataUri = writable('');
 const SelectedColorPalette = writable('default');

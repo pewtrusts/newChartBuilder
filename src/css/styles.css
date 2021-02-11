@@ -122,13 +122,13 @@ section h2:first-of-type {
 	background-color: var(--medium-gray, #767676);
 	cursor: not-allowed;
 }
-.griffin-figure a {
+a {
 	background: 0 0;
 	color: #296ec3;
 	text-decoration: none;
 	transition: color .28s cubic-bezier(.4,0,.2,1),color .28s cubic-bezier(.4,0,.2,1);
 }
-.griffin-figure a:hover {
+a:hover {
 	color: rgba(41,110,195,.7);
     text-decoration: underline;
 }

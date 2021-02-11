@@ -173,6 +173,17 @@ module.exports = (env) => {
                             esModule: false
                         }
                     }]
+                }, {
+                    test: /\.md$/,
+                    use: [{
+                        loader: 'html-loader'
+                    },
+                    {
+                        loader: 'markdown-loader',
+                        options: {
+                            smartyPants: true
+                        }
+                    }]
                 }
                /* {
                     test: /\.csv$/,

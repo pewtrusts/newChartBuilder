@@ -7,6 +7,10 @@
     let activeSection;
     let sections = [
         {
+            name: 'Start',
+            icon: 'signpost'
+        },
+        {
             name: 'Data',
             icon: 'spreadsheet'
         },

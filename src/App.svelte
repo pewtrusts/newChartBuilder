@@ -1,6 +1,7 @@
 <script context="module">
     import Banner from "./components/Banner.svelte";
     import Settings from './components/Settings.svelte';
+    import Start from './components/Start.svelte';
     import DataTable from "@Component/DataTable.svelte";
     import SpriteDefs from "./sprite.svelte";
     import brandOptions from "./brand-options.json";
@@ -35,6 +36,7 @@
     let leftColumn;  
     let datatableContainer = null;
     let sections = [];
+    let activeSection;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -42,6 +44,7 @@
         sections.push(node);
     }
     ActiveSection.subscribe(v => {
+        activeSection = v.value;
         if (!leftColumn) return;
         if ( v.method == 'click'){
             let anchor = leftColumn.querySelector(`a#${v.value}`);
@@ -56,16 +59,19 @@
         }
     }
     onMount(() => {
-        const observerOptions = {
-            root: leftColumn,
-            rootMargin: '0px',
-            threshold: 1
-        }
-        const observer = new IntersectionObserver(intersectionHandler, observerOptions);
-        sections.forEach(section => {
-            observer.observe(section.querySelector('div.observer'));
-        });
-
+        window.requestIdleCallback(function(){
+            leftColumn.scrollTop = 0;
+            const observerOptions = {
+                root: leftColumn,
+                rootMargin: '0px',
+                threshold: 1
+            }
+            const observer = new IntersectionObserver(intersectionHandler, observerOptions);
+            sections.forEach(section => {
+                observer.observe(section.querySelector('div.observer'));
+            });
+        }, {timeout: 1000});
+        
     });
 </script>
 
@@ -102,7 +108,9 @@
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
     }
-   
+   .isHidden {
+       visibility: hidden;
+   }
 </style>
 
 <svelte:head>
@@ -127,6 +135,10 @@
             style="flex-grow: 1;">
             <h1>Griffin Chart Builder</h1>
             <section use:pushSection>
+                <SectionHead text="Start" />
+                <Start />
+            </section>
+            <section use:pushSection>
                 <SectionHead text="Data" />
                 {#if Chart}
                     <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data {seriesCountMismatchNotice} />
@@ -146,7 +158,7 @@
             </section>
             
         </div>
-        <div class="chart-container">
+        <div class:isHidden="{activeSection == 'start'}" class="chart-container">
             <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
             <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
             <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
