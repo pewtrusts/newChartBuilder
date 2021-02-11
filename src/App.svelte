@@ -2,6 +2,7 @@
     import Banner from "./components/Banner.svelte";
     import Settings from './components/Settings.svelte';
     import Start from './components/Start.svelte';
+    import SavedCharts from './components/SavedCharts.svelte';
     import DataTable from "@Component/DataTable.svelte";
     import SpriteDefs from "./sprite.svelte";
     import brandOptions from "./brand-options.json";
@@ -37,6 +38,7 @@
     let datatableContainer = null;
     let sections = [];
     let activeSection;
+    let showSavedCharts = false;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -97,19 +99,29 @@
         padding-left: calc(40px + 1rem);
         max-width: 42%;
     }
-    .chart-container {
+    .right-column {
         flex-grow: 1;
+        height: calc(100vh - var(--banner-height, 75px));
+        overflow-y: auto;
+    }
+    .chart-container {
+        width: 100%;
         padding: 1rem;
         border-left: 1px solid var(--medium-gray, gray);
         display: flex;
         justify-content: flex-start;
         align-items: stretch;
         flex-direction: column;
-        height: calc(100vh - var(--banner-height, 75px));
-        overflow-y: auto;
     }
    .isHidden {
        visibility: hidden;
+   }
+   .saved-charts {
+       position: absolute;
+       top: 0;
+       height: calc(100vh - var(--banner-height, 75px));
+       overflow-y: auto;
+       width: 100%;
    }
 </style>
 
@@ -136,7 +148,7 @@
             <h1>Griffin Chart Builder</h1>
             <section use:pushSection>
                 <SectionHead text="Start" />
-                <Start />
+                <Start bind:showSavedCharts />
             </section>
             <section use:pushSection>
                 <SectionHead text="Data" />
@@ -158,10 +170,17 @@
             </section>
             
         </div>
-        <div class:isHidden="{activeSection == 'start'}" class="chart-container">
-            <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-            <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
-            <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+        <div class="right-column">
+            <div class:isHidden="{activeSection == 'start'}" class="chart-container">
+                <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
+                <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
+                <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+            </div>
+            {#if showSavedCharts}
+            <div class="saved-charts">
+                <SavedCharts />
+            </div>
+            {/if}
         </div>
     </div>
 </div>
