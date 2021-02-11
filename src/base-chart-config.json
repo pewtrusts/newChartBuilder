@@ -1,5 +1,8 @@
 {
   "title": null,
+  "chart": {
+    "type": "column"
+  },
   "credits": {
     "enabled": false
   },

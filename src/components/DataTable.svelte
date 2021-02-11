@@ -58,9 +58,10 @@
 
 <script>
     export let data = [
-        ["X values", "Series 1", "Series 2", "Series 3"],
-        ["Apples", 2, 3, 4],
-        ["Oranges", 4, 7, 10],
+        ["Harvest", "Apples", "Oranges", "Peaches"],
+        ["Spring", 2, 13, 4],
+        ["Summer", 1, 7, 10],
+        ["Fall", 15, 5, 2],
     ];
     export let Chart;
     export let showDataInput;
@@ -107,7 +108,7 @@
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;
     });
-    updateChartData(data, Chart);
+    //updateChartData(data, Chart);
 </script>
 
 <style>

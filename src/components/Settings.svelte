@@ -20,35 +20,29 @@
         }
     };
     let mapStores = {
-        'chart-credit': ChartCredit,
-        'chart-description': ChartDescription,
-        'chart-label': ChartLabel,
-        'chart-notes': ChartNotes,
-        'chart-title': ChartTitle,
-        'chart-sources': ChartSources,
-        'chart-subtitle': ChartSubtitle
+        'chartCredit': ChartCredit,
+        'chartDescription': ChartDescription,
+        'chartLabel': ChartLabel,
+        'chartNotes': ChartNotes,
+        'chartTitle': ChartTitle,
+        'chartSources': ChartSources,
+        'chartSubtitle': ChartSubtitle
     };
-    let chartCredit = ''
-    let chartDescription = '';
-    let chartLabel = '';
-    let chartNotes = '';
-    let chartTitle = '';
-    let chartSources = '';
-    let chartSubtitle = '';
+    let localValues = {
+        'chartCredit': '',
+        'chartDescription': '',
+        'chartLabel': '',
+        'chartNotes': '',
+        'chartTitle': '',
+        'chartSources': '',
+        'chartSubtitle': ''
+    };
     function submitHandler(e){
         const data =  new FormData(this);
         for (let [name,value] of data) {
             console.log(name,value);
             mapStores[name].set(value);
         }
-    }
-    function inputHandler(e){
-        /**
-         * input only files user action not of dynamically setting value
-         * should be able to use this with distinguishing inputType `insertFromPaste`
-         * from `insertText` or not to call editor.clipboard.dangerouslyPasteHTML (right?)
-        */
-        console.log(e, this);
     }
     function replaceFn(url){
         return `<a href="${url}">${url.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;')}</a>`;
@@ -74,29 +68,36 @@
             */
 
             console.log(editor.root.innerHTML, delta, oldDelta, source);
-            mapStores[controls].set(parseLinks(sanitizeHtml(editor.root.innerHTML, sanitizeOptions)));
+            localValues[controls] = parseLinks(sanitizeHtml(editor.root.innerHTML, sanitizeOptions));
         });
     }
     ChartCredit.subscribe(v => {
-        chartCredit = v;
+        localValues.chartCredit = v;
+        localValues = localValues;
     });
     ChartDescription.subscribe(v => {
-        chartDescription = v;
+        localValues.chartDescription = v;
+        localValues = localValues;
     });
     ChartLabel.subscribe(v => {
-        chartLabel = v;
+        localValues.chartLabel = v;
+        localValues = localValues;
     });
     ChartNotes.subscribe(v => {
-        chartNotes = v;
+        localValues.chartNotes = v;
+        localValues = localValues;
     });
     ChartTitle.subscribe(v => {
-        chartTitle = v;
+        localValues.chartTitle = v;
+        localValues = localValues;
     });
     ChartSources.subscribe(v => {
-        chartSources = v;
+        localValues.chartSources = v;
+        localValues = localValues;
     });
     ChartSubtitle.subscribe(v => {
-        chartSubtitle = v;
+        localValues.chartSubtitle = v;
+        localValues = localValues;
     });
 </script>
 <style>
@@ -115,13 +116,13 @@
         line-height: 1.5;
         color: var(--text-color, #000);
     }
-    input[type="text"]{
+    input[type="text"], textarea {
         font-size: 0.85rem;
     }
     input[type="text"]:not([name="chart-label"]) {
         width: 100%;
     }
-    input::placeholder, :global(.ql-editor.ql-blank::before) {
+    textarea::placeholder, input::placeholder, :global(.ql-editor.ql-blank::before) {
         color: #767676;
         font-style: italic;
     }
@@ -138,25 +139,29 @@
         width: 100%;
         margin-bottom: 0.5rem;
     }
-    textarea[name="chart-notes"], textarea[name="chart-sources"]{
+    textarea {
+        width: 100%;
+    }
+    textarea[name="chartNotes"], textarea[name="chartSources"]{
         display:none;
     }
     :global(.ql-editor){
         font-family: var(--font-primary, sans);
     }
+    
 </style>
 <form on:submit|preventDefault="{submitHandler}">
-    <label>{brandOptions.chartLabelName}:<br /><input bind:value="{chartLabel}" placeholder="e.g., Figure 1" name="chart-label" type="text"></label>
-    <label>{brandOptions.chartTitleName}:<br /><input bind:value="{chartTitle}" placeholder="e.g., Most State Tax Revenue Comes from Personal Income Tax and Sales Tax" name="chart-title" type="text"></label>
-    <label>{brandOptions.chartSubtitleName}:<br /><input bind:value="{chartSubtitle}" placeholder="e.g., Mix of tax sources by state" name="chart-subtitle" type="text"></label>
-    <label>Description:<br /><input bind:value="{chartDescription}" placeholder="Please provide a detailed description of the chart for screen readers and search engines" name="chart-description" type="text"></label>
+    <label>{brandOptions.chartLabelName}:<br /><input bind:value="{localValues.chartLabel}" placeholder="e.g., Figure 1" name="chartLabel" type="text"></label>
+    <label>{brandOptions.chartTitleName}:<br /><input bind:value="{localValues.chartTitle}" placeholder="e.g., Most Apple Are Harvested in the Fall" name="chartTitle" type="text"></label>
+    <label>{brandOptions.chartSubtitleName}:<br /><input bind:value="{localValues.chartSubtitle}" placeholder="e.g., Mix of fruit harvest by season" name="chartSubtitle" type="text"></label>
+    <label>Description:<br /><textarea required bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season." name="chartDescription" type="text"></textarea></label>
     <p class="label">Notes:</p>
-    <textarea on:input="{inputHandler}" bind:value="{chartNotes}" name="chart-notes" type="text"></textarea>
-    <div class="quill-container" use:initQuill="{{controls: 'chart-notes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
+    <textarea bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
+    <div class="quill-container" use:initQuill="{{controls: 'chartNotes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
     <p class="label">Sources:</p>
-    <textarea bind:value="{chartSources}" name="chart-sources" type="text"></textarea>
-    <div class="quill-container" use:initQuill="{{controls: 'chart-sources', placeholder: 'e.g., Source: John Adams, ABCs Are Easy, 1955'}}"></div>
-    <label>Credit:<br /><input bind:value="{chartCredit}" placeholder="e.g., © 2021 The Pew Charitable Trusts" name="chart-credit" type="text"></label>
+    <textarea bind:value="{localValues.chartSources}" name="chartSources" type="text"></textarea>
+    <div class="quill-container" use:initQuill="{{controls: 'chartSources', placeholder: 'e.g., Source: John Adams, ABCs Are Easy, 1955'}}"></div>
+    <label>Credit:<br /><input bind:value="{localValues.chartCredit}" placeholder="e.g., © 2021 The Pew Charitable Trusts" name="chartCredit" type="text"></label>
     <input class="button button--primary" type="submit">
 
 </form>
