@@ -5,6 +5,8 @@ import {IsWorking, Picture, PictureIsMissingOrOld, Thumbnail} from './../store';
 CanvasPngCompression.replaceToDataURL();
 // polyfill to add PNG compression level to Canvas toDataUri method
 // 0 => high compression; 1 => none;
+
+// TO DO  remove this for debugging only
 Thumbnail.subscribe(v => {
     if (!v) return;
     window.open(v, '_blank');
@@ -14,6 +16,7 @@ export default function _getImageData(){
     const fullscreenChart = document.querySelector('.js-griffin.js-fullscreen .js-hc-container');
     const mobileContainer = document.querySelector('.js-griffin.js-mobile');
     const mobileChart = document.querySelector('.js-griffin.js-mobile .js-hc-container');
+
     const fs = {
         contHeight: fullscreenContainer.offsetHeight,
         chartTop: fullscreenChart.offsetTop,
@@ -61,7 +64,7 @@ export default function _getImageData(){
                 });
             }
         }),
-        html2canvas(fullscreenContainer, {
+        html2canvas(mobileChart, {
             scale: 0.45,
             onclone: function (_document) {
                 _document.querySelectorAll('.js-figure-wrapper').forEach(wrapper => {

@@ -29,6 +29,17 @@
     .project {
         font-weight: bold;
     }
+    figure {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 65%;
+    }
+    img {
+        position: absolute;
+        object-fit: contain;
+        height: 100%;
+    }
 </style>
 <aside>
     <time datetime="{date.toISOString()}">
@@ -41,7 +52,9 @@
         )}
     </time>
     <h1 class="hed">{data.hed}</h1>
-    <img src="{data.thumbnail}" alt="chart thumbnail" />
+    <figure>
+        <img src="{data.thumbnail}" alt="chart thumbnail" />
+    </figure>
     <dl>
         <dt class="visually-hidden">Project</dt>
         <dd class="project">{data.project}</dd>
