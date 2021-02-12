@@ -1,4 +1,4 @@
-import { XAxisType, SeriesCountFromTable } from '../store';
+import { SeriesCountFromTable, XAxisType } from '../store';
 import updateChart from './update-chart-config';
 import toDate from './coerce-to-date';
 /*
@@ -89,6 +89,8 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
             console.log({ dayIndex, newConfig });
         }
     }
+    newConfig.xAxis.title = newConfig.xAxis.title || {};
+    newConfig.xAxis.title.text = data[0][0] || '';
     /* 
      COMMENTING THIS OUT. startOfWeek SETTING WAS THE MORE IMMEDIATE ISSUE. SAVING FOR PSSIBLE ALETR USE
     if (intervals && intervals.size == 1) {
@@ -104,6 +106,6 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
      }*/
     //TODO: if datetime will have to adjust dateTimeLabelFormats for x-axis and tooltip, and tooltip.xDateFormat
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
-    console.log({ Chart });
+    console.log({ Chart, newConfig });
     updateChart(Chart, newConfig);
 } 

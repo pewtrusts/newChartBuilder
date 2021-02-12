@@ -136,7 +136,7 @@
     
 </style>
 {#if type == 'th' }
-<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keyup="{keyupHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value}
+<th tabindex="0" bind:this="{cell}" use:setGetterSetter on:click|stopPropagation="{clickHandler}" on:keyup="{keyupHandler}" data-row="{row}" data-column="{column}" class="{klass}" scope="{scope}">{value === null ? '' : value}
     <CellContents bind:value {cell} {cellBeingEdited} {showForm} {changeHandler} />
     {#if isDateTime}
     <Sprite width="15" id="calendar" style="position: absolute; right: 5; fill: lightgray;" />

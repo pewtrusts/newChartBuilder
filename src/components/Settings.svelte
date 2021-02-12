@@ -15,6 +15,7 @@
     import {ChartCredit, ChartDescription, ChartLabel, ChartNotes, ChartTitle, ChartSources, ChartSubtitle} from './../store';
     import Sprite from './Sprite.svelte';
     import Notices from './Notices.svelte';
+    let quills = {};
     let isDirtyNotice = {
         label: 'Unsaved changes',
         description: 'The form has changes that have not been applied yet to the chart. Hit the submit button for the changes to take effect.',
@@ -93,6 +94,7 @@
             console.log(editor.root.innerHTML, delta, oldDelta, source);
             localValues[controls] = sanitizeHtml(editor.root.innerHTML, sanitizeOptions);
         });
+        quills[controls] = editor;
     }
     ChartCredit.subscribe(v => {
         localValues.chartCredit = v;
@@ -109,6 +111,8 @@
     ChartNotes.subscribe(v => {
         localValues.chartNotes = v;
         localValues = localValues;
+        if (!quills.chartNotes) return;
+        quills.chartNotes.clipboard.dangerouslyPasteHTML(0, sanitizeHtml(v));
     });
     ChartTitle.subscribe(v => {
         localValues.chartTitle = v;
@@ -117,6 +121,8 @@
     ChartSources.subscribe(v => {
         localValues.chartSources = v;
         localValues = localValues;
+        if (!quills.chartSources) return;
+        quills.chartSources.clipboard.dangerouslyPasteHTML(0, sanitizeHtml(v));
     });
     ChartSubtitle.subscribe(v => {
         localValues.chartSubtitle = v;

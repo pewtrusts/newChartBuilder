@@ -1,6 +1,10 @@
 <script>
+    import loadChart from './../scripts/load-chart';
     export let data;
     let date = new Date(+data.timestamp);
+    function clickHandler(){
+        loadChart(data);
+    }
 </script>
 <style>
     aside {
@@ -61,5 +65,5 @@
         <dt class="visually-hidden">Creator</dt>
         <dd>{data.name}</dd>
     </dl>
-    <button class="button button--primary">Load</button>
+    <button on:click="{clickHandler}" class="button button--primary">Load</button>
 </aside>

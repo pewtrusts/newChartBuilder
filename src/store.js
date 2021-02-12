@@ -1,11 +1,15 @@
 import hash from './griffin/scripts/hash';
 import { writable, derived } from 'svelte/store';
-import brandOptions from './brand-options.json';
+import baseConfig from './base-chart-config.json';
 const CellBeingEdited = writable(null);
 const XAxisType = writable('linear');
-const ChartType = writable(brandOptions.defaultChartType);
+const ChartType = writable(baseConfig.chart.type);
 const ActiveSection = writable('start');
 const UserOptions = writable({});
+UserOptions.subscribe(v => {
+    if (!v || !v.chart || !v.chart.type) return;
+    ChartType.set(v.chart.type);
+})
 const ImageDataUri = writable('');
 const SelectedColorPalette = writable('default');
 const ColorIndeces = writable(undefined);
@@ -23,6 +27,7 @@ const ChartNotes = writable('');
 const ChartTitle = writable('');
 const ChartSources = writable('');
 const ChartSubtitle = writable('');
+const LoadedDataConfig = writable('');
 const Picture = writable('');
 const PictureIsMissingOrOld = writable(true);
 const Thumbnail = writable('');
@@ -139,7 +144,6 @@ const CodeExport = derived([
     </figcaption>` : ''}
 </figure>`;
 });
-
 export {
     ActiveSection, 
     CellBeingEdited, 
@@ -160,6 +164,7 @@ export {
     ImageDataUri,
     Indicators,
     IsWorking,
+    LoadedDataConfig,
     MaxPointCount,
     Picture,
     PictureIsMissingOrOld,
@@ -170,4 +175,20 @@ export {
     Thumbnail,
     UserOptions, 
     XAxisType
+};
+
+export const importConfig = {
+    ChartCredit,
+    ChartDescription,
+    SelectedColorPalette,
+    ChartLabel,
+    ChartNotes,
+    ChartSources,
+    ChartSubtitle,
+    ChartTitle,
+    ChartType,
+    ColorByPoint,
+    ColorIndeces,
+    CustomColors,
+    UserOptions
 };
