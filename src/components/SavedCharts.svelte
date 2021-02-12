@@ -1,6 +1,9 @@
-<script context="module">
+<script>
     import s from './../secrets.json';
+    import SavedChart from './SavedChart.svelte';
+    import brandOptions from './../brand-options.json';
     let resolveSaved;
+    let isWorking = true;
     const savedCharts = new Promise(function(resolve){
         resolveSaved = resolve;
     });
@@ -31,10 +34,10 @@
             instance.currentUser.listen(updateCurrentUser);
             const isSignedIn = instance.isSignedIn.get();
             console.log({isSignedIn});
-            if (!isSignedIn){
-                gapi.auth2.getAuthInstance().signIn();
-            } else {
+            if (isSignedIn){
                 getSavedCharts();
+            } else {
+                isWorking = false;
             }
         }, function(error) {
             console.log(JSON.stringify(error, null, 2));
@@ -51,17 +54,24 @@
             
         }
     } 
+    function listMounted(){
+        isWorking = false;
+    }
     function updateCurrentUser(user){
         console.log(user.getBasicProfile());
     }
     function loadHandler(){
         gapi.load('client:auth2', initClient);
     }
+    function loginHandler(){
+        gapi.auth2.getAuthInstance().signIn();
+    }
     /**
      *  This fn gets data from the Google Sheets document
      * 
      */
     function getSavedCharts() {
+        isWorking = true;
     gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: s.GoogleSheets.sheetId,
         range: 'Sheet1',
@@ -74,6 +84,7 @@
         });
         console.log(data);
         resolveSaved(data);
+        //isWorking = false;
         /*if (range.values.length > 0) {
         renderResults(range.values);
         populateProjectDatalist(range.values)
@@ -92,11 +103,58 @@
     });
     }
 </script>
+
+<style>
+    .container {
+        position: relative;
+        display: contents;
+    }
+    .container::after {
+        content: 'Working on it . . .';
+        display: none;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        z-index: 1;
+        font-size: 36px;
+
+    }
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0,0,0,0.5);
+        display: none;
+        cursor: not-allowed;
+    }
+    .container.isWorking::before, .container.isWorking::after {
+        display: block;
+    }
+    
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+</style>
 <svelte:head>
     <script async defer src="https://apis.google.com/js/api.js" on:load="{loadHandler}"></script>
 </svelte:head>
-{#await savedCharts then charts}
-{#each charts as chart}
-<img width="200" src="{chart.thumbnail}" alt="thumbnail" />
-{/each}
-{/await}
+<div class:isWorking class="container">
+    <h2>Saved charts</h2>
+    {#await savedCharts}
+        <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
+        <button on:click="{loginHandler}" class="button button--primary">Log in</button>
+    {:then charts}
+    {#each charts as data}
+        <ul use:listMounted>
+            <SavedChart {data} />
+        </ul>
+    {/each}
+    {/await}
+</div>

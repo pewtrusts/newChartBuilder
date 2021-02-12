@@ -10,5 +10,6 @@
     "additionalColorPalettes": ["gray", "pew-blue","blue","teal","orange","red", "green", "pink"],
     "chartLabelName": "Label",
     "chartTitleName": "Hed",
-    "chartSubtitleName": "Dek"
+    "chartSubtitleName": "Dek",
+    "emailDomain": "pewtrusts.org"
 }

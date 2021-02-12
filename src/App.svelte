@@ -38,7 +38,6 @@
     let datatableContainer = null;
     let sections = [];
     let activeSection;
-    let showSavedCharts = false;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -100,6 +99,7 @@
         max-width: 42%;
     }
     .right-column {
+        position: relative;
         flex-grow: 1;
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
@@ -122,6 +122,8 @@
        height: calc(100vh - var(--banner-height, 75px));
        overflow-y: auto;
        width: 100%;
+       border-left: 1px solid var(--medium-gray, gray);
+       padding: 1em;
    }
 </style>
 
@@ -148,7 +150,7 @@
             <h1>Griffin Chart Builder</h1>
             <section use:pushSection>
                 <SectionHead text="Start" />
-                <Start bind:showSavedCharts />
+                <Start />
             </section>
             <section use:pushSection>
                 <SectionHead text="Data" />
@@ -176,11 +178,9 @@
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
-            {#if showSavedCharts}
-            <div class="saved-charts">
+            <div class="saved-charts" class:isHidden="{activeSection !== 'start'}">
                 <SavedCharts />
             </div>
-            {/if}
         </div>
     </div>
 </div>
