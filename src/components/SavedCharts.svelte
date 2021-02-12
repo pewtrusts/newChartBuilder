@@ -136,25 +136,30 @@
         display: block;
     }
     
-    ul {
-        list-style-type: none;
+    .chart-list {
         margin: 0;
         padding: 0;
+        display: grid;
+        grid-template-columns: repeat( auto-fit, minmax(150px, 200px) );
+        grid-column-gap: 10px;
+        grid-row-gap: 10px;
+        grid-auto-rows: minmax(min-content, max-content);
+        align-items: start;
     }
 </style>
 <svelte:head>
     <script async defer src="https://apis.google.com/js/api.js" on:load="{loadHandler}"></script>
 </svelte:head>
-<div class:isWorking class="container">
+<section class:isWorking class="container">
     <h2>Saved charts</h2>
     {#await savedCharts}
         <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
         <button on:click="{loginHandler}" class="button button--primary">Log in</button>
     {:then charts}
+    <section class="chart-list" use:listMounted>
     {#each charts as data}
-        <ul use:listMounted>
-            <SavedChart {data} />
-        </ul>
+        <SavedChart {data} />
     {/each}
+    </section>
     {/await}
-</div>
+</section>
