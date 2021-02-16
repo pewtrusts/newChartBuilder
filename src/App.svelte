@@ -2,7 +2,7 @@
     import Banner from "./components/Banner.svelte";
     import Settings from './components/Settings.svelte';
     import Start from './components/Start.svelte';
-    import SavedCharts from './components/SavedCharts.svelte';
+    import ListSavedCharts from './components/ListSavedCharts.svelte';
     import DataTable from "@Component/DataTable.svelte";
     import SpriteDefs from "./sprite.svelte";
     import brandOptions from "./brand-options.json";
@@ -188,7 +188,7 @@
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
             <div class="saved-charts" class:isHidden="{activeSection !== 'start'}">
-                <SavedCharts bind:resolveSaved bind:savedCharts />
+                <ListSavedCharts bind:resolveSaved bind:savedCharts />
             </div>
         </div>
     </div>

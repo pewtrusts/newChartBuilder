@@ -1,5 +1,5 @@
 <script>
-    import loadChart from './../scripts/load-chart';
+    import loadChart from '../scripts/load-chart';
     export let data;
     let date = new Date(+data.timestamp);
     function clickHandler(){

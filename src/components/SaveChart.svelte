@@ -1,6 +1,6 @@
 <script>
     import brandOptions from './../brand-options.json';
-    import { loginHandler } from './SavedCharts.svelte';
+    import { loginHandler } from './ListSavedCharts.svelte';
     export let savedCharts;
 </script>
 {#await savedCharts}

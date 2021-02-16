@@ -5,7 +5,7 @@
 </script>
 <script>
     import s from './../secrets.json';
-    import SavedChart from './SavedChart.svelte';
+    import LoadChart from './LoadChart.svelte';
     import brandOptions from './../brand-options.json';
     let isWorking = true;
     export let resolveSaved;
@@ -159,7 +159,7 @@
     {:then charts}
     <section class="chart-list" use:listMounted>
     {#each charts as data}
-        <SavedChart {data} />
+        <LoadChart {data} />
     {/each}
     </section>
     {/await}
