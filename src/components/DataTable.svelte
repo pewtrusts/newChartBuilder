@@ -59,9 +59,9 @@
 <script>
     export let data = [
         ["", "Apples", "Oranges", "Peaches"],
-        ["Spring", 2, 2, 2],
-        ["Summer", 2, 2, 2],
-        ["Fall", 2, 2, 2],
+        ["Spring", 2, 13, 4],
+        ["Summer", 1, 7, 10],
+        ["Fall", 15, 5, 2],
     ];
     export let Chart;
     export let showDataInput;

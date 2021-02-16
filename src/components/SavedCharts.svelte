@@ -1,12 +1,15 @@
+<script context="module">
+    export function loginHandler(){
+        gapi.auth2.getAuthInstance().signIn();
+    }
+</script>
 <script>
     import s from './../secrets.json';
     import SavedChart from './SavedChart.svelte';
     import brandOptions from './../brand-options.json';
-    let resolveSaved;
     let isWorking = true;
-    const savedCharts = new Promise(function(resolve){
-        resolveSaved = resolve;
-    });
+    export let resolveSaved;
+    export let savedCharts;
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -63,9 +66,7 @@
     function loadHandler(){
         gapi.load('client:auth2', initClient);
     }
-    function loginHandler(){
-        gapi.auth2.getAuthInstance().signIn();
-    }
+    
     /**
      *  This fn gets data from the Google Sheets document
      * 

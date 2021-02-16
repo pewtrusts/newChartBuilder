@@ -27,6 +27,11 @@
             name: 'Code',
             icon: 'code',
 
+        },
+        {
+            name: 'Save',
+            icon: 'data-transfer-upload',
+
         }
     ];
     ActiveSection.subscribe(({value}) => {

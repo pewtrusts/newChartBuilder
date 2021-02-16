@@ -10,6 +10,7 @@
     import DataInput from "@Component/DataInput.svelte";
     import SectionHead from "@Component/SectionHead.svelte";
     import Nav from "@Component/Nav.svelte";
+    import SaveChart from "@Component/SaveChart.svelte";
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
     import Code from '@Component/Code.svelte';
     import Colors from '@Component/Colors.svelte';
@@ -38,6 +39,10 @@
     let datatableContainer = null;
     let sections = [];
     let activeSection;
+    let resolveSaved;
+    let savedCharts = new Promise(function(resolve){
+        resolveSaved = resolve;
+    });
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -170,6 +175,10 @@
                 <SectionHead text="Code" />
                 <Code {pictureIsMissingOrOldNotice} />
             </section>
+            <section use:pushSection>
+                <SectionHead text="Save" />
+                <SaveChart bind:resolveSaved bind:savedCharts />
+            </section>
             
         </div>
         <div class="right-column">
@@ -179,7 +188,7 @@
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
             <div class="saved-charts" class:isHidden="{activeSection !== 'start'}">
-                <SavedCharts />
+                <SavedCharts bind:resolveSaved bind:savedCharts />
             </div>
         </div>
     </div>
