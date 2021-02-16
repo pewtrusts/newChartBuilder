@@ -4,7 +4,9 @@ export default function _loadChart(data){
     const config = JSON.parse(data.config);
     Object.keys(config.griffinConfig).forEach(key => {
         const Key = key.charAt(0).toUpperCase() + key.slice(1);
-        importConfig[Key].set(config.griffinConfig[key]);
+        if (importConfig[Key]){ //some griifin config is for griffin.js at runtime, not for the chartBuilder tool. ie derived values
+            importConfig[Key].set(config.griffinConfig[key]);
+        }
     });
     importConfig.UserOptions.set(config.highchartsConfig);
     LoadedDataConfig.set({ series: config.highchartsConfig.series, xAxis: config.highchartsConfig.xAxis});
