@@ -46,15 +46,21 @@ const ColorCount = derived([MaxPointCount,ColorByPoint, SeriesCount], ([maxPoint
     return seriesCount;
 });
 const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([selectedPalette, customColors]) => {
-    if (selectedPalette !== 'custom') return selectedPalette;
-    return `cc${hash(customColors.join(''))}`;
+    if (selectedPalette !== 'custom') {
+        return selectedPalette;
+    }
+    const rtn = `cc${hash(customColors.join(''))}`;
+    return rtn;
+});
+const Classes = derived([ChartPaletteClassname], function(){
+    return arguments[0];
 });
 const GriffinConfig = derived([
     ChartCredit,
     ChartDescription, 
     ChartLabel, 
     ChartNotes,
-    ChartPaletteClassname, 
+    ChartPaletteClassname,
     ChartSources, 
     ChartSubtitle,
     ChartTitle,
@@ -64,7 +70,7 @@ const GriffinConfig = derived([
     chartDescription, 
     chartLabel, 
     chartNotes,
-    chartPaletteClassname, 
+    chartPaletteClassname,
     chartSources, 
     chartSubtitle,
     chartTitle,
@@ -75,7 +81,7 @@ const GriffinConfig = derived([
         chartDescription, 
         chartLabel, 
         chartNotes,
-        chartPaletteClassname, 
+        chartPaletteClassname,
         chartSources, 
         chartSubtitle,
         chartTitle,
@@ -93,10 +99,10 @@ const CodeExport = derived([
     ChartDescription, 
     ChartLabel, 
     ChartNotes,
-    ChartPaletteClassname,
     ChartTitle, 
     ChartSources,
-    ChartSubtitle, 
+    ChartSubtitle,
+    Classes, 
     Picture,
     UserOptions, 
     GriffinConfig
@@ -105,10 +111,10 @@ const CodeExport = derived([
     chartDescription,
     chartLabel, 
     chartNotes,
-    chartPaletteClassname,
     chartTitle, 
     chartSources,
     chartSubtitle,
+    classes,
     picture,
     userOptions, 
     griffinConfig
@@ -128,7 +134,7 @@ const CodeExport = derived([
         griffinConfig 
     })}
     </pre>
-    <div aria-hidden="true" class="js-hc-container hc-container ${chartPaletteClassname}">
+    <div aria-hidden="true" class="js-hc-container hc-container ${classes.join(' ')}">
         ${picture}
     </div>${ chartNotes || chartSources || chartCredit ? `
     <figcaption>${chartNotes ? `
@@ -156,6 +162,7 @@ export {
     ChartSubtitle,
     ChartTitle,
     ChartType, 
+    Classes,
     CodeExport,
     ColorByPoint,
     ColorCount,

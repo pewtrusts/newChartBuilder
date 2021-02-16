@@ -4,7 +4,7 @@
     import Highcharts from 'highcharts/highcharts.src.js';
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
-    import {ChartType, ColorIndeces, UserOptions, ChartPaletteClassname, ColorByPoint, SeriesCountMismatch} from './../store';
+    import {ChartType, ColorIndeces, UserOptions, Classes, ColorByPoint, SeriesCountMismatch} from './../store';
     import { get } from 'svelte/store';
     import updateChartConfig from '../scripts/update-chart-config';
     import Notices from './Notices.svelte';
@@ -47,7 +47,7 @@
     export let seriesCountMismatchNotice;
     export let chartWidth;
     export let size;
-    let colorPaletteClass;
+    let classes = [];
     let chartLabel;
     let chartTitle;
     let chartSubtitle;
@@ -59,8 +59,8 @@
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;
     });
-    ChartPaletteClassname.subscribe(v => {
-        colorPaletteClass = v;
+    Classes.subscribe(v => {
+        classes = v;
     });
     function containerUse(node){
         Chart = createChart(node);
@@ -156,7 +156,7 @@
                 {/if}
             </header>
             {/if}
-        <div class="container js-hc-container {colorPaletteClass}" use:containerUse></div>
+        <div class="container js-hc-container {classes.join(' ')}" use:containerUse></div>
         <figcaption>
             {#if chartNotes}
             <p class="figure-note">

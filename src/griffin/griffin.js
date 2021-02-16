@@ -46,5 +46,5 @@ griffins.forEach(griffin => {
                 hash: config.griffinConfig.chartPaletteClassname.replace('cc','')
             });
         }
-    //Highcharts.chart(container, config.highchartsConfig);
+    Highcharts.chart(container, config.highchartsConfig);
 });
