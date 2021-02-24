@@ -10,6 +10,7 @@
     let isWorking = true;
     export let resolveSaved;
     export let savedCharts;
+    export let loadedChart;
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -159,7 +160,7 @@
     {:then charts}
     <section class="chart-list" use:listMounted>
     {#each charts as data}
-        <LoadChart {data} />
+        <LoadChart {data} bind:loadedChart />
     {/each}
     </section>
     {/await}

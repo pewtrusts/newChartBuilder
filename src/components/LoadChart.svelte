@@ -1,8 +1,11 @@
 <script>
     import loadChart from '../scripts/load-chart';
     export let data;
+    export let loadedChart;
+    export let disabled = false;
     let date = new Date(+data.timestamp);
     function clickHandler(){
+        loadedChart = data;
         loadChart(data);
     }
 </script>
@@ -65,5 +68,7 @@
         <dt class="visually-hidden">Creator</dt>
         <dd>{data.name}</dd>
     </dl>
+    {#if !disabled }
     <button on:click="{clickHandler}" class="button button--primary">Load</button>
+    {/if}
 </aside>

@@ -14,6 +14,7 @@
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
     import Code from '@Component/Code.svelte';
     import Colors from '@Component/Colors.svelte';
+    import VerifySave from '@Component/VerifySave.svelte';
     import {ActiveSection, IsWorking} from './store';
     import { onMount } from 'svelte';
 
@@ -34,6 +35,8 @@
     }
     let Chart = "";
     let showDataInput = false;
+    let showVerify = false;
+    let verifyPromise = null;
     let data;
     let leftColumn;  
     let datatableContainer = null;
@@ -43,6 +46,7 @@
     let savedCharts = new Promise(function(resolve){
         resolveSaved = resolve;
     });
+    let loadedChart = false;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -147,6 +151,9 @@
 {#if showDataInput}
     <DataInput bind:datatableContainer bind:Chart bind:data bind:showDataInput />
 {/if}
+{#if showVerify}
+    <VerifySave bind:showVerify bind:loadedChart bind:verifyPromise />
+{/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">
         <div bind:this="{leftColumn}"
@@ -177,7 +184,7 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Save" />
-                <SaveChart bind:resolveSaved bind:savedCharts />
+                <SaveChart bind:resolveSaved bind:savedCharts bind:loadedChart bind:showVerify bind:verifyPromise />
             </section>
             
         </div>
@@ -188,7 +195,7 @@
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
             <div class="saved-charts" class:isHidden="{activeSection !== 'start'}">
-                <ListSavedCharts bind:resolveSaved bind:savedCharts />
+                <ListSavedCharts bind:resolveSaved bind:savedCharts bind:loadedChart/>
             </div>
         </div>
     </div>
