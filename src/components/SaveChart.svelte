@@ -1,13 +1,17 @@
 <script>
     /**
      * todo: ensure thumbnail is available and up to date
+     * update: if thumbnail is not availaboe just do it on save.
+     * return image now returns promise that should be chainable
      * 
      */
+    //import Notices from './Notices.svelte';
     import brandOptions from "./../brand-options.json";
     import { loginHandler } from "./ListSavedCharts.svelte";
-    import { SavingChartData } from './../store';
+    import { SavingChartData, PictureIsMissingOrOld } from './../store';
     import { get } from 'svelte/store';
     import s from "./../secrets.json";
+    import { pictureIsMissingOrOldNotice } from './../App.svelte';
     export let savedCharts;
     export let loadedChart;
     export let showVerify;
@@ -19,8 +23,21 @@
     export let userId;
     export let userEmail;
     export let userName;
-    let project;
-    $: projectFromLoadedChart = loadedChart ? loadedChart.project : "";
+
+   // let notices = new Set();
+   // let pictureIsMissingOrOld = true;
+    $: saveIsDisabled = !project || null;
+    $: project = (function(){
+        if (project){
+            return project;
+        }
+        return loadedChart ? loadedChart.project : '';
+    }())
+  /*  PictureIsMissingOrOld.subscribe(v => {
+        pictureIsMissingOrOld = v;
+        notices[v ? 'add' : 'delete'](pictureIsMissingOrOldNotice);
+        notices = notices;
+    });*/
     function returnProjects(charts) {
         return Array.from(new Set(charts.map((c) => c.project)));
     }
@@ -77,39 +94,6 @@
     }
     console.log(resolveSaved);
 </script>
-
-{#await savedCharts}
-    <p>
-        You need to log in to Google using your {brandOptions.emailDomain} address
-        to save charts.
-    </p>
-    <button on:click={loginHandler} class="button button--primary"
-        >Log in</button
-    >
-{:then charts}
-    <form on:submit|preventDefault={submitHandler}>
-        <label for="project-list">Project name (select existing or add a new one):</label>
-        <input
-            value={projectFromLoadedChart}
-            class="datalist-input"
-            required
-            id="project-list"
-            name="project"
-            list="saved-projects"
-        />
-        <datalist id="saved-projects">
-            {#each returnProjects(charts) as project}
-                <option value={project} />
-            {/each}
-        </datalist>
-        <input
-            type="submit"
-            class="button button--primary"
-            value="Save chart"
-        />
-    </form>
-{/await}
-
 <style>
     label {
         font-weight: 900;
@@ -124,3 +108,37 @@
         margin-bottom: 0.5rem;
     }
 </style>
+<!--<Notices {notices} />-->
+{#await savedCharts}
+    <p>
+        You need to log in to Google using your {brandOptions.emailDomain} address
+        to save charts.
+    </p>
+    <button on:click={loginHandler} class="button button--primary"
+        >Log in</button
+    >
+{:then charts}
+    <form on:submit|preventDefault={submitHandler}>
+        <label for="project-list">Project name (select existing or add a new one):</label>
+        <input
+            bind:value={project}
+            class="datalist-input"
+            required
+            id="project-list"
+            name="project"
+            list="saved-projects"
+        />
+        <datalist id="saved-projects">
+            {#each returnProjects(charts) as project}
+                <option value={project} />
+            {/each}
+        </datalist>
+        <input
+            disabled="{saveIsDisabled}"
+            type="submit"
+            class="button button--primary"
+            value="Save chart"
+        />
+    </form>
+{/await}
+

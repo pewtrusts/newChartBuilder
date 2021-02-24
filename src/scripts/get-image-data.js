@@ -6,11 +6,6 @@ CanvasPngCompression.replaceToDataURL();
 // polyfill to add PNG compression level to Canvas toDataUri method
 // 0 => high compression; 1 => none;
 
-// TO DO  remove this for debugging only
-Thumbnail.subscribe(v => {
-    if (!v) return;
-    window.open(v, '_blank');
-});
 export default function _getImageData(){
     const fullscreenContainer = document.querySelector('.js-griffin.js-fullscreen');
     const fullscreenChart = document.querySelector('.js-griffin.js-fullscreen .js-hc-container');
@@ -73,7 +68,7 @@ export default function _getImageData(){
             }
         }),
     ];
-    Promise.all(promises).then(([full2,full1,mobile2,mobile1, thumbnail]) => {
+    return Promise.all(promises).then(([full2,full1,mobile2,mobile1, thumbnail]) => {
         Picture.set(`
         <picture class="fullscreen">
             <source srcset="${full1.toDataURL("image/webp", 0.3)} 1x, ${full2.toDataURL("image/webp", 0.3)} 2x"> 

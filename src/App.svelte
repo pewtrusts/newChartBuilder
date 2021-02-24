@@ -17,22 +17,29 @@
     import VerifySave from '@Component/VerifySave.svelte';
     import {ActiveSection, IsWorking} from './store';
     import { onMount } from 'svelte';
+    import getImageData from './scripts/get-image-data';
+    function picClickHandler(){
+        IsWorking.set(true);
+        requestIdleCallback(getImageData, { timeout: 2000 });
+    }
+    export const pictureIsMissingOrOldNotice = {
+        label: 'Old or missing images',
+        description: 'The images of the charts have not yet been generated or have become out of sync with changes made since they were last updated.' + 
+                     ' Click on the notice to update the images or navigate to the images section.',
+        type: 'warning',
+        onclick: picClickHandler
+    }
+    const seriesCountMismatchNotice = {
+        label: 'Unused series',
+        description: 'The selected chart type can only render one series, but the data supplied has more than one. Only the first series will be rendered.',
+        type: 'warning'
+    };
 
 </script> 
 
 <script>
 
-    let seriesCountMismatchNotice = {
-        label: 'Unused series',
-        description: 'The selected chart type can only render one series, but the data supplied has more than one. Only the first series will be rendered.',
-        type: 'warning'
-    };
-    let pictureIsMissingOrOldNotice = {
-        label: 'Old or missing images',
-        description: 'The images of the charts have not yet been generated or have become out of sync with changes made since they were last updated.' + 
-                     ' Click on the notice to update the images ot navigate to the images section.',
-        type: 'warning'
-    }
+    
     let Chart = "";
     let showDataInput = false;
     let showVerify = false;
