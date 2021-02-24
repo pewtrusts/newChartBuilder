@@ -8,8 +8,8 @@
 <script>
     export let showVerify = false;
     export let loadedChart;
-    export let verifyPromise;
-    let verifyResolve;
+    export let verifyResolve;
+    export let verifyReject;
     function keydownHandler(e){
         if ( e.keyCode == 27 ){ //ESC
             showVerify  = false;
@@ -17,18 +17,15 @@
     }
     function submitHandler(){
         console.log(this);
-        verifyPromise(this.value);
+        verifyResolve(this.value);
+        showVerify = false;
     }
     function closeHandler(){
         showVerify = false;
     }
     function init(){
         console.log('init verify');
-        var verifyReject;
-        verifyPromise = new Promise(function(resolve,reject){
-            verifyResolve = resolve;
-            verifyReject = reject;
-        });
+        
         return {
             destroy(){
                 verifyReject();
@@ -91,7 +88,7 @@
             </div>
         {/if}
         <p>You have edited an existing chart. Do you want to replace it with the new one or keep it?</p>
-        <Button clickHandler="{submitHandler}" title="Replace it" type="primary" />
-        <Button clickHandler="{submitHandler}" title="Keep it" type="primary" />
+        <Button clickHandler="{submitHandler}" title="Replace it" type="primary" value="replace" />
+        <Button clickHandler="{submitHandler}" title="Keep it" type="primary"  value="keep"/>
     </div>
 </div>

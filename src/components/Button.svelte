@@ -9,6 +9,8 @@
     export let type = null;
     export let style = null;
     export let showIconAndText = false;
+    export let value = null;
+    
 </script>
 <style>
     .button-component {
@@ -27,7 +29,7 @@
         background-color: var(--background-medium, lightgray);
     }
 </style>
-<button class="button-component" class:secondary="{type == 'secondary'}" class:primary="{type == 'primary'}" role="button" on:click="{clickHandler}" title="{title}" style="{style}" >
+<button {value} class="button-component" class:secondary="{type == 'secondary'}" class:primary="{type == 'primary'}" role="button" on:click="{clickHandler}" title="{title}" style="{style}" >
     {#if iconID}
     <Sprite width="15" id="{iconID}" style="{iconStyle}" />
     {/if}

@@ -36,7 +36,9 @@
     let Chart = "";
     let showDataInput = false;
     let showVerify = false;
-    let verifyPromise = null;
+    let verifyPromise;
+    let verifyResolve;
+    let verifyReject;
     let data;
     let leftColumn;  
     let datatableContainer = null;
@@ -46,7 +48,11 @@
     let savedCharts = new Promise(function(resolve){
         resolveSaved = resolve;
     });
+    let googleSheetHeaders = null;
     let loadedChart = false;
+    let userId = null;
+    let userName = null;
+    let userEmail = null;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -152,7 +158,7 @@
     <DataInput bind:datatableContainer bind:Chart bind:data bind:showDataInput />
 {/if}
 {#if showVerify}
-    <VerifySave bind:showVerify bind:loadedChart bind:verifyPromise />
+    <VerifySave bind:showVerify bind:loadedChart bind:verifyResolve bind:verifyReject />
 {/if}
 <div class="ctn ctn--full">
     <div class="table-chart-wrapper">
@@ -184,7 +190,19 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Save" />
-                <SaveChart bind:resolveSaved bind:savedCharts bind:loadedChart bind:showVerify bind:verifyPromise />
+                <SaveChart 
+                    bind:googleSheetHeaders 
+                    bind:resolveSaved 
+                    bind:savedCharts 
+                    bind:loadedChart 
+                    bind:showVerify 
+                    bind:verifyPromise 
+                    bind:verifyResolve 
+                    bind:verifyReject
+                    bind:userId
+                    bind:userEmail
+                    bind:userName
+                />
             </section>
             
         </div>
@@ -195,7 +213,15 @@
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
             <div class="saved-charts" class:isHidden="{activeSection !== 'start'}">
-                <ListSavedCharts bind:resolveSaved bind:savedCharts bind:loadedChart/>
+                <ListSavedCharts 
+                    bind:resolveSaved
+                    bind:savedCharts 
+                    bind:loadedChart 
+                    bind:googleSheetHeaders
+                    bind:userId
+                    bind:userEmail
+                    bind:userName
+                />
             </div>
         </div>
     </div>

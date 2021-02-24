@@ -55,6 +55,7 @@ const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([sel
 const Classes = derived([ChartPaletteClassname], function(){
     return arguments[0];
 });
+
 const GriffinConfig = derived([
     ChartCredit,
     ChartDescription, 
@@ -93,6 +94,18 @@ const GriffinConfig = derived([
     delete obj.chartSources;
     PictureIsMissingOrOld.set(true);
     return obj;
+});
+//project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
+const SavingChartData = derived([ChartType, ChartTitle, UserOptions, GriffinConfig, Thumbnail], ([chartType, chartTitle, userOptions, griffinConfig, thumbnail]) => {
+    return {
+        type: chartType,
+        hed: chartTitle,
+        config: JSON.stringify({
+            highchartsConfig: userOptions,
+            griffinConfig
+        }),
+        thumbnail
+    };
 });
 const CodeExport = derived([
     ChartCredit,
@@ -175,6 +188,7 @@ export {
     MaxPointCount,
     Picture,
     PictureIsMissingOrOld,
+    SavingChartData,
     SelectedColorPalette, 
     SeriesCount,
     SeriesCountFromTable,

@@ -11,6 +11,10 @@
     export let resolveSaved;
     export let savedCharts;
     export let loadedChart;
+    export let googleSheetHeaders;
+    export let userEmail;
+    export let userId;
+    export let userName;
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -40,6 +44,7 @@
             console.log({isSignedIn});
             if (isSignedIn){
                 getSavedCharts();
+                updateCurrentUser();
             } else {
                 isWorking = false;
             }
@@ -54,15 +59,20 @@
     function updateSigninStatus(isSignedIn) {
         if (isSignedIn) {
             getSavedCharts();
+            updateCurrentUser();
         } else {
-            
+           // logout ?
         }
     } 
     function listMounted(){
         isWorking = false;
     }
-    function updateCurrentUser(user){
-        console.log(user.getBasicProfile());
+    function updateCurrentUser(){
+        const user = instance.currentUser.get();
+        const profile = user.getBasicProfile();
+        userEmail = profile.getEmail();
+        userId = profile.getId();
+        userName = profile.getGivenName() + ' ' + profile.getFamilyName();
     }
     function loadHandler(){
         gapi.load('client:auth2', initClient);
@@ -74,32 +84,33 @@
      */
     function getSavedCharts() {
         isWorking = true;
-    gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: s.GoogleSheets.sheetId,
-        range: 'Sheet1',
-    }).then(function(response) {
-        const data = response.result.values.slice(1).map(function(d){
-            return d.reduce(function(acc,cur,i){
-                acc[response.result.values[0][i]] = cur;
-                return acc;
-            },{})
-        });
-        console.log(data);
-        resolveSaved(data);
-        //isWorking = false;
-        /*if (range.values.length > 0) {
-        renderResults(range.values);
-        populateProjectDatalist(range.values)
-        populateCreatorOptions(range.values);
-        console.log(range.values);
-        /*for (let i = 0; i < range.values.length; i++) {
-            var row = range.values[i];
-            // Print columns A and E, which correspond to indices 0 and 4.
-            appendPre(row[0] + ', ' + row[4]);
-        }*/
-        /*} else {
-        console.log('No data found.');
-        }*/
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: s.GoogleSheets.sheetId,
+            range: 'Sheet1',
+        }).then(function(response) {
+            googleSheetHeaders = response.result.values[0];
+            const data = response.result.values.slice(1).map(function(d){
+                return d.reduce(function(acc,cur,i){
+                    acc[response.result.values[0][i]] = cur;
+                    return acc;
+                },{})
+            });
+            console.log(data);
+            resolveSaved(data);
+            //isWorking = false;
+            /*if (range.values.length > 0) {
+            renderResults(range.values);
+            populateProjectDatalist(range.values)
+            populateCreatorOptions(range.values);
+            console.log(range.values);
+            /*for (let i = 0; i < range.values.length; i++) {
+                var row = range.values[i];
+                // Print columns A and E, which correspond to indices 0 and 4.
+                appendPre(row[0] + ', ' + row[4]);
+            }*/
+            /*} else {
+            console.log('No data found.');
+            }*/
     }, function(response) {
             alert('You may not have permission to edit the Google Sheet document. Error: ' + response.result.error.message);
     });
