@@ -142,24 +142,35 @@
     select {
         margin-bottom: 0.5em;
     }
+    header {
+        background-color: #fff;
+        position: sticky;
+        top: 0;
+        padding-top: 1em;
+        z-index: 1;
+    }
+
 </style>
 <svelte:head>
     <script async defer src="https://apis.google.com/js/api.js" on:load="{loadHandler}"></script>
 </svelte:head>
 <section class:isWorking class="container">
-    <h2>Saved charts</h2>
     {#await savedCharts}
+        <h2>Saved charts</h2>
         <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
         <button on:click="{loginHandler}" class="button button--primary">Log in</button>
     {:then value}
-    <label for="project-filter">Filter by project:</label>
-    <!-- svelte-ignore a11y-no-onchange -->
-    <select on:change="{projectFilterHandler}" name="project-filter" id="project-filter">
-        <option value="any">Any</option>
-        {#each returnProjects(value.data) as project}
+    <header>
+        <h2>Saved charts</h2>
+        <label for="project-filter">Filter by project:</label>
+        <!-- svelte-ignore a11y-no-onchange -->
+        <select on:change="{projectFilterHandler}" name="project-filter" id="project-filter">
+            <option value="any">Any</option>
+            {#each returnProjects(value.data) as project}
             <option value="{project}">{project}</option>
-        {/each}
-    </select>
+            {/each}
+        </select>
+    </header>
     <section class="chart-list" use:listMounted>
     {#each sortCharts(value.data) as data}
         <LoadChart {data} bind:loadedChart {projectFilter} />

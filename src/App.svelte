@@ -147,6 +147,7 @@
        width: 100%;
        border-left: 1px solid var(--medium-gray, gray);
        padding: 1em;
+       padding-top: 0;
    }
 </style>
 
