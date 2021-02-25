@@ -1,4 +1,6 @@
 <script context="module">
+    import { getSavedCharts } from './../scripts/get-saved-charts';
+    import initGetSavedCharts from './../scripts/get-saved-charts';
     export function loginHandler(){
         gapi.auth2.getAuthInstance().signIn();
     }
@@ -25,10 +27,16 @@
     // included, separated by spaces.
     const SCOPES = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email"; 
     let instance;
+
     /**
      *  Initializes the API client library and sets up sign-in state
      *  listeners.
      */
+    async function setHeaders(){
+        const sheetsData = await savedCharts;
+        googleSheetHeaders = sheetsData.googleSheetHeaders;
+        return true;
+    }
     function initClient() {
         gapi.client.init({
             apiKey: API_KEY,
@@ -78,43 +86,9 @@
         gapi.load('client:auth2', initClient);
     }
     
-    /**
-     *  This fn gets data from the Google Sheets document
-     * 
-     */
-    function getSavedCharts() {
-        isWorking = true;
-        gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: s.GoogleSheets.sheetId,
-            range: 'Sheet1',
-        }).then(function(response) {
-            googleSheetHeaders = response.result.values[0];
-            const data = response.result.values.slice(1).map(function(d){
-                return d.reduce(function(acc,cur,i){
-                    acc[response.result.values[0][i]] = cur;
-                    return acc;
-                },{})
-            });
-            console.log(data);
-            resolveSaved(data);
-            //isWorking = false;
-            /*if (range.values.length > 0) {
-            renderResults(range.values);
-            populateProjectDatalist(range.values)
-            populateCreatorOptions(range.values);
-            console.log(range.values);
-            /*for (let i = 0; i < range.values.length; i++) {
-                var row = range.values[i];
-                // Print columns A and E, which correspond to indices 0 and 4.
-                appendPre(row[0] + ', ' + row[4]);
-            }*/
-            /*} else {
-            console.log('No data found.');
-            }*/
-    }, function(response) {
-            alert('You may not have permission to edit the Google Sheet document. Error: ' + response.result.error.message);
-    });
-    }
+    initGetSavedCharts({resolveSaved});
+    setHeaders();
+    
 </script>
 
 <style>
@@ -168,9 +142,9 @@
     {#await savedCharts}
         <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
         <button on:click="{loginHandler}" class="button button--primary">Log in</button>
-    {:then charts}
+    {:then value}
     <section class="chart-list" use:listMounted>
-    {#each charts as data}
+    {#each value.data as data}
         <LoadChart {data} bind:loadedChart />
     {/each}
     </section>

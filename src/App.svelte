@@ -60,6 +60,7 @@
     let userId = null;
     let userName = null;
     let userEmail = null;
+    let getSavedCharts;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -209,6 +210,7 @@
                     bind:userId
                     bind:userEmail
                     bind:userName
+                    bind:getSavedCharts
                 />
             </section>
             
@@ -228,6 +230,7 @@
                     bind:userId
                     bind:userEmail
                     bind:userName
+                    bind:getSavedCharts
                 />
             </div>
         </div>
