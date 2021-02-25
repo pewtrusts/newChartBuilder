@@ -113,10 +113,16 @@ section h2:first-of-type {
 	line-height: 1.5;
 	letter-spacing: 0.3px;
 	transition: background-color 0.2s ease-in-out;
+	min-width: 55px;
 }
 .button--primary {
 	background-color: var(--brand-primary, #000);
 	color: #fff
+}
+.button--secondary {
+	background-color: #fff;
+	color: var(--brand-primary, #000);
+	border: 1px solid var(--brand-primary, #000);
 }
 .button[disabled] {
 	background-color: var(--medium-gray, #767676);

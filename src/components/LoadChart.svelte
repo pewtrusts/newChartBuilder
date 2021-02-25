@@ -69,6 +69,6 @@
         <dd>{data.name}</dd>
     </dl>
     {#if !disabled }
-    <button on:click="{clickHandler}" class="button button--primary">Load</button>
+    <div style="margin-top: 0.5em"><button on:click="{clickHandler}" class="button button--secondary">Load</button></div>
     {/if}
 </aside>
