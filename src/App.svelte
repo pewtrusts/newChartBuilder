@@ -126,11 +126,11 @@
         flex-grow: 1;
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
+        border-left: 1px solid var(--medium-gray, gray);
     }
     .chart-container {
         width: 100%;
         padding: 1rem;
-        border-left: 1px solid var(--medium-gray, gray);
         display: flex;
         justify-content: flex-start;
         align-items: stretch;
@@ -140,12 +140,11 @@
        visibility: hidden;
    }
    .saved-charts {
+       background-color: var(--light-gray, #ccc);
        position: absolute;
        top: 0;
-       height: calc(100vh - var(--banner-height, 75px));
-       overflow-y: auto;
+       min-height: calc(100vh - var(--banner-height, 75px));
        width: 100%;
-       border-left: 1px solid var(--medium-gray, gray);
        padding: 1em;
        padding-top: 0;
    }

@@ -12,6 +12,7 @@
 </script>
 <style>
     aside {
+        background-color: #fff;
         border: 1px solid var(--light-gray, #767676);
         padding: 0.5rem;
         font-size: 0.75rem;

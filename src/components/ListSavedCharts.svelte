@@ -19,6 +19,8 @@
     export let userName;
     let projectFilter = 'any';
     let isWorking = true;
+    let currentUserCharts;
+    let otherUserCharts;
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -39,6 +41,8 @@
     async function setHeaders(){
         const sheetsData = await savedCharts;
         googleSheetHeaders = sheetsData.googleSheetHeaders;
+        currentUserCharts = sheetsData.data.filter(d => d.user_id == userId);
+        otherUserCharts = sheetsData.data.filter(d => d.user_id != userId);
         return true;
     }
     function initClient() {
@@ -138,12 +142,13 @@
         grid-row-gap: 10px;
         grid-auto-rows: minmax(min-content, max-content);
         align-items: stretch;
+        min-height: auto;
     }
     select {
         margin-bottom: 0.5em;
     }
     header {
-        background-color: #fff;
+        background-color: var(--light-gray, #ccc);
         position: sticky;
         top: 0;
         padding-top: 1em;
@@ -171,8 +176,19 @@
             {/each}
         </select>
     </header>
+    {#if currentUserCharts.length > 0 }
+    <h3>Your charts</h3>
+    {/if}
     <section class="chart-list" use:listMounted>
-    {#each sortCharts(value.data) as data}
+    {#each sortCharts(currentUserCharts) as data}
+        <LoadChart {data} bind:loadedChart {projectFilter} />
+    {/each}
+    </section>
+    {#if currentUserCharts.length > 0 && otherUserCharts.length > 0 }
+    <h3>Your team&rsquo;s charts</h3>
+    {/if}
+    <section class="chart-list">
+    {#each sortCharts(otherUserCharts) as data}
         <LoadChart {data} bind:loadedChart {projectFilter} />
     {/each}
     </section>
