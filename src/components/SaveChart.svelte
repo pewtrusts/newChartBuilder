@@ -1,3 +1,8 @@
+<script context="module">
+    export function returnProjects(charts) {
+        return Array.from(new Set(charts.map((c) => c.project)));
+    }
+</script>
 <script>
     /**
      * todo: ensure thumbnail is available and up to date
@@ -34,9 +39,6 @@
         }
         return loadedChart ? loadedChart.project : '';
     }())
-    function returnProjects(charts) {
-        return Array.from(new Set(charts.map((c) => c.project)));
-    }
     function _saveChart(props){
         if ( pictureIsMissingOrOld ){
             IsWorking.set(true);

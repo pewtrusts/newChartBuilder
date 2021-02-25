@@ -1,6 +1,7 @@
 <script context="module">
     import { getSavedCharts } from './../scripts/get-saved-charts';
     import initGetSavedCharts from './../scripts/get-saved-charts';
+    import { returnProjects } from './SaveChart.svelte';
     export function loginHandler(){
         gapi.auth2.getAuthInstance().signIn();
     }
@@ -9,7 +10,6 @@
     import s from './../secrets.json';
     import LoadChart from './LoadChart.svelte';
     import brandOptions from './../brand-options.json';
-    let isWorking = true;
     export let resolveSaved;
     export let savedCharts;
     export let loadedChart;
@@ -17,6 +17,8 @@
     export let userEmail;
     export let userId;
     export let userName;
+    let projectFilter = 'any';
+    let isWorking = true;
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -27,7 +29,9 @@
     // included, separated by spaces.
     const SCOPES = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email"; 
     let instance;
-
+    function sortCharts(charts){
+        return charts.sort((a,b) => b.timestamp - a.timestamp);
+    }
     /**
      *  Initializes the API client library and sets up sign-in state
      *  listeners.
@@ -85,7 +89,9 @@
     function loadHandler(){
         gapi.load('client:auth2', initClient);
     }
-    
+    function projectFilterHandler(){
+        projectFilter = this.value;
+    }
     initGetSavedCharts({resolveSaved});
     setHeaders();
     
@@ -131,7 +137,10 @@
         grid-column-gap: 10px;
         grid-row-gap: 10px;
         grid-auto-rows: minmax(min-content, max-content);
-        align-items: start;
+        align-items: stretch;
+    }
+    select {
+        margin-bottom: 0.5em;
     }
 </style>
 <svelte:head>
@@ -143,9 +152,17 @@
         <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
         <button on:click="{loginHandler}" class="button button--primary">Log in</button>
     {:then value}
+    <label for="project-filter">Filter by project:</label>
+    <!-- svelte-ignore a11y-no-onchange -->
+    <select on:change="{projectFilterHandler}" name="project-filter" id="project-filter">
+        <option value="any">Any</option>
+        {#each returnProjects(value.data) as project}
+            <option value="{project}">{project}</option>
+        {/each}
+    </select>
     <section class="chart-list" use:listMounted>
-    {#each value.data as data}
-        <LoadChart {data} bind:loadedChart />
+    {#each sortCharts(value.data) as data}
+        <LoadChart {data} bind:loadedChart {projectFilter} />
     {/each}
     </section>
     {/await}

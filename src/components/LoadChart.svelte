@@ -3,6 +3,7 @@
     export let data;
     export let loadedChart;
     export let disabled = false;
+    export let projectFilter;
     let date = new Date(+data.timestamp);
     function clickHandler(){
         loadedChart = data;
@@ -14,6 +15,9 @@
         border: 1px solid var(--light-gray, #767676);
         padding: 0.5rem;
         font-size: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     h1 {
         font: inherit
@@ -48,27 +52,33 @@
         height: 100%;
     }
 </style>
+{#if projectFilter == 'any' || projectFilter == data.project}
 <aside>
-    <time datetime="{date.toISOString()}">
-        {date.toLocaleDateString(undefined,
-            {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            }
-        )}
-    </time>
-    <h1 class="hed">{data.hed}</h1>
+    <div>
+        <time datetime="{date.toISOString()}">
+            {date.toLocaleDateString(undefined,
+                {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }
+            )}
+        </time>
+        <h1 class="hed">{data.hed}</h1>
+    </div>
     <figure>
         <img src="{data.thumbnail}" alt="chart thumbnail" />
     </figure>
-    <dl>
-        <dt class="visually-hidden">Project</dt>
-        <dd class="project">{data.project}</dd>
-        <dt class="visually-hidden">Creator</dt>
-        <dd>{data.name}</dd>
-    </dl>
-    {#if !disabled }
-    <div style="margin-top: 0.5em"><button on:click="{clickHandler}" class="button button--secondary">Load</button></div>
-    {/if}
+    <div>
+        <dl>
+            <dt class="visually-hidden">Project</dt>
+            <dd class="project">{data.project}</dd>
+            <dt class="visually-hidden">Creator</dt>
+            <dd>{data.name}</dd>
+        </dl>
+        {#if !disabled }
+        <div style="margin-top: 0.5em"><button on:click="{clickHandler}" class="button button--secondary">Load</button></div>
+        {/if}
+    </div>
 </aside>
+{/if}
