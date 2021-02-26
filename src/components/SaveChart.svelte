@@ -12,7 +12,7 @@
      */
     import brandOptions from "./../brand-options.json";
     import { loginHandler } from "./ListSavedCharts.svelte";
-    import { PictureIsMissingOrOld, IsWorking } from './../store';
+    import { ActiveSection, PictureIsMissingOrOld, IsWorking } from './../store';
     import { getSavedCharts } from './../scripts/get-saved-charts';
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import getImageData from './../scripts/get-image-data';
@@ -56,7 +56,9 @@
             resolveSaved = resolve;
         });
         initGetSavedCharts({resolveSaved});
-        getSavedCharts();
+        getSavedCharts().then(() => {
+            ActiveSection.set({method: 'click', value: 'start'});
+        });
     }
     
     function submitHandler() {

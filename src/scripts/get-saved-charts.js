@@ -8,7 +8,7 @@ export default function _init(props){
 }
 export function getSavedCharts() {
     IsWorking.set(true);
-    gapi.client.sheets.spreadsheets.values.get({
+    return gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: s.GoogleSheets.sheetId,
         range: 'Sheet1',
     }).then(function (response) {
@@ -23,6 +23,8 @@ export function getSavedCharts() {
         console.log(data);
         resolveSaved({data, googleSheetHeaders});
         IsWorking.set(false);
+        return true; // TO DO : rather than passing resolveSaved into this context could have returned the necessary data and chained onto
+                     // a `then()` in the original context
     }, function (response) {
         alert('You may not have permission to edit the Google Sheet document. Error: ' + response.result.error.message);
     });
