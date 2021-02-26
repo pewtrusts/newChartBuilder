@@ -10,6 +10,7 @@
     import s from './../secrets.json';
     import LoadChart from './LoadChart.svelte';
     import brandOptions from './../brand-options.json';
+    import { onMount } from 'svelte';
     export let resolveSaved;
     export let savedCharts;
     export let loadedChart;
@@ -17,12 +18,12 @@
     export let userEmail;
     export let userId;
     export let userName;
+    let currentUserCharts = [];
+    let otherUserCharts = [];
     let projectFilter = 'any';
     let typeFilter = 'any';
     let creatorFilter = 'any';
     let isWorking = true;
-    let currentUserCharts;
-    let otherUserCharts;
     const CLIENT_ID = s.GoogleSheets.ID
     const API_KEY = s.GoogleSheets.key;
 
@@ -43,9 +44,6 @@
     async function setHeaders(){
         const sheetsData = await savedCharts;
         googleSheetHeaders = sheetsData.googleSheetHeaders;
-        currentUserCharts = sheetsData.data.filter(d => d.user_id == userId);
-        otherUserCharts = sheetsData.data.filter(d => d.user_id != userId);
-        return true;
     }
     function initClient() {
         gapi.client.init({
@@ -109,6 +107,10 @@
     }
     function returnCreators(charts) {
         return Array.from(new Set(charts.map((c) => c.name)));
+    }
+    function divideCharts(_, charts){
+        currentUserCharts = charts.filter(d => d.user_id == userId);
+        otherUserCharts = charts.filter(d => d.user_id != userId);
     }
 
     initGetSavedCharts({resolveSaved});
@@ -180,48 +182,50 @@
         <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
         <button on:click="{loginHandler}" class="button button--primary">Log in</button>
     {:then value}
-    <header>
-        <h2>Saved charts</h2>
-        <label for="project-filter">Filter by project:</label>
-        <!-- svelte-ignore a11y-no-onchange -->
-        <select on:change="{projectFilterHandler}" name="project-filter" id="project-filter">
-            <option value="any">Any</option>
-            {#each returnProjects(value.data) as project}
-            <option value="{project}">{project}</option>
+    <div use:divideCharts="{value.data}">
+        <header>
+            <h2>Saved charts</h2>
+            <label for="project-filter">Filter by project:</label>
+            <!-- svelte-ignore a11y-no-onchange -->
+            <select on:change="{projectFilterHandler}" name="project-filter" id="project-filter">
+                <option value="any">Any</option>
+                {#each returnProjects(value.data) as project}
+                <option value="{project}">{project}</option>
+                {/each}
+            </select>
+            <label for="type-filter">Filter by type:</label>
+            <!-- svelte-ignore a11y-no-onchange -->
+            <select on:change="{typeFilterHandler}" name="type-filter" id="type-filter">
+                <option value="any">Any</option>
+                {#each returnTypes(value.data) as type}
+                <option value="{type}">{type}</option>
+                {/each}
+            </select>
+            <label for="creator-filter">Filter by creator:</label>
+            <!-- svelte-ignore a11y-no-onchange -->
+            <select on:change="{creatorFilterHandler}" name="creator-filter" id="creator-filter">
+                <option value="any">Any</option>
+                {#each returnCreators(value.data) as creator}
+                <option value="{creator}">{creator}</option>
+                {/each}
+            </select>
+        </header>
+        {#if currentUserCharts.length > 0 }
+        <h3>Your charts</h3>
+        <section class="chart-list" use:listMounted>
+            {#each sortCharts(currentUserCharts) as data}
+            <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
             {/each}
-        </select>
-        <label for="type-filter">Filter by type:</label>
-        <!-- svelte-ignore a11y-no-onchange -->
-        <select on:change="{typeFilterHandler}" name="type-filter" id="type-filter">
-            <option value="any">Any</option>
-            {#each returnTypes(value.data) as type}
-            <option value="{type}">{type}</option>
+        </section>
+        {/if}
+        {#if otherUserCharts.length > 0 }
+        <h3>Your team&rsquo;s charts</h3>
+        <section class="chart-list">
+            {#each sortCharts(otherUserCharts) as data}
+            <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
             {/each}
-        </select>
-        <label for="creator-filter">Filter by creator:</label>
-        <!-- svelte-ignore a11y-no-onchange -->
-        <select on:change="{creatorFilterHandler}" name="creator-filter" id="creator-filter">
-            <option value="any">Any</option>
-            {#each returnCreators(value.data) as creator}
-            <option value="{creator}">{creator}</option>
-            {/each}
-        </select>
-    </header>
-    {#if currentUserCharts.length > 0 }
-    <h3>Your charts</h3>
-    {/if}
-    <section class="chart-list" use:listMounted>
-    {#each sortCharts(currentUserCharts) as data}
-        <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
-    {/each}
-    </section>
-    {#if currentUserCharts.length > 0 && otherUserCharts.length > 0 }
-    <h3>Your team&rsquo;s charts</h3>
-    {/if}
-    <section class="chart-list">
-    {#each sortCharts(otherUserCharts) as data}
-        <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
-    {/each}
-    </section>
+        </section>
+        {/if}
+    </div>
     {/await}
 </section>
