@@ -28,7 +28,7 @@
         
         return {
             destroy(){
-                verifyReject();
+                verifyReject('dialog closed');
             }
         };
     }

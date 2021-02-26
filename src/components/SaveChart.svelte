@@ -80,6 +80,8 @@
                 } else {
                     _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
                 }
+            }, () => {
+                return;
             });
         } else {
             _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
