@@ -1,6 +1,6 @@
-import { SelectedColorPalette, importConfig, LoadedDataConfig } from './../store';
+import { SelectedColorPalette, importConfig, LoadedDataConfig, newChartConfig } from './../store';
 import addCustomColorProperties from './../griffin/scripts/addCustomColorProperties';
-export default function _loadChart(data){
+export default function _loadChart(data = newChartConfig){ // New chart will use newChartConfig ie pass in no param
     console.log(importConfig);
     const config = JSON.parse(data.config);
     Object.keys(config.griffinConfig).forEach(key => {
