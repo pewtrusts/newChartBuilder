@@ -27,7 +27,7 @@
     export let userId;
     export let userEmail;
     export let userName;
-    import { saveChart } from './../scripts/save-chart';
+    import { saveChart, deletePrevious } from './../scripts/save-chart';
     let pictureIsMissingOrOld;
     PictureIsMissingOrOld.subscribe(v => {
         pictureIsMissingOrOld = v;
@@ -58,6 +58,7 @@
         initGetSavedCharts({resolveSaved});
         getSavedCharts();
     }
+    
     function submitHandler() {
         const formData = new FormData(this);
         project = formData.get('project');
@@ -70,13 +71,17 @@
             });
             verifyPromise.then((v) => {
                 if (v == "replace") {
-                    // delete then saveChart();
+                    IsWorking.set(true);
+                    deletePrevious(loadedChart).then(() => {
+                        _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+                    });
                 } else {
                     _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
                 }
             });
+        } else {
+            _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
         }
-        _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
     }
     console.log(resolveSaved);
 </script>

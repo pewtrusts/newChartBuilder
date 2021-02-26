@@ -13,9 +13,10 @@ export function getSavedCharts() {
         range: 'Sheet1',
     }).then(function (response) {
         const googleSheetHeaders = response.result.values[0];
-        const data = response.result.values.slice(1).map(function (d) {
+        const data = response.result.values.slice(1).map(function (d,j) {
             return d.reduce(function (acc, cur, i) {
                 acc[response.result.values[0][i]] = cur;
+                acc.rowIndex =  j + 1;
                 return acc;
             }, {})
         });
