@@ -1,5 +1,6 @@
 <script>
     import loadChart from '../scripts/load-chart';
+    import { ActiveSection } from './../store';
     export let data;
     export let loadedChart;
     export let disabled = false;
@@ -10,6 +11,7 @@
     function clickHandler(){
         loadedChart = data;
         loadChart(data);
+        ActiveSection.set({method: 'click', value: 'data'});
     }
 </script>
 <style>
@@ -55,9 +57,10 @@
         height: 100%;
     }
 </style>
-{#if (projectFilter == 'any' || projectFilter == data.project) &&
+{#if disabled || 
+     ((projectFilter == 'any' || projectFilter == data.project) &&
      (typeFilter == 'any' || typeFilter == data.type) &&
-     (creatorFilter == 'any' || creatorFilter == data.name) } 
+     (creatorFilter == 'any' || creatorFilter == data.name)) } 
 <aside>
     <div>
         <time datetime="{date.toISOString()}">
