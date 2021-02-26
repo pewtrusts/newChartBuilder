@@ -18,6 +18,8 @@
     export let userId;
     export let userName;
     let projectFilter = 'any';
+    let typeFilter = 'any';
+    let creatorFilter = 'any';
     let isWorking = true;
     let currentUserCharts;
     let otherUserCharts;
@@ -96,6 +98,19 @@
     function projectFilterHandler(){
         projectFilter = this.value;
     }
+    function typeFilterHandler(){
+        typeFilter = this.value;
+    }
+    function creatorFilterHandler(){
+        creatorFilter = this.value;
+    }
+    function returnTypes(charts) {
+        return Array.from(new Set(charts.map((c) => c.type)));
+    }
+    function returnCreators(charts) {
+        return Array.from(new Set(charts.map((c) => c.name)));
+    }
+
     initGetSavedCharts({resolveSaved});
     setHeaders();
     
@@ -175,13 +190,29 @@
             <option value="{project}">{project}</option>
             {/each}
         </select>
+        <label for="type-filter">Filter by type:</label>
+        <!-- svelte-ignore a11y-no-onchange -->
+        <select on:change="{typeFilterHandler}" name="type-filter" id="type-filter">
+            <option value="any">Any</option>
+            {#each returnTypes(value.data) as type}
+            <option value="{type}">{type}</option>
+            {/each}
+        </select>
+        <label for="creator-filter">Filter by creator:</label>
+        <!-- svelte-ignore a11y-no-onchange -->
+        <select on:change="{creatorFilterHandler}" name="creator-filter" id="creator-filter">
+            <option value="any">Any</option>
+            {#each returnCreators(value.data) as creator}
+            <option value="{creator}">{creator}</option>
+            {/each}
+        </select>
     </header>
     {#if currentUserCharts.length > 0 }
     <h3>Your charts</h3>
     {/if}
     <section class="chart-list" use:listMounted>
     {#each sortCharts(currentUserCharts) as data}
-        <LoadChart {data} bind:loadedChart {projectFilter} />
+        <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
     {/each}
     </section>
     {#if currentUserCharts.length > 0 && otherUserCharts.length > 0 }
@@ -189,7 +220,7 @@
     {/if}
     <section class="chart-list">
     {#each sortCharts(otherUserCharts) as data}
-        <LoadChart {data} bind:loadedChart {projectFilter} />
+        <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
     {/each}
     </section>
     {/await}

@@ -4,6 +4,8 @@
     export let loadedChart;
     export let disabled = false;
     export let projectFilter;
+    export let typeFilter;
+    export let creatorFilter;
     let date = new Date(+data.timestamp);
     function clickHandler(){
         loadedChart = data;
@@ -53,7 +55,9 @@
         height: 100%;
     }
 </style>
-{#if projectFilter == 'any' || projectFilter == data.project}
+{#if (projectFilter == 'any' || projectFilter == data.project) &&
+     (typeFilter == 'any' || typeFilter == data.type) &&
+     (creatorFilter == 'any' || creatorFilter == data.name) } 
 <aside>
     <div>
         <time datetime="{date.toISOString()}">
