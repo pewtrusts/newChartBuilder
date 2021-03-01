@@ -14,6 +14,8 @@ export default function _loadChart(data = newChartConfig){ // New chart will use
                     colors: config.griffinConfig.customColors,
                     hash: config.griffinConfig[key].replace('cc', '')
                 });
+            } else {
+                SelectedColorPalette.set(config.griffinConfig[key]);
             }
         }
     });
