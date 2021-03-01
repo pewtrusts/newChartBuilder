@@ -1,5 +1,5 @@
 <script context="module">
-    import {ColorIndeces, SelectedColorPalette, ColorCount} from './../store';
+    import {ChartType, ColorIndeces, SelectedColorPalette, ColorCount} from './../store';
     import { get } from 'svelte/store';
     function changeHandler(e){
         console.log(e.target.value);
@@ -17,7 +17,6 @@
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i) => i);
         ColorIndeces.set(colorIndeces);
     }
-    
 </script>
 <script>
     export let palette;
@@ -25,7 +24,10 @@
     export let defaultPaletteColorCount;
     let customSwatchStep = 360 / colorCount;
     let selectedPalette;
-       
+    
+    ChartType.subscribe(() => {
+        checkColorIndeces(get(ColorCount));
+    });
     SelectedColorPalette.subscribe(v => {
         selectedPalette = v;
         if ( selectedPalette == palette){
