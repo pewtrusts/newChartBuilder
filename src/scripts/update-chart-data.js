@@ -1,4 +1,4 @@
-import { SeriesCountFromTable, XAxisType } from '../store';
+import { DatatableData, XAxisType } from '../store';
 import updateChart from './update-chart-config';
 import toDate from './coerce-to-date';
 /*
@@ -25,9 +25,9 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
     // info: intervals was used to set specific tick points until i found the more immediate
     // and simpler issue was the startOfWeek setting. keeping here as comments for later
     if ( datatableData ){
-        SeriesCountFromTable.set(datatableData.length - 1);
+        DatatableData.set(datatableData);
     } else {
-        SeriesCountFromTable.set(data.length - 1);
+        DatatableData.set(data);
     }
     var intervals;
     const asDateTime = data.slice(1).map(row => {

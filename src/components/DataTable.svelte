@@ -96,12 +96,12 @@
     LoadedDataConfig.subscribe(v => {
         if (!v) return;
         //xaxis type == categorical
-
-        data = [
+        const _data = [
             [(v.xAxis.title ? v.xAxis.title.text : ''), ...v.series.map(d => d.name)],
             ...v.xAxis.categories.map((c,i) => [c, ...v.series.map(s => s.data[i].y)])
         ];
-        updateChartData(data, Chart);
+        data = v.datatableData || _data;
+        updateChartData(_data, Chart, data);
 
     })
     ChartType.subscribe(v => {

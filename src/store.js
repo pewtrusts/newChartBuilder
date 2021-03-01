@@ -12,14 +12,16 @@ const UserOptions = writable({});
 UserOptions.subscribe(v => {
     if (!v || !v.chart || !v.chart.type) return;
     ChartType.set(v.chart.type);
-})
+});
+export const DatatableData = writable([]);
 const ImageDataUri = writable('');
 const SelectedColorPalette = writable('default');
 const ColorIndeces = writable(undefined);
 const Indicators = writable({});
 const IsWorking = writable(false);
 const ColorByPoint = writable([]);
-const SeriesCountFromTable = writable(0); /* SeriesCountFromTable is # of series from data passed in by user.
+const SeriesCountFromTable = derived([DatatableData], ([datatableData]) => datatableData.length - 1);
+                                            /* SeriesCountFromTable is # of series from data passed in by user.
                                              SeriesCount is # series sent to the Chart instance. e.g., pie charts
                                              only pass in one series regardless of the SeriesCountFromTable */
 const CustomColors = writable([]);
@@ -35,7 +37,7 @@ const Picture = writable('');
 const PictureIsMissingOrOld = writable(true);
 const Thumbnail = writable('');
 const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
-const SeriesCountMismatch = derived([SeriesCountFromTable, ChartType], ([seriesCount, chartType]) => seriesCount > 1 && chartType == 'pie');
+const SeriesCountMismatch = derived([SeriesCountFromTable, SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
 const MaxPointCount = derived([UserOptions], ([userOptions]) => {
     if ( !userOptions.series ){
         return 0;
@@ -58,7 +60,9 @@ const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([sel
 const Classes = derived([ChartPaletteClassname], function(){
     return arguments[0];
 });
-
+/**
+ * to do: when there's a series count mismatch, append the datatable data to the griffin config so it can be loaded back in
+ */
 const GriffinConfig = derived([
     ChartCredit,
     ChartDescription, 
@@ -68,7 +72,9 @@ const GriffinConfig = derived([
     ChartSources, 
     ChartSubtitle,
     ChartTitle,
-    CustomColors, 
+    CustomColors,
+    DatatableData,
+    SeriesCountMismatch 
 ], ([
     chartCredit,
     chartDescription, 
@@ -78,7 +84,9 @@ const GriffinConfig = derived([
     chartSources, 
     chartSubtitle,
     chartTitle,
-    customColors, 
+    customColors,
+    datatableData,
+    seriesCountMismatch 
 ]) => {
     const obj =  {
         chartCredit,
@@ -89,8 +97,12 @@ const GriffinConfig = derived([
         chartSources, 
         chartSubtitle,
         chartTitle,
-        customColors, 
+        customColors,
+        datatableData 
     };
+    if (!seriesCountMismatch){
+        delete obj.datatableData;
+    }
     delete obj.chartCredit;
     delete obj.chartDescription;
     delete obj.chartNotes;

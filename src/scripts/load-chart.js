@@ -18,6 +18,6 @@ export default function _loadChart(data = newChartConfig){ // New chart will use
         }
     });
     importConfig.UserOptions.set(config.highchartsConfig);
-    LoadedDataConfig.set({ series: config.highchartsConfig.series, xAxis: config.highchartsConfig.xAxis});
+    LoadedDataConfig.set({ series: config.highchartsConfig.series, xAxis: config.highchartsConfig.xAxis, datatableData: config.griffinConfig.datatableData});
     console.log(config);
 }
