@@ -65,6 +65,7 @@
     ];
     export let Chart;
     export let showDataInput;
+    let chartType;
     let xAxisType = "linear";
     export let datatableContainer;
     let notices = new Set();
@@ -83,16 +84,19 @@
         return data[0].map((_, i) => [...data.map((row) => row[i])]);
     }
     function transpose() {
-        const container = Chart.renderTo;
-        Chart.destroy();
         data = _transpose(data);
-        Chart = createChart(container);
-        updateChartData(data, Chart);
+        if (chartType == 'pie') {
+            let _data = _transpose(data);
+            updateChartData(_transpose(_data.slice(0,2)), Chart, data);
+        } else {
+            updateChartData(data, Chart);
+        }
     }
     function handleDataChange(e) {
         console.log({ e, data });
         updateChartData(data, Chart);
     }
+    
     LoadedDataConfig.subscribe(v => {
         if (!v) return;
         //xaxis type == categorical
@@ -105,6 +109,7 @@
 
     })
     ChartType.subscribe(v => {
+        chartType = v;
         if (v == 'pie') {
             let _data = _transpose(data);
             updateChartData(_transpose(_data.slice(0,2)), Chart, data);
