@@ -9,6 +9,7 @@ const XAxisType = writable('linear');
 const ChartType = writable(baseConfig.chart.type);
 const ActiveSection = writable('start');
 const UserOptions = writable({});
+export const ExportType = writable('static');
 UserOptions.subscribe(v => {
     if (!v || !v.chart || !v.chart.type) return;
     ChartType.set(v.chart.type);
@@ -133,7 +134,8 @@ const CodeExport = derived([
     Classes, 
     Picture,
     UserOptions, 
-    GriffinConfig
+    GriffinConfig,
+    ExportType
 ], ([
     chartCredit,
     chartDescription,
@@ -145,10 +147,11 @@ const CodeExport = derived([
     classes,
     picture,
     userOptions, 
-    griffinConfig
+    griffinConfig,
+    exportType
 ]) => {
     const hashTitle = chartTitle ? hash(chartTitle) : null;
-    return `<figure${chartTitle ? ' aria-labelledby="heading-' + hashTitle + '"' : ''}${chartDescription ? ` aria-describedby="description-${hashTitle || hash(chartDescription)}"` : ''} class="ai2html-griffin-figure griffin-figure js-griffin">
+    return `<figure${chartTitle ? ' aria-labelledby="heading-' + hashTitle + '"' : ''}${chartDescription ? ` aria-describedby="description-${hashTitle || hash(chartDescription)}"` : ''} class="ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
     <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
     <header>${chartLabel ? `
         <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
