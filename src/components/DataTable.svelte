@@ -70,6 +70,7 @@
     export let datatableContainer;
     let notices = new Set();
     export let seriesCountMismatchNotice;
+    let seriesCountMismatch = false;
     function returnHeadClass(i) {
         if (
             data.slice(1).every((row) => {
@@ -121,6 +122,7 @@
         xAxisType = v;
     });
     SeriesCountMismatch.subscribe(v => {
+        seriesCountMismatch = v;
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;
     });
@@ -181,6 +183,10 @@
     .bar-slot--column:last-child {
         border-right-width: 0;
     }
+    .bar-slot--column.unused {
+        opacity: 0.5;
+
+    }
     .transpose {
         position: sticky; 
         left: 0;
@@ -203,6 +209,9 @@
             var(--background-medium, lightgray) 40px,
             transparent 41px
         );
+    }
+    :global(.unused) {
+        opacity: 0.5;
     }
 </style>
 <Notices {notices} />
@@ -228,7 +237,7 @@
         </button>
         {#if data}
             {#each data[0] as _, i}
-                <div class="bar-slot bar-slot--column">
+                <div class="bar-slot bar-slot--column" class:unused="{seriesCountMismatch && i > 1}">
                     <span>{returnColumnLetters(i)}</span>
                 </div>
             {/each}
@@ -254,7 +263,7 @@
                             column={i}
                             type="th"
                             scope="column"
-                            klass="{returnValueType(columnHead)} {returnHeadClass(i)}" />
+                            klass="{returnValueType(columnHead)} {returnHeadClass(i)} {i > 1 && seriesCountMismatch ? 'unused' : ''}" />
                     {/each}
                 {/if}
             </tr>
@@ -281,7 +290,7 @@
                                 column={j + 1}
                                 type="td"
                                 scope={null}
-                                klass={returnValueType(datum)} />
+                                klass="{returnValueType(datum)} {j > 0 && seriesCountMismatch ? 'unused' : ''}" />
                         {/each}
                     </tr>
                 {/each}
