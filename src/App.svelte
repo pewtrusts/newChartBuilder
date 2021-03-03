@@ -15,6 +15,7 @@
     import Code from '@Component/Code.svelte';
     import Colors from '@Component/Colors.svelte';
     import VerifySave from '@Component/VerifySave.svelte';
+    import Dialog from '@Component/Dialog.svelte';
     import {ActiveSection, IsWorking} from './store';
     import { onMount } from 'svelte';
     import getImageData from './scripts/get-image-data';
@@ -61,6 +62,8 @@
     let userName = null;
     let userEmail = null;
     let getSavedCharts;
+    let dialog = null;
+    let clickSave = () => {};
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -162,6 +165,9 @@
 <SpriteDefs />
 <Banner />
 <Nav />
+{#if dialog}
+    <Dialog bind:dialog />
+{/if}
 {#if showDataInput}
     <DataInput bind:datatableContainer bind:Chart bind:data bind:showDataInput />
 {/if}
@@ -194,7 +200,7 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Code" />
-                <Code {pictureIsMissingOrOldNotice} />
+                <Code {pictureIsMissingOrOldNotice} bind:dialog {clickSave} />
             </section>
             <section use:pushSection>
                 <SectionHead text="Save" />
@@ -211,6 +217,7 @@
                     bind:userEmail
                     bind:userName
                     bind:getSavedCharts
+                    bind:clickSave
                 />
             </section>
             

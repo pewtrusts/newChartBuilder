@@ -12,7 +12,7 @@
      */
     import brandOptions from "./../brand-options.json";
     import { loginHandler } from "./ListSavedCharts.svelte";
-    import { ActiveSection, PictureIsMissingOrOld, IsWorking } from './../store';
+    import { ActiveSection, PictureIsMissingOrOld, IsWorking, ChartHasBeenSaved } from './../store';
     import { getSavedCharts } from './../scripts/get-saved-charts';
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import getImageData from './../scripts/get-image-data';
@@ -27,12 +27,22 @@
     export let userId;
     export let userEmail;
     export let userName;
+    export let clickSave;
+    clickSave = function(){
+        const click = new MouseEvent("click", {
+            "view": window,
+            "bubbles": true,
+            "cancelable": false
+        });
+        saveButton.dispatchEvent(click);
+    }
+    let saveButton;
+
     import { saveChart, deletePrevious } from './../scripts/save-chart';
     let pictureIsMissingOrOld;
     PictureIsMissingOrOld.subscribe(v => {
         pictureIsMissingOrOld = v;
     });
-    $: saveIsDisabled = !project || null;
     $: project = (function(){
         if (project){
             return project;
@@ -52,6 +62,7 @@
         }
     }
     function reloadCharts(){
+        ChartHasBeenSaved.set(true);
         savedCharts = new Promise(function(resolve){
             resolveSaved = resolve;
         });
@@ -129,10 +140,10 @@
             {/each}
         </datalist>
         <input
-            disabled="{saveIsDisabled}"
             type="submit"
             class="button button--primary"
             value="Save chart"
+            bind:this="{saveButton}"
         />
     </form>
 {/await}

@@ -3,15 +3,22 @@
      * perhaps later if there are more required fields, put in a derived stored of missing
      * required fields and base the dialog on that. now it is only dependent on ChartDescription
      */
-    import { ChartDescription, CodeExport, PictureIsMissingOrOld, ExportType, IsWorking } from './../store';
+    import { ChartDescription, CodeExport, PictureIsMissingOrOld, ExportType, IsWorking, ChartHasBeenSaved } from './../store';
     import getImageData from './../scripts/get-image-data';
     import Button from './Button.svelte';
+    import SaveAfterCopy from './SaveAfterCopy.svelte';
     let codeExport;
     let pictureIsMissingOrOld;
+    let chartHasBeenSaved;
     let chartDescription;
     let container;
     let showSuccess = false;
     let fadeSuccess = false;
+    export let dialog;
+    export let clickSave;
+    ChartHasBeenSaved.subscribe(v => {
+        chartHasBeenSaved = v;
+    });
     ChartDescription.subscribe(v => {
         chartDescription = v;
     });
@@ -51,10 +58,30 @@
             requestIdleCallback(function(){
                 getImageData().then(() => {
                     copyCode();
+                    if (!chartHasBeenSaved){
+                        dialog = {
+                            component: SaveAfterCopy,
+                            props: {
+                                clickSave
+                            }
+                        };
+                        /**
+                         * to do : separate show dialog from dialog itself
+                        */
+                    }
+                    
                 });
             }, {timeout: 2000})
         } else {
             copyCode();
+            if (!chartHasBeenSaved){
+                dialog = {
+                    component: SaveAfterCopy,
+                    props: {
+                        clickSave
+                    }
+                };
+            }
         }
     }
     
