@@ -1,11 +1,20 @@
 <script>
-    import { CodeExport, PictureIsMissingOrOld, ExportType } from './../store';
+    /**
+     * perhaps later if there are more required fields, put in a derived stored of missing
+     * required fields and base the dialog on that. now it is only dependent on ChartDescription
+     */
+    import { ChartDescription, CodeExport, PictureIsMissingOrOld, ExportType, IsWorking } from './../store';
+    import getImageData from './../scripts/get-image-data';
     import Button from './Button.svelte';
     let codeExport;
-    let pictureIsMissingOrOld = false;
+    let pictureIsMissingOrOld;
+    let chartDescription;
     let container;
     let showSuccess = false;
     let fadeSuccess = false;
+    ChartDescription.subscribe(v => {
+        chartDescription = v;
+    });
     CodeExport.subscribe(v => {
         codeExport = v;
     });
@@ -26,11 +35,29 @@
             }, 1000);
         },500);
     }
-    function clickHandler(){
+    function copyCode(){
         navigator.clipboard.writeText(codeExport).then(() => {
             flashSuccess();
         });
     }
+    function clickHandler(){
+        const data =  new FormData(this);
+        console.log(Array.from(data.keys()));
+        if (data.has('chartDescription')){
+            ChartDescription.set(data.get('chartDescription'));
+        }
+        if ( pictureIsMissingOrOld ){
+            IsWorking.set(true);
+            requestIdleCallback(function(){
+                getImageData().then(() => {
+                    copyCode();
+                });
+            }, {timeout: 2000})
+        } else {
+            copyCode();
+        }
+    }
+    
 </script>
 <style>
     textarea {
@@ -62,14 +89,44 @@
         display: block;
         margin-bottom: 1em;
     }
+    .form-wrapper {
+        margin-top: 1em;
+    }
+    .form-wrapper label {
+        font-weight: 900;
+        margin: 0 0 0.5rem;
+    }
+    .form-wrapper textarea {
+        display: block;
+        width: 100%;
+        font-size: 0.85em;
+        line-height: 1.5;
+    }
+    .form-wrapper textarea::placeholder {
+        color: #767676;
+        font-style: italic;
+    }
 </style>
 <!-- to do: remove spacing to minimize output -->
 <!--<textarea value="{JSON.stringify(codeExport, null, 2)}"></textarea>-->
 <p>Copy the code needed to include the chart on the website. The website will render the chart as a static image if you have <em>static</em> selected;
 it will replace the image with a dynamic Highcharts version if you have <em>dynamic</em> selected.</p>
-<div class="selectors">
-    <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked > Static</label>
-    <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="dynamic" > Dynamic</label>
-</div>
-<div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" {clickHandler} type="primary" /></div>
+<form on:submit|preventDefault="{clickHandler}">
+    <div class="selectors">
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked > Static</label>
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="dynamic" > Dynamic</label>
+    </div>
+    <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" type="primary" /></div>
+    {#if !chartDescription }
+    <div class="form-wrapper">
+        <label>Description:<textarea 
+            required
+            name="chartDescription" 
+            id="chartDescription-missing" 
+            placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season."
+            ></textarea>
+        </label>
+    </div>
+    {/if}
+</form>
 <textarea value="{codeExport}"></textarea>

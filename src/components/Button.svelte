@@ -2,7 +2,7 @@
     import Sprite from "./Sprite.svelte";
 </script>
 <script>
-    export let clickHandler
+    export let clickHandler = function(){};
     export let iconID = null;
     export let title;
     export let iconStyle = null;
