@@ -25,7 +25,7 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
             () => {
                 IsWorking.set(false);
                 //getSavedCharts(true);
-                return true;
+                return _savingChartData;
             },
             function (error) {
                 console.log(error);

@@ -61,7 +61,8 @@
             saveChart(props).then(reloadCharts);
         }
     }
-    function reloadCharts(){
+    function reloadCharts(savedChart){
+        loadedChart = savedChart;
         ChartHasBeenSaved.set(true);
         savedCharts = new Promise(function(resolve){
             resolveSaved = resolve;
@@ -71,7 +72,9 @@
             ActiveSection.set({method: 'click', value: 'start'});
         });
     }
-    
+    function __saveChart(project){
+        _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+    }
     function submitHandler() {
         const formData = new FormData(this);
         project = formData.get('project');
@@ -86,16 +89,16 @@
                 if (v == "replace") {
                     IsWorking.set(true);
                     deletePrevious(loadedChart).then(() => {
-                        _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+                        __saveChart(project);
                     });
                 } else {
-                    _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+                    __saveChart(project);
                 }
             }, () => {
                 return;
             });
         } else {
-            _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+            __saveChart(project);
         }
     }
     console.log(resolveSaved);
