@@ -178,7 +178,9 @@
 </svelte:head>
 <section class:isWorking class="container">
     {#await savedCharts}
-        <h2>Saved charts</h2>
+        <header>
+            <h2>Saved charts</h2>
+        </header>
         <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
         <button on:click="{loginHandler}" class="button button--primary">Log in</button>
     {:then value}
