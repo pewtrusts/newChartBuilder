@@ -26,7 +26,7 @@
         codeExport = v;
     });
     PictureIsMissingOrOld.subscribe(v => {
-        pictureIsMissingOrOld = true;
+        pictureIsMissingOrOld = v;
     });
     function changeHandler(){
         ExportType.set(this.value);
