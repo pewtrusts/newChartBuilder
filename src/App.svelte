@@ -16,6 +16,8 @@
     import Colors from '@Component/Colors.svelte';
     import VerifySave from '@Component/VerifySave.svelte';
     import Dialog from '@Component/Dialog.svelte';
+    import Print from '@Component/Print.svelte';
+    import PrintChart from '@Component/PrintChart.svelte';
     import {ActiveSection, IsWorking} from './store';
     import { onMount } from 'svelte';
     import getImageData from './scripts/get-image-data';
@@ -63,6 +65,7 @@
     let userEmail = null;
     let getSavedCharts;
     let dialog = null;
+    let enablePrint = undefined;
     let clickSave = () => {};
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
@@ -220,15 +223,19 @@
                     bind:clickSave
                 />
             </section>
+            <section use:pushSection>
+                <SectionHead text="Print" />
+                <Print bind:enablePrint/>
+            </section>
             
         </div>
         <div class="right-column">
-            <div class:isHidden="{activeSection == 'start'}" class="chart-container">
+            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
-            <div class="saved-charts" class:isHidden="{activeSection !== 'start'}">
+            <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 
                     bind:resolveSaved
                     bind:savedCharts 
@@ -240,6 +247,9 @@
                     bind:getSavedCharts
                 />
             </div>
+            {#if enablePrint && activeSection == 'print'}
+                <PrintChart />
+            {/if}
         </div>
     </div>
 </div>

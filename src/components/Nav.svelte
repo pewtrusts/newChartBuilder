@@ -17,10 +17,12 @@
         {
             name: 'Text',
             icon: 'text',
+            style: 'bottom: 2px;'
         },
         {
             name: 'Colors',
             icon: 'droplet',
+            style: 'bottom: 2px;'
 
         },
         {
@@ -31,7 +33,11 @@
         {
             name: 'Save',
             icon: 'data-transfer-upload',
-
+        },
+        {
+            name: 'Print',
+            icon: 'document',
+            style: 'left: 2px;bottom: 2px;'
         }
     ];
     ActiveSection.subscribe(({value}) => {
@@ -54,7 +60,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 40px;
+        height: 55px;
         position: relative;
 
     }
@@ -77,6 +83,13 @@
         line-height: 0;
         position: relative;
         right: 1px;
+        display: inline-flex;
+        height: 85%;
+        justify-content: space-around;
+        flex-direction: column;
+        align-items: center;
+        color: var(--medium-gray, #bbb);
+        font-size: 0.75rem;
     }
     .navigation-section {
         position: absolute;
@@ -92,7 +105,12 @@
     <nav>
         <ul>
             {#each sections as section}
-            <li class:isActive="{slugger(section.name) == activeSection}"><a on:click|preventDefault="{clickHandler}" title="{section.name}" href="#{slugger(section.name)}"><Sprite width="25" id="{section.icon}" gray="{true}" white="{slugger(section.name) == activeSection}" style="{section.style}" /></a></li>
+            <li class:isActive="{slugger(section.name) == activeSection}">
+                <a on:click|preventDefault="{clickHandler}" title="{section.name}" href="#{slugger(section.name)}">
+                    <Sprite width="25" id="{section.icon}" gray="{true}" white="{slugger(section.name) == activeSection}" style="{section.style}" />
+                    <div>{section.name}</div>
+                </a>
+            </li>
             {/each}
         </ul>
     </nav>

@@ -1,13 +1,19 @@
 <script context="module">
     import '@Submodule/shared-css/styles.css';
     // TO DO: SWITCH TO MINIFIED HC SRC
-    import Highcharts from 'highcharts/highcharts.src.js';
+    import Highcharts from 'highcharts';
+    //import Highcharts from 'highcharts/highcharts.src.js';
+    import HCExporting from 'highcharts/modules/exporting';
+    import HCOfflineExporting from 'highcharts/modules/offline-exporting';
     import options from '@Project/options.json';
     import config from '@Project/base-chart-config.json';
     import {ChartType, ColorIndeces, UserOptions, Classes, ColorByPoint, SeriesCountMismatch} from './../store';
     import { get } from 'svelte/store';
     import updateChartConfig from '../scripts/update-chart-config';
     import Notices from './Notices.svelte';
+    window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
+    HCExporting(Highcharts);
+    HCOfflineExporting(Highcharts);
     Highcharts.setOptions(options);
     export function createChart(node){
         return Highcharts.chart(node, config);
