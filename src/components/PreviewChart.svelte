@@ -15,6 +15,9 @@
     HCExporting(Highcharts);
     HCOfflineExporting(Highcharts);
     Highcharts.setOptions(options);
+    config.title = config.title || {};
+    config.title.text = undefined;
+    config.exporting = {enabled:false};
     export function createChart(node){
         return Highcharts.chart(node, config);
     }

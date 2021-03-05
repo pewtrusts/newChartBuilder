@@ -116,3 +116,11 @@ picture.fullscreen {
 .hc-container {
   overflow-y: hidden;
 }
+.highcharts-container.griffin {
+  font-family: lato;
+  font-size: 13.3333px;
+}
+.highcharts-container.griffin .highcharts-axis-labels {
+  font-size: 1em;
+}
+

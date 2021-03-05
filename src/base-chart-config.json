@@ -1,7 +1,7 @@
 {
-  "title": null,
   "chart": {
-    "type": "column"
+    "type": "column",
+    "className": "griffin"
   },
   "credits": {
     "enabled": false

@@ -154,3 +154,25 @@ a:hover {
 	font-variant-ligatures: none !important;
 	-webkit-font-variant-ligatures: none !important;
 }
+
+.highcharts-container {
+	font-family: inherit;
+
+}
+
+/* for print output */
+
+/* print */
+
+.highcharts-container.griffin--for-print {
+	font-family: 'lato';
+  font-size: 15.99px; /* scales to 9pt in print */
+}
+.highcharts-container.griffin--for-print .highcharts-axis-labels {
+	font-size: inherit;
+}
+.highcharts-container.griffin--for-print .highcharts-legend text {
+    font-weight: normal;
+    fill: #808285;
+    font-size: 14.2222px; /* ie 8 pt in print */
+}

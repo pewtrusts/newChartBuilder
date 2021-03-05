@@ -2,11 +2,12 @@
 <script>
     import Button from './Button.svelte';
     import { PrintWidth, PrintHeight } from './../store';
+    import convert from './../scripts/unit-conversions';
     export let enablePrint = true; // undo this for dev only
     let customWidth = false;
     let printWidth = 0;
     let printHeight = 0;
-    $: customWidthInches = pixelsToInches(printWidth);
+    $: customWidthInches = convert.pixelsToInches(printWidth);
     let printSizes = [
         {
             value: '39p0',
@@ -32,45 +33,35 @@
     function changeHandler(){
         enablePrint = !enablePrint;
     }
-    function picaToInches(d){
-        const split = d.split('p');
-        return split[0] / 6 + split[1] / 12;
-    }
-    function pixelsToInches(px){
-        return Number((px / 96 / 1.3333).toFixed(3));
-    }
-    function inchesToPixels(inches){
-        return inches * 96 * 1.3333;
-    }
     function widthHandler(){
         if (this.value == 'null'){
             customWidth = true;
             return;
         }
-        const pixels = inchesToPixels(picaToInches(this.value));
+        const pixels = convert.inchesToPixels(convert.picaToInches(this.value));
         PrintWidth.set(pixels);
         customWidth = false;
     }
     function widthDisplay(d){
         var inches;
         if ( d.value ){
-            inches = picaToInches(d.value);
+            inches = convert.picaToInches(d.value);
         }
         let parenthetical = d.value ? ` ${d.value} (${Number(inches.toFixed(3)).toString()}in)` : '';
         return d.value ? `${d.key} column — ${parenthetical}` : d.key;
     }
     function customWidthHandler(){
         console.log(this.value);
-        PrintWidth.set(inchesToPixels(this.value))
+        PrintWidth.set(convert.inchesToPixels(this.value))
     }
     function heightHandler(){
-        PrintHeight.set(inchesToPixels(this.value));
+        PrintHeight.set(convert.inchesToPixels(this.value));
     }
-    PrintWidth.set(inchesToPixels(picaToInches('39p0')));
+    PrintWidth.set(convert.inchesToPixels(convert.picaToInches('39p0')));
     PrintWidth.subscribe(v => {
         printWidth = v;
     });
-    PrintHeight.set(inchesToPixels(picaToInches('39p0')) * 0.5625);
+    PrintHeight.set(convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625);
     PrintHeight.subscribe(v => {
         printHeight = v;
     });
@@ -117,7 +108,7 @@
     {/if}
     <br />
     <label for="height-input">Height:</label>
-    <input id="height-input" style="width:80px;" on:change="{heightHandler}" type="number" step="0.001" min="0" value="{pixelsToInches(printHeight)}"> inches<br />
+    <input id="height-input" style="width:80px;" on:change="{heightHandler}" type="number" step="0.001" min="0" value="{convert.pixelsToInches(printHeight)}"> inches<br />
     <Button title="Reset to 16:9" type="secondary" {clickHandler} />
     <Button title="Download SVG" type="primary" clickHandler="{downloadSVG}" />
 {/if}
