@@ -149,6 +149,10 @@
     });
 </script>
 <style>
+    .outer-wrapper {
+        margin-bottom: 2em;
+        align-self: center;
+    }
     .container {
         margin-top: 1rem;
     }
@@ -162,13 +166,13 @@
     .wrapper::before {
         content: attr(data-width) 'px X ' attr(data-height)attr(data-height-type) ' (' attr(data-min-height) 'px min)';
         position: absolute;
-        top: -35px;
+        top: -45px;
         color: #767676;
     }
 </style>
 
 <Notices {notices} />
-<div>
+<div class="outer-wrapper">
     <div data-min-height="{minHeight}" data-height="{chartHeight.value * (chartHeight.type == 'percent' ? 100 : 1)}" data-height-type="{chartHeight.type == 'percent' ? '%' : 'px'}" data-width="{chartWidth}" class="wrapper js-figure-wrapper">
         <figure style="min-width:{chartWidth}px;max-width:{chartWidth}px;" class="ai2html-griffin-figure griffin-figure js-griffin js-{size}">
             <meta name="format-detection" content="telephone=no">
