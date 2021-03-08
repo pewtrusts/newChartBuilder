@@ -66,7 +66,7 @@
     let userEmail = null;
     let getSavedCharts;
     let dialog = null;
-    let enablePrint = undefined;
+    let enablePrint = false;
     let clickSave = () => {};
     let chartWidth = 650;
     IsWorking.subscribe(v => {
@@ -143,7 +143,7 @@
         padding: 1rem;
         display: flex;
         justify-content: flex-start;
-        align-items: stretch;
+        align-items: flex-start;
         flex-direction: column;
     }
    .isHidden {
@@ -234,9 +234,11 @@
             
         </div>
         <div class="right-column">
-            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
+            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" style="padding: 1em;">
                 <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
                 <ChartSizeSelector {Chart}/>
+            </div>
+            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>

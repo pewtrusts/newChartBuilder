@@ -3,7 +3,7 @@
     import Button from './Button.svelte';
     import { PrintWidth, PrintHeight } from './../store';
     import convert from './../scripts/unit-conversions';
-    export let enablePrint = true; // undo this for dev only
+    export let enablePrint = false; 
     let customWidth = false;
     let printWidth = 0;
     let printHeight = 0;
