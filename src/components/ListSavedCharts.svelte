@@ -2,6 +2,7 @@
     import { getSavedCharts } from './../scripts/get-saved-charts';
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import { returnProjects } from './SaveChart.svelte';
+    import Login from './Login.svelte';
     export function loginHandler(){
         gapi.auth2.getAuthInstance().signIn();
     }
@@ -9,8 +10,6 @@
 <script>
     import s from './../secrets.json';
     import LoadChart from './LoadChart.svelte';
-    import brandOptions from './../brand-options.json';
-    import { onMount } from 'svelte';
     export let resolveSaved;
     export let savedCharts;
     export let loadedChart;
@@ -178,11 +177,7 @@
 </svelte:head>
 <section class:isWorking class="container">
     {#await savedCharts}
-        <header>
-            <h2>Saved charts</h2>
-        </header>
-        <p>You need to log in to Google using your {brandOptions.emailDomain} address to load saved charts.</p>
-        <button on:click="{loginHandler}" class="button button--primary">Log in</button>
+        <Login reason="to load saved charts" />
     {:then value}
     <div use:divideCharts="{value.data}">
         <header>

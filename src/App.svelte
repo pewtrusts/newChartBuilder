@@ -1,6 +1,6 @@
 <script context="module">
     import Banner from "./components/Banner.svelte";
-    import Settings from './components/Settings.svelte';
+    import Text from './components/Text.svelte';
     import Start from './components/Start.svelte';
     import ListSavedCharts from './components/ListSavedCharts.svelte';
     import DataTable from "@Component/DataTable.svelte";
@@ -17,6 +17,7 @@
     import VerifySave from '@Component/VerifySave.svelte';
     import Dialog from '@Component/Dialog.svelte';
     import Print from '@Component/Print.svelte';
+    import Settings from '@Component/Settings.svelte';
     import ChartSizeSelector from '@Component/ChartSizeSelector.svelte';
     import PrintChart from '@Component/PrintChart.svelte';
     import {ActiveSection, IsWorking, ChartWidth} from './store';
@@ -128,7 +129,7 @@
     .left-column {
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
-        padding-left: calc(40px + 1rem);
+        padding-left: calc(55px + 1rem);
         max-width: 42%;
     }
     .right-column {
@@ -198,8 +199,12 @@
                 {/if}
             </section>
             <section use:pushSection>
+                <SectionHead text="Settings" />
+                <Settings {savedCharts}/>
+            </section>
+            <section use:pushSection>
                 <SectionHead text="Text" />
-                <Settings />
+                <Text />
             </section>
             <section use:pushSection>
                 <SectionHead text="Colors" />

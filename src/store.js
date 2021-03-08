@@ -1,4 +1,5 @@
 import hash from './griffin/scripts/hash';
+import slugger from 'slugger';
 import { writable, derived } from 'svelte/store';
 import baseConfig from './base-chart-config.json';
 export const newChartConfig = {
@@ -6,6 +7,7 @@ export const newChartConfig = {
 };
 export const ChartWidth = writable(650);
 export const ChartHeight = writable({type: 'percent', value: 0.5625});
+export const ChartProject = writable(undefined);
 export const MinHeight = writable(300);
 export const PrintWidth = writable(undefined);
 export const PrintHeight = writable(undefined);
@@ -66,8 +68,8 @@ export const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors]
     const rtn = `cc${hash(customColors.join(''))}`;
     return rtn;
 });
-export const Classes = derived([ChartPaletteClassname], function(){
-    return arguments[0];
+export const Classes = derived([ChartPaletteClassname, ChartProject], function(){
+    return arguments[0].map(d => slugger(d));
 });
 /**
  * to do: when there's a series count mismatch, append the datatable data to the griffin config so it can be loaded back in

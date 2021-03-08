@@ -10,9 +10,8 @@
      * return image now returns promise that should be chainable
      * 
      */
-    import brandOptions from "./../brand-options.json";
-    import { loginHandler } from "./ListSavedCharts.svelte";
-    import { ActiveSection, PictureIsMissingOrOld, IsWorking, ChartHasBeenSaved } from './../store';
+    import Login from './Login.svelte';
+    import { ActiveSection, PictureIsMissingOrOld, IsWorking, ChartHasBeenSaved, ChartProject } from './../store';
     import { getSavedCharts } from './../scripts/get-saved-charts';
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import getImageData from './../scripts/get-image-data';
@@ -44,11 +43,22 @@
         pictureIsMissingOrOld = v;
     });
     $: project = (function(){
+        var rtn;
         if (project){
-            return project;
+            rtn = project;
+        } else {
+            rtn = loadedChart ? loadedChart.project : '';
         }
-        return loadedChart ? loadedChart.project : '';
-    }())
+        ChartProject.set(rtn);
+        return rtn;
+    }());
+    ChartProject.subscribe(v => {
+        if (!v){
+            return;
+        }
+        console.log({v})
+        project = v;
+    });
     function _saveChart(props){
         if ( pictureIsMissingOrOld ){
             IsWorking.set(true);
@@ -119,13 +129,7 @@
 </style>
 <!--<Notices {notices} />-->
 {#await savedCharts}
-    <p>
-        You need to log in to Google using your {brandOptions.emailDomain} address
-        to save charts.
-    </p>
-    <button on:click={loginHandler} class="button button--primary"
-        >Log in</button
-    >
+    <Login reason="to save charts" />
 {:then value}
     <form on:submit|preventDefault={submitHandler}>
         <label for="project-list">Project name (select existing or add a new one):</label>

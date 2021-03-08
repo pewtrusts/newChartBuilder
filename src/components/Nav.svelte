@@ -15,6 +15,10 @@
             icon: 'spreadsheet'
         },
         {
+            name: 'Settings',
+            icon: 'cog',
+        },
+        {
             name: 'Text',
             icon: 'text',
             style: 'bottom: 2px;'
@@ -95,7 +99,7 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        width: 40px;
+        width: 55px;
         background-color: var(--dark-background, #000);
         height: 100%;
         padding-top: 80px;
