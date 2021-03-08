@@ -1,12 +1,27 @@
 {
   "chart": {
     "type": "column",
-    "className": "griffin"
+    "className": "griffin",
+    "height": "56.25%"
   },
   "credits": {
     "enabled": false
   },
   "yAxis": {
       "title": null
+  },
+  "responsive": {
+    "rules": [
+      {
+        "chartOptions": {
+          "chart": {
+            "height": 300
+          }
+        },
+        "condition": {
+          "maxHeight": 300
+        }
+      }
+    ]
   }
 }

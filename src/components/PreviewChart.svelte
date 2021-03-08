@@ -9,6 +9,7 @@
     import config from '@Project/base-chart-config.json';
     import {ChartType, ColorIndeces, UserOptions, Classes, ColorByPoint, SeriesCountMismatch} from './../store';
     import { get } from 'svelte/store';
+    import {beforeUpdate, afterUpdate} from 'svelte';
     import updateChartConfig from '../scripts/update-chart-config';
     import Notices from './Notices.svelte';
     window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
@@ -64,6 +65,16 @@
     let chartSources;
     let chartCredit;
     let notices = new Set();
+    let previousWidth;
+    beforeUpdate(() => {
+        console.log(chartWidth);
+    });
+    afterUpdate(() => {
+        if ( Chart && previousWidth && chartWidth !== previousWidth ){
+            Chart.reflow();
+        }
+        previousWidth = chartWidth;
+    });
     SeriesCountMismatch.subscribe(v => {
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;

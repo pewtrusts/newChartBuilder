@@ -17,8 +17,9 @@
     import VerifySave from '@Component/VerifySave.svelte';
     import Dialog from '@Component/Dialog.svelte';
     import Print from '@Component/Print.svelte';
+    import ChartSizeSelector from '@Component/ChartSizeSelector.svelte';
     import PrintChart from '@Component/PrintChart.svelte';
-    import {ActiveSection, IsWorking} from './store';
+    import {ActiveSection, IsWorking, ChartWidth} from './store';
     import { onMount } from 'svelte';
     import getImageData from './scripts/get-image-data';
     function picClickHandler(){
@@ -67,6 +68,7 @@
     let dialog = null;
     let enablePrint = undefined;
     let clickSave = () => {};
+    let chartWidth = 650;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -81,7 +83,9 @@
             anchor.scrollIntoView();
         }
     });
-    
+    ChartWidth.subscribe(v => {
+        chartWidth = v;
+    });
     function intersectionHandler(e){
         const intersecting = e.find(_e => _e.isIntersecting);
         if ( intersecting ){
@@ -232,7 +236,8 @@
         <div class="right-column">
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-                <PreviewChart bind:Chart {seriesCountMismatchNotice} chartWidth="{650}" size="fullscreen"/>
+                <ChartSizeSelector {Chart}/>
+                <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
             <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
