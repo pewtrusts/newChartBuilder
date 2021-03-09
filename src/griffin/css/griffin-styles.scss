@@ -1,0 +1,98 @@
+@import 'griffin-color-variables.css';
+@import 'griffin-other-variables.css';
+@import 'griffin-colors.css';
+picture.fullscreen {
+  display: none;
+}
+@media screen and (min-width: 504px){
+  picture.fullscreen {
+    display: inline;
+  }
+  picture.mobile {
+    display: none;
+  }
+}
+
+.hc-container {
+  overflow-y: hidden;
+}
+.highcharts-container.griffin {
+  font-family: lato;
+  font-size: 13.3333px;
+  
+  .highcharts-axis-labels {
+    font-size: 1em;
+  }
+  .highcharts-data-label-connector {
+    fill: none;
+  }
+  .highcharts-plot-band-label, span.highcharts-plot-line-label {
+      fill: #666;
+      color: #666;
+  }
+  .highcharts-tracker-line {
+        display: none;
+
+        @media screen {
+            display: block;
+        }
+    }
+
+    .highcharts-graph {
+        stroke-width: var(--stroke-width);
+    }
+    .highcharts-legend-item .highcharts-point {
+        transform: translate(0,1px);
+        stroke: none;
+    }
+    .highcharts-legend-item.highcharts-line-series .highcharts-graph {
+        stroke-width: 16px;
+        stroke-linecap: butt;
+        transform: translate(0,-2px);
+    }
+        .highcharts-legend-item text {
+        fill: #666;
+        font-weight: normal;
+    }
+    .highcharts-annotation-label text {
+        fill: #000;
+    }
+
+    .highcharts-plot-line {
+        stroke-dasharray: 6;
+        stroke: var(--color-1);
+    }
+
+    span.highcharts-plot-line-label {
+        width: 265px;
+        white-space: normal !important;
+    }
+      .highcharts-tooltip {
+        filter: none;
+        text {
+            transform: translateY(-2px);
+        }
+        .highcharts-header {
+            font-size: .75em;
+            fill: #767676;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+    }
+    .highcharts-tooltip-box {
+        fill: #fff;
+        fill-opacity: 1;
+        stroke-width: 2.5px;
+        stroke-linecap: round;
+    }
+    .highcharts-markers {
+      display: none;
+    }
+    .highcharts-markers path {
+      fill: #fff;
+      stroke-width: 3px
+    }
+
+}
+

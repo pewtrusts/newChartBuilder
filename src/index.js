@@ -1,8 +1,8 @@
 import 'normalize-css';
 import 'tippy.js/dist/tippy.css';
 import 'highcharts/css/highcharts.css';
-import './griffin/css/griffin-variables.css';
-import './griffin/css/griffin-styles.css';
+//import './griffin/css/griffin-variables.css';
+import './griffin/css/griffin-styles.scss';
 import './css/variables.css';
 import './css/styles.css';
 import App from './App.svelte';

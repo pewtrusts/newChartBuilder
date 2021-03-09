@@ -51,8 +51,9 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
         XAxisType.set('linear');
     }
     const series = data[0].slice(1).map((valueColumn, i) => {
+        var rtn;
         if (shouldBeCategorical) {
-            return {
+            rtn = {
                 name: valueColumn,
                 data: data.slice(1).map(row => {
                     return {
@@ -60,16 +61,33 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
                     };
                 })
             };
+        } else {
+            rtn = {
+                name: valueColumn,
+                data: data.slice(1).map((row, j) => {
+                    return {
+                        x: shouldBeDateTime ? asDateTime[j].getTime() : row[0],
+                        y: row[i + 1]
+                    };
+                })
+            }
         }
-        return {
-            name: valueColumn,
-            data: data.slice(1).map((row, j) => {
-                return {
-                    x: shouldBeDateTime ? asDateTime[j].getTime() : row[0],
-                    y: row[i + 1]
-                };
-            })
-        }
+        /**
+         * TO DO. find a better way to do this. should be pulling from defaults based on chart type
+         */
+        rtn.marker = {
+            radius: 4,
+            symbol: 'circle'
+        };
+        rtn.states = {
+            hover: {
+                enabled: false,
+                    halo: {
+                    size: 0
+                },
+            }
+        };
+        return rtn;
     });
     const newConfig = { series };
     if (shouldBeDateTime) {

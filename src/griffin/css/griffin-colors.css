@@ -99,28 +99,3 @@
   fill: var(--color-12, #91e8e1);
   stroke: var(--color-12, #91e8e1);
 }
-
-
-picture.fullscreen {
-  display: none;
-}
-@media screen and (min-width: 504px){
-  picture.fullscreen {
-    display: inline;
-  }
-  picture.mobile {
-    display: none;
-  }
-}
-
-.hc-container {
-  overflow-y: hidden;
-}
-.highcharts-container.griffin {
-  font-family: lato;
-  font-size: 13.3333px;
-}
-.highcharts-container.griffin .highcharts-axis-labels {
-  font-size: 1em;
-}
-

@@ -1,6 +1,5 @@
 import 'highcharts/css/highcharts.css';
-import './css/griffin-variables.css';
-import './css/griffin-styles.css';
+import './css/griffin-styles.scss';
 import '@Submodule/shared-css/styles.css';
 import Highcharts from 'highcharts/highcharts.src.js';
 /* TO DO: for production, bundle HG or use CDN? */
