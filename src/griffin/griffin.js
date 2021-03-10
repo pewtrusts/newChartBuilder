@@ -33,7 +33,7 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     }
     return this;
 };
-function extendObj(base, properties, value){
+export function extendObj(base, properties, value){
     properties.reduce(function(acc,cur,i){
         if (!acc[cur]){
             acc[cur] = i == properties.length - 1 ? value : {};

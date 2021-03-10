@@ -1,4 +1,6 @@
-import { DatatableData, XAxisType } from '../store';
+import { DatatableData, XAxisType, NumberFormat } from '../store';
+import { extendObj } from './../griffin/griffin';
+import returnPointFormatter from './../griffin/scripts/return-point-formatter';
 import updateChart from './update-chart-config';
 import toDate from './coerce-to-date';
 /*
@@ -6,7 +8,10 @@ import toDate from './coerce-to-date';
  * able to be overridden by user choice. ie for evenly spaces dates it might be better to
  * treat as categories rather than as dates. or for months or quarters especially
  */
-
+let numberFormat;
+NumberFormat.subscribe(v => {
+    numberFormat = v;
+});
 const timeUnits =
 {
     millisecond: 1,
@@ -125,5 +130,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
     //TODO: if datetime will have to adjust dateTimeLabelFormats for x-axis and tooltip, and tooltip.xDateFormat
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
     console.log({ Chart, newConfig });
+    extendObj(newConfig, ['legend','enabled'], series.length > 1);
+    extendObj(newConfig, ['tooltip', 'pointFormatter'], returnPointFormatter({numberFormat: numberFormat, seriesLength: series.length}));
     updateChart(Chart, newConfig);
 } 
