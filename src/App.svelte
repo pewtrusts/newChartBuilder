@@ -130,7 +130,7 @@
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
         padding-left: calc(55px + 1rem);
-        max-width: 42%;
+        max-width: 37%;
     }
     .right-column {
         position: relative;

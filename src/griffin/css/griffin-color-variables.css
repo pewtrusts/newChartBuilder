@@ -1,8 +1,8 @@
 /* default branded colors go here. define as many as wanted. number of colors
  * can be set as a config property passed to Highcharts and in chartBulder.*/
 :root {
-    --color-0: #333333; /* use 6-digit notation for compat with setting values of input[type="color"] */
-    --color-1: #296ec3;
+    --color-0: #296ec3;
+    --color-1: #333333; /* use 6-digit notation for compat with setting values of input[type="color"] */
     --color-2: #229cc5; 
     --color-3: #5ac7be; 
     --color-4: #f47d4b; 
