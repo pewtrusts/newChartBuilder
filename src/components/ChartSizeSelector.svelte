@@ -1,5 +1,6 @@
 <script>
-    import {ChartWidth, ChartHeight, MinHeight} from './../store';
+    import {ChartWidth, ChartHeight, MinHeight, UserOptions} from './../store';
+    import { get } from 'svelte/store'
     import updateChartConfig from '../scripts/update-chart-config';
     export let Chart;
     let minHeight;
@@ -31,6 +32,16 @@
                     height: `${v.type == 'percent' ? v.value * 100 : v.value}${v.type == 'px' ? 'px' : '%'}`
                 }
             });
+            /**
+             * so Highcharts userOptions property of the Chart instance doesn't actually reflect 1:1 the user
+             * options passed in. if responsive conditions are met the userOptions are changed in response. 
+             * we don't want the size of how the chart is displayed in the tool to affect the user options in
+             * the code export, so he we have a brute force setting of chartHeight to the userOptions.
+             */
+            let _userOptions = get(UserOptions);
+            _userOptions.chart.height = `${v.type == 'percent' ? v.value * 100 : v.value}${v.type == 'px' ? '' : '%'}`;
+            UserOptions.set(_userOptions);
+
         }
     });
     function heightHandler(){
@@ -47,22 +58,18 @@
     MinHeight.subscribe(v => {
         minHeight = v;
         if (Chart){
-            updateChartConfig(Chart, {
-                "responsive": {
-                    "rules": [
-                    {
-                        "chartOptions": {
-                        "chart": {
-                            "height": v
-                        }
-                        },
-                        "condition": {
-                        "maxHeight": v
-                        }
-                    }
-                    ]
+            let config = get(UserOptions);
+            config.responsive.rules[0] = {
+                "chartOptions": {
+                "chart": {
+                    "height": v
                 }
-            });
+                },
+                "condition": {
+                "maxHeight": v
+                }
+            };
+            updateChartConfig(Chart, config);
         }
     });
 </script>

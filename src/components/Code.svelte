@@ -88,10 +88,9 @@
 </script>
 <style>
     textarea {
-        /*width: 100%;
+        width: 100%;
         font-family: var(--mono, monospace);
-        height: calc(100% - 40px);*/
-        display: none;
+        height: calc(100% - 40px);
     }
     .container {
         display: inline-block;

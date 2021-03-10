@@ -3,6 +3,7 @@
     import updateChartData from "@Script/update-chart-data.js";
     import Button from './Button.svelte';
     import { fade } from 'svelte/transition';
+    import { NumberFormat } from './../store';
     //import dataFile from '@Project/data/gdp.csv';
     //import dataFile from "@Project/data/datetime-example.csv";
     //import dataFile from "@Project/data/categorical-example.csv";
@@ -37,6 +38,21 @@
             complete(results) {
                 data = results.data;
                 updateChartData(data, Chart);
+            },
+            transform(value, column){
+                if ( column == 0){
+                    return value;
+                }
+                const rtn = value.replace(/[,$%]/g, '').trim();
+                if ( value.slice(-1) == '%'){
+                    NumberFormat.set('percentage');
+                    return (+rtn * 0.01).toPrecision(14);
+                } else if ( value.charAt(0) == '$'){
+                    NumberFormat.set('currency');
+                } else {
+                    NumberFormat.set(undefined);
+                }
+                return rtn;
             },
             skipEmptyLines: true,
         });

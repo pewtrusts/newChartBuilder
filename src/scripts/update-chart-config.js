@@ -1,9 +1,10 @@
 import { ColorByPoint, PictureIsMissingOrOld, UserOptions } from './../store';
+import { clean } from './../components/PreviewChart.svelte';
 export default function updateChartConfig(Chart, config) {
     window.Charts.forEach(chart => {
         chart.update(config, true, true);
     });
-    UserOptions.set(Chart.userOptions);
+    UserOptions.set(clean(Chart.userOptions));
     ColorByPoint.set(Chart.series.map(s => s.options.colorByPoint));
     PictureIsMissingOrOld.set(true);
 }

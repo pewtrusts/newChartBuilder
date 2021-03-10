@@ -6,7 +6,8 @@ import Highcharts from 'highcharts/highcharts.src.js';
 import options from '@Project/options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
 import addCustomColorProperties from './scripts/addCustomColorProperties';
-
+import returnFormatter from './scripts/return-number-formatter';
+window.Highcharts = Highcharts;
 Highcharts.setOptions(options);
 Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     var currentClassName = replace ? '' : (this.attr('class') || '');
@@ -32,11 +33,23 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     }
     return this;
 };
-
+function extendObj(base, properties, value){
+    properties.reduce(function(acc,cur,i){
+        if (!acc[cur]){
+            acc[cur] = i == properties.length - 1 ? value : {};
+        }
+        return acc[cur] 
+    }, base);
+    console.log(base);
+}
 const griffins = document.querySelectorAll('.js-griffin');
 griffins.forEach(griffin => {
     const config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
     const container = griffin.querySelector('.js-hc-container');
+    const formatter = returnFormatter(config.griffinConfig.numberFormat);
+    extendObj(config.highchartsConfig, ['yAxis','labels','formatter'], formatter);
+  //  config.highchartsConfig.yAxis.labels.formatter = formatter;
+    config.highchartsConfig.title.text = config.highchartsConfig.title.text || undefined;
     container.classList.add(config.griffinConfig.chartPaletteClassname);
     if (config.griffinConfig.chartPaletteClassname.indexOf('cc') === 0 
         && config.griffinConfig.customColors.length > 0){
@@ -45,5 +58,6 @@ griffins.forEach(griffin => {
                 hash: config.griffinConfig.chartPaletteClassname.replace('cc','')
             });
         }
+    
     Highcharts.chart(container, config.highchartsConfig);
 });

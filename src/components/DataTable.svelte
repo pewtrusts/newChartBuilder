@@ -5,7 +5,6 @@
     import updateChartData from "@Script/update-chart-data.js";
     import EditableCell from "@Component/EditableCell.svelte";
     import { ChartType, XAxisType, SeriesCountMismatch, LoadedDataConfig } from "@Project/store";
-    import { createChart } from "@Component/PreviewChart.svelte";
 
     /* for testing data is being imported directly. will come from user input */
     const alphabet = [
@@ -115,7 +114,9 @@
             let _data = _transpose(data);
             updateChartData(_transpose(_data.slice(0,2)), Chart, data);
         } else {
-            updateChartData(data, Chart);
+            setTimeout(() => {
+                updateChartData(data, Chart);
+            },1000);
         }
     });
     XAxisType.subscribe((v) => {

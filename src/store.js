@@ -47,6 +47,7 @@ export const LoadedDataConfig = writable('');
 export const Picture = writable('');
 export const PictureIsMissingOrOld = writable(true);
 export const Thumbnail = writable('');
+export const NumberFormat = writable(undefined);
 export const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 export const SeriesCountMismatch = derived([SeriesCountFromTable, SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
 export const MaxPointCount = derived([UserOptions], ([userOptions]) => {
@@ -85,7 +86,8 @@ export const GriffinConfig = derived([
     ChartTitle,
     CustomColors,
     DatatableData,
-    SeriesCountMismatch 
+    SeriesCountMismatch,
+    NumberFormat 
 ], ([
     chartCredit,
     chartDescription, 
@@ -97,7 +99,8 @@ export const GriffinConfig = derived([
     chartTitle,
     customColors,
     datatableData,
-    seriesCountMismatch 
+    seriesCountMismatch,
+    numberFormat 
 ]) => {
     const obj =  {
         chartCredit,
@@ -109,7 +112,8 @@ export const GriffinConfig = derived([
         chartSubtitle,
         chartTitle,
         customColors,
-        datatableData 
+        datatableData,
+        numberFormat 
     };
     if (!seriesCountMismatch){
         delete obj.datatableData;
