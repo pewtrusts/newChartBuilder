@@ -76,6 +76,7 @@
 </script>
 
 <script>
+
     import {
         ChartLabel,
         ChartTitle,
@@ -86,6 +87,7 @@
         ChartHeight,
         MinHeight,
         NumberFormat,
+        Stacking
     } from "./../store";
     export let Chart;
     export let seriesCountMismatchNotice;
@@ -182,6 +184,11 @@
             updateChartConfig(Chart, { chart: { type: v } });
         }
     });
+    Stacking.subscribe(v => {
+        if (Chart){
+            updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
+        }
+    })
     ColorIndeces.subscribe((v) => {
         if (!v || !Chart) return;
         const series = get(UserOptions).series;
