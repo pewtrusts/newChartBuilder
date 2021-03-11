@@ -15,6 +15,7 @@
     import {ChartCredit, ChartDescription, ChartLabel, ChartNotes, ChartTitle, ChartSources, ChartSubtitle} from './../store';
     import Sprite from './Sprite.svelte';
     import Notices from './Notices.svelte';
+    export let checkHeight;
     let quills = {};
     let isDirtyNotice = {
         label: 'Unsaved changes',
@@ -66,6 +67,7 @@
             isSubmitting = false;
             isDirty = false;
         }, 500);
+        checkHeight();
     }
     function replaceFn(url){
         return `<a href="${url}">${url.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;')}</a>`;

@@ -70,6 +70,7 @@
     let enablePrint = false;
     let clickSave = () => {};
     let chartWidth = 650;
+    let checkHeight = null;
     IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -204,7 +205,7 @@
             </section>
             <section use:pushSection>
                 <SectionHead text="Text" />
-                <Text />
+                <Text bind:checkHeight />
             </section>
             <section use:pushSection>
                 <SectionHead text="Colors" />
@@ -241,7 +242,7 @@
         <div class="right-column">
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" style="padding: 1em;">
                 <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-                <ChartSizeSelector {Chart}/>
+                <ChartSizeSelector bind:checkHeight {Chart}/>
             </div>
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>

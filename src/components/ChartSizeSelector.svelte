@@ -1,12 +1,15 @@
 <script context="module">
-    let figure;
+    let fullscreen;
     let chart;
+    let mobile;
+    let mobileChart;
+
     export function _setRealHeight(nominal){
-        figure = figure || document.querySelector('.js-fullscreen');
-        chart = chart || document.querySelector('.js-fullscreen .js-hc-container');
-        const nonChartHeight = figure.offsetHeight - chart.offsetHeight;
+        fullscreen = fullscreen || document.querySelector('.js-fullscreen');
+        chart = chart || fullscreen.querySelector('.js-hc-container');
+        const nonChartHeight = fullscreen.offsetHeight - chart.offsetHeight;
         if ( nominal.slice(-1) == '%'){
-            let width = figure.offsetWidth;
+            let width = fullscreen.offsetWidth;
             let desiredTotalHeight = width * parseInt(nominal) / 100;
             let desiredChartHeight = desiredTotalHeight - nonChartHeight;
             let percentage = +((100 * desiredChartHeight / width).toFixed(2));
@@ -15,7 +18,21 @@
             let value = +parseInt(nominal) - nonChartHeight;
             return {value: Math.max(value,100), warn: value < 100};
         }
-
+    }
+    export function _setRealMinHeight(nominal){
+        mobile = mobile || document.querySelector('.js-mobile');
+        mobileChart = mobileChart || mobile.querySelector('.js-hc-container');
+        const nonChartHeight = mobile.offsetHeight - mobileChart.offsetHeight;
+        if ( nominal.slice(-1) == '%'){
+            let width = mobile.offsetWidth;
+            let desiredTotalHeight = width * parseInt(nominal) / 100;
+            let desiredChartHeight = desiredTotalHeight - nonChartHeight;
+            let percentage = +((100 * desiredChartHeight / width).toFixed(2));
+            return percentage + '%';
+        } else {
+            let value = +parseInt(nominal) - nonChartHeight;
+            return value;
+        }
     }
 </script>
 <script>
@@ -25,12 +42,16 @@
      * 
      * LOAD saved charts.
      */
-    import {ChartWidth, ChartHeight, MinHeight, UserOptions} from './../store';
+    import { onMount } from 'svelte';
+    import {ChartWidth, ChartHeight, MinHeight, UserOptions, LoadedDataConfig} from './../store';
     import Notices from './Notices.svelte';
     import { get } from 'svelte/store'
     import updateChartConfig from '../scripts/update-chart-config';
     export let Chart;
+    export let checkHeight; 
+    
     let minHeight;
+    let nominalMinHeight = '366';
     let chartWidth;
     let chartHeight;
     let nominalHeightValue = '56.25%';
@@ -49,6 +70,28 @@
         notices = notices;
         ChartHeight.set(calc.value);
     }
+    onMount(() => {
+        checkHeight = function(){
+            requestIdleCallback(() => {
+                setRealHeight(nominalHeightValue);
+                setRealMinHeight(nominalMinHeight);
+            },{timeout:500});
+        };
+        function _set(){
+            if ( Chart ){
+                setRealHeight(nominalHeightValue);
+            } else {
+                setTimeout(() => {
+                    _set();
+                }, 200);
+            }
+        }
+        _set();
+        LoadedDataConfig.subscribe(() => {
+            if (!Chart) return;
+            checkHeight();
+        });
+    });
     $: widthValue = (function(){ // need to bind the selectors values for when charts are loaded
         if (chartWidth == undefined){
             customWidth = false;
@@ -99,6 +142,11 @@
     }
     ChartWidth.subscribe(v => {
         chartWidth = v;
+        if ( Chart ){
+            requestIdleCallback(() => {
+                setRealHeight(nominalHeightValue);
+            },{timeout: 500});
+        }
     });
     ChartHeight.subscribe(v => {
         chartHeight = v;
@@ -120,9 +168,12 @@
 
         }
     });
-    
+    function setRealMinHeight(nominal){
+        const value = _setRealMinHeight(nominal);
+        MinHeight.set(value);
+    }
     function minHeightHandler(){
-        MinHeight.set(this.value);
+        setRealMinHeight(this.value);
     }
     MinHeight.subscribe(v => {
         minHeight = v;
@@ -191,4 +242,4 @@
 </div>
 <!-- svelte-ignore a11y-no-onchange -->
 <label for="min-height">Minimum chart height:</label> 
-<input id="min-height" type="number" on:change="{minHeightHandler}" increment="1" bind:value="{minHeight}" >
+<input id="min-height" type="number" on:change="{minHeightHandler}" increment="1" bind:value="{nominalMinHeight}" >
