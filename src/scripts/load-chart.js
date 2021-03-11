@@ -1,5 +1,6 @@
-import { SelectedColorPalette, importConfig, LoadedDataConfig, newChartConfig } from './../store';
+import { SelectedColorPalette, importConfig, LoadedDataConfig, newChartConfig, ChartHeight, MinHeight } from './../store';
 import addCustomColorProperties from './../griffin/scripts/addCustomColorProperties';
+
 export default function _loadChart(data = newChartConfig){ // New chart will use newChartConfig ie pass in no param
     console.log(importConfig);
     const config = JSON.parse(data.config);
@@ -20,6 +21,8 @@ export default function _loadChart(data = newChartConfig){ // New chart will use
         }
     });
     importConfig.UserOptions.set(config.highchartsConfig);
+    ChartHeight.set(config.highchartsConfig.chart.height);
+    MinHeight.set(config.highchartsConfig.responsive.rules[0].chartOptions.chart.height);
     LoadedDataConfig.set({ series: config.highchartsConfig.series, xAxis: config.highchartsConfig.xAxis, datatableData: config.griffinConfig.datatableData});
     console.log(config);
 }

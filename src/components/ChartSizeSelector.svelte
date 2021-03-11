@@ -8,6 +8,31 @@
     let chartHeight;
     let customHeight = false;
     let customWidth = false;
+    let customHeightValue;
+    $: widthValue = (function(){ // need to bind the selectors values for when charts are loaded
+        if (chartWidth == undefined){
+            customWidth = false;
+            return '650';
+        }
+        if (!['650','990'].includes(chartWidth)){
+            customWidth = true;
+            return 'custom'
+        }
+        customWidth = false;
+        return chartWidth;
+    })();
+    $: heightValue = (function(){ // need to bind the selectors values for when charts are loaded
+        if ( chartHeight == undefined ){
+            customHeight = false;
+            return '56.25%';
+        }
+        if (!['100%','56.25%'].includes(chartHeight)){
+            customHeight = true;
+            return 'custom';
+        }
+        customHeight = false;
+        return chartHeight;
+    })();
     function widthHandler(){
         if (this.value == 'custom') {
             customWidth = true;
@@ -16,20 +41,29 @@
         customWidth = false;
         ChartWidth.set(this.value);
     }
+    function heightHandler(){
+         if (this.value == 'custom') {
+            customHeight = true;
+            return;
+        }
+        customHeight = false;
+        ChartHeight.set(this.value);
+    }
     function customWidthHandler(){
         ChartWidth.set(this.value);
     }
     function customHeightHandler(){
-        ChartHeight.set({type: 'px', value: this.value});
+        ChartHeight.set(chartHeight);
     }
     ChartWidth.subscribe(v => {
         chartWidth = v;
     });
     ChartHeight.subscribe(v => {
+        chartHeight = v;
         if (Chart){
             updateChartConfig(Chart, {
                 chart: {
-                    height: `${v.type == 'percent' ? v.value * 100 : v.value}${v.type == 'px' ? 'px' : '%'}`
+                    height: chartHeight
                 }
             });
             /**
@@ -39,19 +73,12 @@
              * the code export, so he we have a brute force setting of chartHeight to the userOptions.
              */
             let _userOptions = get(UserOptions);
-            _userOptions.chart.height = `${v.type == 'percent' ? v.value * 100 : v.value}${v.type == 'px' ? '' : '%'}`;
+            _userOptions.chart.height = chartHeight;
             UserOptions.set(_userOptions);
 
         }
     });
-    function heightHandler(){
-         if (this.value == 'custom') {
-            customHeight = true;
-            return;
-        }
-        ChartHeight.set({type: 'percent', value: this.value});
-        customHeight = false;
-    }
+    
     function minHeightHandler(){
         MinHeight.set(this.value);
     }
@@ -81,13 +108,23 @@
         display: inline-block;
         width: 100px;
     }
+    .custom-height-form {
+        display: inline-block;
+    }
+    .custom-height-form input[type=text]{
+        border: 1px solid #ccc;
+        border-radius: 0;
+        line-height: 1.5;
+        color: var(--text-color, #000);
+        font-size: 0.85em;
+    }
 </style>
 <div>
     <label for="width-selector">Chart width:</label>
     <!-- svelte-ignore a11y-no-onchange -->
-    <select id="width-selector" on:change="{widthHandler}" name="chart-width">
+    <select id="width-selector" on:change="{widthHandler}" name="chart-width" bind:value="{widthValue}">
         <option value="990">990px</option>
-        <option selected value="650">650px</option>
+        <option value="650">650px</option>
         <option value="custom">custom</option>
     </select>
     {#if customWidth }
@@ -97,13 +134,16 @@
 <div>
     <label for="height-selector">Chart height:</label>
     <!-- svelte-ignore a11y-no-onchange -->
-    <select id="height-selector" on:change="{heightHandler}" name="chart-height">
-        <option selected value="0.5625">16:9 (56.25% width)</option>
-        <option value="1">Square (100% width)</option>
+    <select id="height-selector" on:change="{heightHandler}" name="chart-height" bind:value="{heightValue}">
+        <option value="56.25%">16:9 (56.25% width)</option>
+        <option value="100%">Square (100% width)</option>
         <option value="custom">custom</option>
     </select>
     {#if customHeight }
-        <input on:change="{customHeightHandler}" type="number" increment="1" value="{chartHeight}"/>px
+        <form class="custom-height-form" on:submit|preventDefault="{customHeightHandler}">
+            <input placeholder="e.g., 100, 100px, 75%" type="text" bind:value="{chartHeight}" pattern="\d+|\d+px|\d+%|\d+\.\d+%"/>
+            <input class="button button--primary" type="submit">
+        </form>
     {/if}
 </div>
 <!-- svelte-ignore a11y-no-onchange -->

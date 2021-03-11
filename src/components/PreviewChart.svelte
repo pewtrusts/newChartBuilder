@@ -39,7 +39,7 @@
         userOptions.responsive.rules.forEach(rule => {
             delete rule._id;
         });
-        userOptions.chart.height = `${v.type == 'percent' ? v.value * 100 : v.value}${v.type == 'px' ? '' : '%'}`;
+        userOptions.chart.height = v;
         return userOptions;
     }
     window.Charts = [];
@@ -214,9 +214,7 @@
 <div class="outer-wrapper">
     <div
         data-min-height={minHeight}
-        data-height={chartHeight.value *
-            (chartHeight.type == "percent" ? 100 : 1)}
-        data-height-type={chartHeight.type == "percent" ? "%" : "px"}
+        data-height={chartHeight}
         data-width={chartWidth}
         class="wrapper js-figure-wrapper"
     >
@@ -279,8 +277,7 @@
         position: relative;
     }
     .wrapper::before {
-        content: attr(data-width) "px X " attr(data-height)
-            attr(data-height-type) " (" attr(data-min-height) "px min)";
+        content: attr(data-width) "px X " attr(data-height) " (" attr(data-min-height) "px min)";
         position: absolute;
         top: -45px;
         color: #767676;
