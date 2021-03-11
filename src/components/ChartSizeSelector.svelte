@@ -1,14 +1,54 @@
+<script context="module">
+    let figure;
+    let chart;
+    export function _setRealHeight(nominal){
+        figure = figure || document.querySelector('.js-fullscreen');
+        chart = chart || document.querySelector('.js-fullscreen .js-hc-container');
+        const nonChartHeight = figure.offsetHeight - chart.offsetHeight;
+        if ( nominal.slice(-1) == '%'){
+            let width = figure.offsetWidth;
+            let desiredTotalHeight = width * parseInt(nominal) / 100;
+            let desiredChartHeight = desiredTotalHeight - nonChartHeight;
+            let percentage = +((100 * desiredChartHeight / width).toFixed(2));
+            return {value: Math.max(10, percentage) + '%', warn: percentage < 10};
+        } else {
+            let value = +parseInt(nominal) - nonChartHeight;
+            return {value: Math.max(value,100), warn: value < 100};
+        }
+
+    }
+</script>
 <script>
+    /**
+     * TO DO: min chart heigth needs to be nominal and calculated just like others. trigger recalc on text change, on load, and 
+     * on width change. (or just afterUpdate?)
+     * 
+     * LOAD saved charts.
+     */
     import {ChartWidth, ChartHeight, MinHeight, UserOptions} from './../store';
+    import Notices from './Notices.svelte';
     import { get } from 'svelte/store'
     import updateChartConfig from '../scripts/update-chart-config';
     export let Chart;
     let minHeight;
     let chartWidth;
     let chartHeight;
+    let nominalHeightValue = '56.25%';
+    let nominalCustomHeight = '56.25%';
     let customHeight = false;
     let customWidth = false;
-    let customHeightValue;
+    let outOfBoundsNotice = {
+        label: 'Height value too small',
+        description: 'The text around the chart (title, subtitle, notes, etc.) take up too much space for the entire figure to be the height you selected.',
+        type: 'warning'
+    };
+    let notices = new Set();
+    function setRealHeight(nominal){
+        const calc = _setRealHeight(nominal);
+        notices[calc.warn ? 'add' : 'delete'](outOfBoundsNotice);
+        notices = notices;
+        ChartHeight.set(calc.value);
+    }
     $: widthValue = (function(){ // need to bind the selectors values for when charts are loaded
         if (chartWidth == undefined){
             customWidth = false;
@@ -21,7 +61,8 @@
         customWidth = false;
         return chartWidth;
     })();
-    $: heightValue = (function(){ // need to bind the selectors values for when charts are loaded
+    
+   /* $: heightValue = (function(){ // nominal value of the selector. need to bind the selectors values for when charts are loaded
         if ( chartHeight == undefined ){
             customHeight = false;
             return '56.25%';
@@ -32,7 +73,7 @@
         }
         customHeight = false;
         return chartHeight;
-    })();
+    })();*/
     function widthHandler(){
         if (this.value == 'custom') {
             customWidth = true;
@@ -47,13 +88,14 @@
             return;
         }
         customHeight = false;
-        ChartHeight.set(this.value);
+        setRealHeight(this.value);
+        //ChartHeight.set();
     }
     function customWidthHandler(){
         ChartWidth.set(this.value);
     }
     function customHeightHandler(){
-        ChartHeight.set(chartHeight);
+        setRealHeight(nominalCustomHeight);
     }
     ChartWidth.subscribe(v => {
         chartWidth = v;
@@ -120,6 +162,7 @@
     }
 </style>
 <div>
+    <Notices {notices} />
     <label for="width-selector">Chart width:</label>
     <!-- svelte-ignore a11y-no-onchange -->
     <select id="width-selector" on:change="{widthHandler}" name="chart-width" bind:value="{widthValue}">
@@ -134,14 +177,14 @@
 <div>
     <label for="height-selector">Chart height:</label>
     <!-- svelte-ignore a11y-no-onchange -->
-    <select id="height-selector" on:change="{heightHandler}" name="chart-height" bind:value="{heightValue}">
+    <select id="height-selector" on:change="{heightHandler}" name="chart-height" bind:value="{nominalHeightValue}">
         <option value="56.25%">16:9 (56.25% width)</option>
         <option value="100%">Square (100% width)</option>
         <option value="custom">custom</option>
     </select>
     {#if customHeight }
         <form class="custom-height-form" on:submit|preventDefault="{customHeightHandler}">
-            <input placeholder="e.g., 100, 100px, 75%" type="text" bind:value="{chartHeight}" pattern="\d+|\d+px|\d+%|\d+\.\d+%"/>
+            <input placeholder="e.g., 100, 100px, 75%" type="text" bind:value="{nominalCustomHeight}" pattern="\d+|\d+px|\d+%|\d+\.\d+%"/>
             <input class="button button--primary" type="submit">
         </form>
     {/if}

@@ -216,6 +216,7 @@
         data-min-height={minHeight}
         data-height={chartHeight}
         data-width={chartWidth}
+        data-size={size}
         class="wrapper js-figure-wrapper"
     >
         <figure
@@ -267,7 +268,7 @@
         align-self: center;
     }
     .container {
-        margin-top: 1rem;
+        margin-top: 1.5rem;
     }
     .griffin-figure {
         margin: 0 auto;
@@ -277,9 +278,9 @@
         position: relative;
     }
     .wrapper::before {
-        content: attr(data-width) "px X " attr(data-height) " (" attr(data-min-height) "px min)";
+        content: "[" attr(data-size) "]";
         position: absolute;
-        top: -45px;
+        top: -35px;
         color: #767676;
     }
 </style>
