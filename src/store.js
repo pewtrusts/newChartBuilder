@@ -27,6 +27,18 @@ UserOptions.subscribe(v => {
     ChartType.set(v.chart.type);
 });
 export const DatatableData = writable([]);
+export const writables = {};
+export const writableMap = {};
+function createWritable({name,value,HCConfig}){
+    writables[name] = writable(value);
+    writableMap[HCConfig] = writables[name];
+}
+[
+    ['CreditsEnabled',true,'credits.enabled']
+].forEach(d => {
+    createWritable({name: d[0], value: d[1], HCConfig: d[2]});
+});
+console.log(writables, writableMap);
 export const ImageDataUri = writable('');
 export const SelectedColorPalette = writable('default');
 export const ColorIndeces = writable(undefined);
