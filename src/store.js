@@ -2,96 +2,122 @@ import hash from './griffin/scripts/hash';
 import slugger from 'slugger';
 import { writable, derived } from 'svelte/store';
 import baseConfig from './base-chart-config.json';
-export const newChartConfig = {
+
+export const s = {};
+export const hMap = {};
+export const gMap = {};
+function createWritable({ name, value, config }, map) {
+    s[name] = writable(value);
+    map[config || name] = s[name];
+}
+
+/**
+ *  Stores that correspond to settings in the Highcharts configuration object
+ */
+[
+    ['ChartHeight', '56.25%', 'chart.height'],
+    ['ChartType', baseConfig.chart.type, 'chart.type'],
+    ['CreditsEnabled', true, 'credits.enabled'],
+    ['MinHeight', 300, 'responsive.rules[0].chartOptions.chart.height'],
+    ['Stacking', 'none', 'plotOptions.series.stacking'],
+    ['UserOptions', {}],
+    ['XAxisType', 'linear', 'xAxis.type'],
+].forEach(d => {
+    createWritable({ name: d[0], value: d[1], config: d[2] }, hMap);
+});
+
+/**
+ *  Stores that correspond to settings in the Griffin configuration object saved with charts
+ */
+[
+    ['NominalMinHeight', '366'],
+    ['ChartWidth', '650'],
+    ['ChartProject', undefined],
+    ['DatatableData', []],
+    ['CustomColors',[]],
+    ['ChartCredit', `© ${new Date().getFullYear()} The Pew Charitable Trusts`],
+    ['ChartDescription', ''],
+    ['ChartLabel', ''],
+    ['ChartNotes', ''],
+    ['ChartTitle', ''],
+    ['ChartSources', ''],
+    ['ChartSubtitle', ''],
+].forEach(d => {
+    createWritable({ name: d[0], value: d[1], config: d[2] }, gMap);
+});
+/**
+ * Stores that govern app state but are not saved as HC or Griffin configuration with charts
+ */
+s.newChartConfig = {
     config: "{\"highchartsConfig\":{\"title\":null,\"chart\":{\"type\":\"column\"},\"credits\":{\"enabled\":false},\"yAxis\":{\"title\":null},\"series\":[{\"name\":\"Apples\",\"data\":[{\"y\":2},{\"y\":1},{\"y\":15}],\"colorIndex\":0},{\"name\":\"Oranges\",\"data\":[{\"y\":13},{\"y\":7},{\"y\":5}],\"colorIndex\":1},{\"name\":\"Peaches\",\"data\":[{\"y\":4},{\"y\":10},{\"y\":2}],\"colorIndex\":2}],\"xAxis\":{\"title\":{\"text\":\"\"},\"type\":\"category\",\"categories\":[\"Spring\",\"Summer\",\"Fall\"]}},\"griffinConfig\":{\"chartCredit\":\"© 2021 The Pew Charitable Trusts and the Urban Institute\",\"chartDescription\":\"Bar chart showing that most apples are harvested in the fall.\",\"chartLabel\":\"Figure 1\",\"chartNotes\":\"Some of the increase in apples harvested is due to unusually high rainfall in September. See <a href=\\\"http://example.com\\\">this report</a>.\",\"chartSources\":\"Source: John Adams, <em>Economics</em>, 1789.\",\"chartSubtitle\":\"Fruits by season\",\"chartTitle\":\"Most Apples Are Harvested in the Fall\",\"customColors\":[],\"selectedColorPalette\":\"default\",\"numberFormat\":\"default\"}}",
 };
-export const NominalMinHeight = writable(366);
-export const Stacking = writable('none');
-export const ChartWidth = writable('650');
-export const ChartHeight = writable('56.25%');
-export const ChartProject = writable(undefined);
-export const MinHeight = writable(300);
-export const PrintWidth = writable(undefined);
-export const PrintHeight = writable(undefined);
-export const CellBeingEdited = writable(null);
-export const XAxisType = writable('linear');
-export const ChartType = writable(baseConfig.chart.type);
-export const ActiveSection = writable('start');
-export const UserOptions = writable({});
-export const ExportType = writable('static');
-export const ChartHasBeenSaved = writable(false);
+s.PrintWidth = writable(undefined);
+s.PrintHeight = writable(undefined);
+s.CellBeingEdited = writable(null);
+s.ActiveSection = writable('start');
+s.ExportType = writable('static');
+s.ChartHasBeenSaved = writable(false);
 
-UserOptions.subscribe(v => {
-    ChartHasBeenSaved.set(false);
-    if (!v || !v.chart || !v.chart.type) return;
-    ChartType.set(v.chart.type);
-});
-export const DatatableData = writable([]);
-export const ImageDataUri = writable('');
-export const SelectedColorPalette = writable('default');
-export const ColorIndeces = writable(undefined);
-export const Indicators = writable({});
-export const IsWorking = writable(false);
-export const ColorByPoint = writable([]);
-export const SeriesCountFromTable = derived([DatatableData], ([datatableData]) => datatableData.length - 1);
+
+
+s.ImageDataUri = writable('');
+s.SelectedColorPalette = writable('default');
+s.ColorIndeces = writable(undefined);
+s.Indicators = writable({});
+s.IsWorking = writable(false);
+s.ColorByPoint = writable([]);
+s.SeriesCountFromTable = derived([s.DatatableData], ([datatableData]) => datatableData.length - 1);
                                             /* SeriesCountFromTable is # of series from data passed in by user.
                                              SeriesCount is # series sent to the Chart instance. e.g., pie charts
                                              only pass in one series regardless of the SeriesCountFromTable */
-export const CustomColors = writable([]);
-export const ChartCredit = writable(`© ${new Date().getFullYear()} The Pew Charitable Trusts`);
-export const ChartDescription = writable('');
-export const ChartLabel = writable('');
-export const ChartNotes = writable('');
-export const ChartTitle = writable('');
-export const ChartSources = writable('');
-export const ChartSubtitle = writable('');
-export const LoadedDataConfig = writable('');
-export const Picture = writable('');
-export const PictureIsMissingOrOld = writable(true);
-export const Thumbnail = writable('');
-export const NumberFormat = writable(undefined);
-export const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
-export const SeriesCountMismatch = derived([SeriesCountFromTable, SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
-export const MaxPointCount = derived([UserOptions], ([userOptions]) => {
+
+s.LoadedDataConfig = writable('');
+s.Picture = writable('');
+s.PictureIsMissingOrOld = writable(true);
+s.Thumbnail = writable('');
+s.NumberFormat = writable(undefined);
+s.SeriesCount = derived([s.UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
+s.SeriesCountMismatch = derived([s.SeriesCountFromTable, s.SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
+s.MaxPointCount = derived([s.UserOptions], ([userOptions]) => {
     if ( !userOptions.series || userOptions.series.length == 0){
         return 0;
     }
     return Math.max(...userOptions.series.map(d => d.data.length));
 });
-export const ColorCount = derived([MaxPointCount,ColorByPoint, SeriesCount], ([maxPointCount, colorByPoint, seriesCount]) => {
+s.ColorCount = derived([s.MaxPointCount,s.ColorByPoint, s.SeriesCount], ([maxPointCount, colorByPoint, seriesCount]) => {
     if (colorByPoint[0] == true){
         return maxPointCount;
     }
     return seriesCount;
 });
-export const ChartPaletteClassname = derived([SelectedColorPalette,CustomColors], ([selectedPalette, customColors]) => {
+s.ChartPaletteClassname = derived([s.SelectedColorPalette,s.CustomColors], ([selectedPalette, customColors]) => {
     if (selectedPalette !== 'custom') {
         return selectedPalette;
     }
     const rtn = `cc${hash(customColors.join(''))}`;
     return rtn;
 });
-export const Classes = derived([ChartPaletteClassname, ChartProject], function(){
+s.Classes = derived([s.ChartPaletteClassname, s.ChartProject], function(){
     return arguments[0].map(d => slugger(d));
 });
 /**
  * to do: when there's a series count mismatch, append the datatable data to the griffin config so it can be loaded back in
  */
-export const GriffinConfig = derived([
-    ChartCredit,
-    ChartDescription, 
-    ChartLabel, 
-    ChartNotes,
-    ChartPaletteClassname,
-    ChartSources, 
-    ChartSubtitle,
-    ChartTitle,
-    CustomColors,
-    DatatableData,
-    SeriesCountMismatch,
-    NumberFormat,
-    ChartWidth,
-    NominalMinHeight 
+s.GriffinConfig = derived([
+    s.ChartCredit,
+    s.ChartDescription, 
+    s.ChartLabel, 
+    s.ChartNotes,
+    s.ChartPaletteClassname,
+    s.ChartSources, 
+    s.ChartSubtitle,
+    s.ChartTitle,
+    s.CustomColors,
+    s.DatatableData,
+    s.SeriesCountMismatch,
+    s.NumberFormat,
+    s.ChartWidth,
+    s.NominalMinHeight 
 ], ([
     chartCredit,
     chartDescription, 
@@ -126,14 +152,14 @@ export const GriffinConfig = derived([
     if (!seriesCountMismatch){
         delete obj.datatableData;
     }
-    PictureIsMissingOrOld.set(true);
+    s.PictureIsMissingOrOld.set(true);
     return obj;
 });
-GriffinConfig.subscribe(() => {
-    ChartHasBeenSaved.set(false);
+s.GriffinConfig.subscribe(() => {
+    s.ChartHasBeenSaved.set(false);
 });
 //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
-export const SavingChartData = derived([ChartType, ChartTitle, UserOptions, GriffinConfig, Thumbnail], ([chartType, chartTitle, userOptions, griffinConfig, thumbnail]) => {
+s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.UserOptions, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, userOptions, griffinConfig, thumbnail]) => {
     return {
         type: chartType,
         hed: chartTitle,
@@ -144,19 +170,19 @@ export const SavingChartData = derived([ChartType, ChartTitle, UserOptions, Grif
         thumbnail
     };
 });
-export const CodeExport = derived([
-    ChartCredit,
-    ChartDescription, 
-    ChartLabel, 
-    ChartNotes,
-    ChartTitle, 
-    ChartSources,
-    ChartSubtitle,
-    Classes, 
-    Picture,
-    UserOptions, 
-    GriffinConfig,
-    ExportType
+s.CodeExport = derived([
+    s.ChartCredit,
+    s.ChartDescription, 
+    s.ChartLabel, 
+    s.ChartNotes,
+    s.ChartTitle, 
+    s.ChartSources,
+    s.ChartSubtitle,
+    s.Classes, 
+    s.Picture,
+    s.UserOptions, 
+    s.GriffinConfig,
+    s.ExportType
 ], ([
     chartCredit,
     chartDescription,
@@ -203,21 +229,25 @@ export const CodeExport = derived([
 </figure>`;
 });
 
-export const importConfig = {
-    ChartCredit,
-    ChartDescription,
-    SelectedColorPalette,
-    ChartLabel,
-    ChartNotes,
-    ChartSources,
-    ChartSubtitle,
-    ChartTitle,
-    ChartType,
-    ColorByPoint,
-    ColorIndeces,
-    CustomColors,
-    UserOptions,
-    NumberFormat,
-    ChartWidth,
-    NominalMinHeight
+s.importConfig = { // THIS SHOULD BECOME UNNECESSARY
+    ChartCredit: s.ChartCredit,
+    ChartDescription: s.ChartDescription,
+    SelectedColorPalette: s.SelectedColorPalette,
+    ChartLabel: s.ChartLabel,
+    ChartNotes: s.ChartNotes,
+    ChartSources: s.ChartSources,
+    ChartSubtitle: s.ChartSubtitle,
+    ChartTitle: s.ChartTitle,
+    ColorByPoint: s.ColorByPoint,
+    ColorIndeces: s.ColorIndeces,
+    CustomColors: s.CustomColors,
+    UserOptions: s.UserOptions,
+    NumberFormat: s.NumberFormat,
+    ChartWidth: s.ChartWidth,
+    NominalMinHeigh: s.NominalMinHeight
 };
+s.UserOptions.subscribe(v => {
+    s.ChartHasBeenSaved.set(false);
+    /*if (!v || !v.chart || !v.chart.type) return;
+    s.ChartType.set(v.chart.type);*/
+});

@@ -3,7 +3,7 @@
 </script>
 <script>
     import Dropdown from './Dropdown.svelte';
-    import {ChartType} from './../store'; 
+    import { w } from './../store'; 
    export let chartTypes;
     let options = chartTypes.sort();
     let label = 'Chart type:';

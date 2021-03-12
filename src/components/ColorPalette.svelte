@@ -1,5 +1,5 @@
 <script context="module">
-    import {ChartType, ColorIndeces, SelectedColorPalette, ColorCount} from './../store';
+    import {w, ColorIndeces, SelectedColorPalette, ColorCount} from './../store';
     import { get } from 'svelte/store';
     function changeHandler(e){
         console.log(e.target.value);
@@ -25,7 +25,7 @@
     let customSwatchStep = 360 / colorCount;
     let selectedPalette;
     
-    ChartType.subscribe(() => {
+    w.ChartType.subscribe(() => {
         checkColorIndeces(get(ColorCount));
     });
     SelectedColorPalette.subscribe(v => {
