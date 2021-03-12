@@ -53,7 +53,7 @@ export const NumberFormat = writable(undefined);
 export const SeriesCount = derived([UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
 export const SeriesCountMismatch = derived([SeriesCountFromTable, SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
 export const MaxPointCount = derived([UserOptions], ([userOptions]) => {
-    if ( !userOptions.series ){
+    if ( !userOptions.series || userOptions.series.length == 0){
         return 0;
     }
     return Math.max(...userOptions.series.map(d => d.data.length));
