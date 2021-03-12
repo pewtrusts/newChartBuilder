@@ -98,6 +98,9 @@
     }
     
     LoadedDataConfig.subscribe(v => {
+        /**
+         * TO DO: NONCATEGORICAL
+        */
         if (!v) return;
         //xaxis type == categorical
         const _data = [

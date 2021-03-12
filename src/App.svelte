@@ -136,6 +136,7 @@
     .right-column {
         position: relative;
         flex-grow: 1;
+        min-width: 1000px;
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
         border-left: 1px solid var(--medium-gray, gray);
