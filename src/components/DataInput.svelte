@@ -33,6 +33,7 @@
             return; // TO DO: what should happen if empty string is submitted?
         }
         Papa.parse((dataFile || inputString), { // TO DO: error handling  
+            delimiter: dataFile ? ',' : '\t',
             download: !!dataFile,
             dynamicTyping: true,
             complete(results) {
@@ -40,6 +41,7 @@
                 updateChartData(data, Chart);
             },
             transform(value, column){
+                console.log({value,column});
                 if ( column == 0){
                     return value;
                 }
