@@ -43,15 +43,15 @@
      * LOAD saved charts.
      */
     import { onMount } from 'svelte';
-    import {ChartWidth, ChartHeight, MinHeight, UserOptions, LoadedDataConfig} from './../store';
+    import {ChartWidth, ChartHeight, MinHeight, UserOptions, LoadedDataConfig, NominalMinHeight } from './../store';
     import Notices from './Notices.svelte';
     import { get } from 'svelte/store'
     import updateChartConfig from '../scripts/update-chart-config';
     export let Chart;
-    export let checkHeight; 
+    export let checkHeight;  
     
     let minHeight;
-    let nominalMinHeight = '366';
+    let nominalMinHeight;
     let chartWidth;
     let chartHeight;
     let nominalHeightValue = '56.25%';
@@ -64,6 +64,9 @@
         type: 'warning'
     };
     let notices = new Set();
+    NominalMinHeight.subscribe(v => {
+        nominalMinHeight = v;
+    });
     function setRealHeight(nominal){
         const calc = _setRealHeight(nominal);
         notices[calc.warn ? 'add' : 'delete'](outOfBoundsNotice);
@@ -71,10 +74,12 @@
         ChartHeight.set(calc.value);
     }
     onMount(() => {
-        checkHeight = function(){
+        checkHeight = function(isLoad){
             requestIdleCallback(() => {
                 setRealHeight(nominalHeightValue);
-                setRealMinHeight(nominalMinHeight);
+                if (!isLoad){
+                    setRealMinHeight(nominalMinHeight);
+                }
             },{timeout:500});
         };
         function _set(){
@@ -89,7 +94,7 @@
         _set();
         LoadedDataConfig.subscribe(() => {
             if (!Chart) return;
-            checkHeight();
+            checkHeight(true);
         });
     });
     $: widthValue = (function(){ // need to bind the selectors values for when charts are loaded
@@ -151,11 +156,13 @@
     ChartHeight.subscribe(v => {
         chartHeight = v;
         if (Chart){
-            updateChartConfig(Chart, {
-                chart: {
-                    height: chartHeight
-                }
-            });
+            requestIdleCallback(() => {
+                updateChartConfig(Chart, {
+                    chart: {
+                        height: chartHeight
+                    }
+                });
+            },{timeout:500});
             /**
              * so Highcharts userOptions property of the Chart instance doesn't actually reflect 1:1 the user
              * options passed in. if responsive conditions are met the userOptions are changed in response. 
@@ -173,6 +180,7 @@
         MinHeight.set(value);
     }
     function minHeightHandler(){
+        NominalMinHeight.set(this.value);
         setRealMinHeight(this.value);
     }
     MinHeight.subscribe(v => {

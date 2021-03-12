@@ -5,6 +5,7 @@ import baseConfig from './base-chart-config.json';
 export const newChartConfig = {
     config: "{\"highchartsConfig\":{\"title\":null,\"chart\":{\"type\":\"column\"},\"credits\":{\"enabled\":false},\"yAxis\":{\"title\":null},\"series\":[{\"name\":\"Apples\",\"data\":[{\"y\":2},{\"y\":1},{\"y\":15}],\"colorIndex\":0},{\"name\":\"Oranges\",\"data\":[{\"y\":13},{\"y\":7},{\"y\":5}],\"colorIndex\":1},{\"name\":\"Peaches\",\"data\":[{\"y\":4},{\"y\":10},{\"y\":2}],\"colorIndex\":2}],\"xAxis\":{\"title\":{\"text\":\"\"},\"type\":\"category\",\"categories\":[\"Spring\",\"Summer\",\"Fall\"]}},\"griffinConfig\":{\"chartCredit\":\"© 2021 The Pew Charitable Trusts and the Urban Institute\",\"chartDescription\":\"Bar chart showing that most apples are harvested in the fall.\",\"chartLabel\":\"Figure 1\",\"chartNotes\":\"Some of the increase in apples harvested is due to unusually high rainfall in September. See <a href=\\\"http://example.com\\\">this report</a>.\",\"chartSources\":\"Source: John Adams, <em>Economics</em>, 1789.\",\"chartSubtitle\":\"Fruits by season\",\"chartTitle\":\"Most Apples Are Harvested in the Fall\",\"customColors\":[],\"selectedColorPalette\":\"default\",\"numberFormat\":\"default\"}}",
 };
+export const NominalMinHeight = writable(366);
 export const Stacking = writable('none');
 export const ChartWidth = writable('650');
 export const ChartHeight = writable('56.25%');
@@ -89,7 +90,8 @@ export const GriffinConfig = derived([
     DatatableData,
     SeriesCountMismatch,
     NumberFormat,
-    ChartWidth 
+    ChartWidth,
+    NominalMinHeight 
 ], ([
     chartCredit,
     chartDescription, 
@@ -103,7 +105,8 @@ export const GriffinConfig = derived([
     datatableData,
     seriesCountMismatch,
     numberFormat,
-    chartWidth 
+    chartWidth ,
+    nominalMinHeight
 ]) => {
     const obj =  {
         chartCredit,
@@ -117,15 +120,12 @@ export const GriffinConfig = derived([
         customColors,
         datatableData,
         numberFormat,
-        chartWidth 
+        chartWidth,
+        nominalMinHeight 
     };
     if (!seriesCountMismatch){
         delete obj.datatableData;
     }
-    delete obj.chartCredit;
-    delete obj.chartDescription;
-    delete obj.chartNotes;
-    delete obj.chartSources;
     PictureIsMissingOrOld.set(true);
     return obj;
 });
@@ -218,5 +218,6 @@ export const importConfig = {
     CustomColors,
     UserOptions,
     NumberFormat,
-    ChartWidth
+    ChartWidth,
+    NominalMinHeight
 };

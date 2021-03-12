@@ -59,8 +59,8 @@ export default function _getImageData(){
                 });
             }
         }),
-        html2canvas(mobileChart, {
-            scale: 0.45,
+        html2canvas(fullscreenChart, {
+            scale: 0.25,
             onclone: function (_document) {
                 _document.querySelectorAll('.js-figure-wrapper').forEach(wrapper => {
                     wrapper.classList.add('image-export');
