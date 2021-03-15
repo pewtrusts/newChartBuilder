@@ -79,6 +79,7 @@ s.ActiveSection = writable('start');
 s.ExportType = writable('static');
 s.ChartHasBeenSaved = writable(false);
 
+<<<<<<< HEAD
 
 
 s.ImageDataUri = writable('');
@@ -88,6 +89,47 @@ s.Indicators = writable({});
 s.IsWorking = writable(false);
 s.ColorByPoint = writable([]);
 s.SeriesCountFromTable = derived([s.DatatableData], ([datatableData]) => datatableData.length - 1);
+||||||| merged common ancestors
+UserOptions.subscribe(v => {
+    ChartHasBeenSaved.set(false);
+    if (!v || !v.chart || !v.chart.type) return;
+    ChartType.set(v.chart.type);
+});
+export const DatatableData = writable([]);
+export const ImageDataUri = writable('');
+export const SelectedColorPalette = writable('default');
+export const ColorIndeces = writable(undefined);
+export const Indicators = writable({});
+export const IsWorking = writable(false);
+export const ColorByPoint = writable([]);
+export const SeriesCountFromTable = derived([DatatableData], ([datatableData]) => datatableData.length - 1);
+=======
+UserOptions.subscribe(v => {
+    ChartHasBeenSaved.set(false);
+    if (!v || !v.chart || !v.chart.type) return;
+    ChartType.set(v.chart.type);
+});
+export const DatatableData = writable([]);
+export const writables = {};
+export const writableMap = {};
+function createWritable({name,value,HCConfig}){
+    writables[name] = writable(value);
+    writableMap[HCConfig] = writables[name];
+}
+[
+    ['CreditsEnabled',true,'credits.enabled']
+].forEach(d => {
+    createWritable({name: d[0], value: d[1], HCConfig: d[2]});
+});
+console.log(writables, writableMap);
+export const ImageDataUri = writable('');
+export const SelectedColorPalette = writable('default');
+export const ColorIndeces = writable(undefined);
+export const Indicators = writable({});
+export const IsWorking = writable(false);
+export const ColorByPoint = writable([]);
+export const SeriesCountFromTable = derived([DatatableData], ([datatableData]) => datatableData.length - 1);
+>>>>>>> 4910c5c9b41f9f2dd1a835d19cd7de37a0f3dc2c
                                             /* SeriesCountFromTable is # of series from data passed in by user.
                                              SeriesCount is # series sent to the Chart instance. e.g., pie charts
                                              only pass in one series regardless of the SeriesCountFromTable */
