@@ -1,5 +1,5 @@
 <script context="module">
-    import {ActiveSection} from './../store';
+    import {s} from './../store';
 </script>
 <script>
     import slugger from 'slugger';
@@ -44,11 +44,11 @@
             style: 'left: 2px;bottom: 2px;'
         }
     ];
-    ActiveSection.subscribe(({value}) => {
+    s.ActiveSection.subscribe(({value}) => {
         activeSection = value;
     });
     function clickHandler(){
-        ActiveSection.set({method: 'click', value: slugger(this.title)});
+        s.ActiveSection.set({method: 'click', value: slugger(this.title)});
     }
 </script>
 <style>

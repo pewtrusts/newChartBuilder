@@ -31,5 +31,17 @@
       }
     ]
   },
+  "series": [{
+    "data": [0,0,0],
+    "name": "Series 1"
+  },
+{
+  "data": [
+    0,
+    0,
+    0
+  ],
+  "name": "Series 2"
+}],
   "tooltip": {}
 }

@@ -7,27 +7,21 @@
     import HCExporting from "highcharts/modules/exporting";
     import HCOfflineExporting from "highcharts/modules/offline-exporting";
     import options from "@Project/options.json";
-    import config from "@Project/base-chart-config.json";
-    import {
-        ChartType,
-        ColorIndeces,
-        UserOptions,
-        Classes,
-        ColorByPoint,
-        SeriesCountMismatch,
-    } from "./../store";
+   // import config from "@Project/base-chart-config.json";
+    import { s } from "./../store";
     import { get } from "svelte/store";
-    import { beforeUpdate, afterUpdate } from "svelte";
+    import { onMount, beforeUpdate, afterUpdate } from "svelte";
     import updateChartConfig from "../scripts/update-chart-config";
     import Notices from "./Notices.svelte";
+    let chartCount = 0;
     window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
     HCExporting(Highcharts);
     HCOfflineExporting(Highcharts);
     Highcharts.setOptions(options);
-    config.title = config.title || {};
+    /*config.title = config.title || {};
     config.title.text = undefined;
-    config.exporting = { enabled: false };
-    export function createChart(node) {
+    config.exporting = { enabled: false };*/
+    export function createChart(node, config) {
         return Highcharts.chart(node, config);
     }
     export function clean(userOptions){
@@ -77,22 +71,11 @@
 
 <script>
 
-    import {
-        ChartLabel,
-        ChartTitle,
-        ChartSubtitle,
-        ChartNotes,
-        ChartSources,
-        ChartCredit,
-        ChartHeight,
-        MinHeight,
-        NumberFormat,
-        Stacking
-    } from "./../store";
     export let Chart;
     export let seriesCountMismatchNotice;
     export let chartWidth;
     export let size;
+    let chartContainer;
     let classes = [];
     let chartLabel;
     let chartTitle;
@@ -104,11 +87,21 @@
     let previousWidth;
     let chartHeight;
     let minHeight;
-    ChartHeight.subscribe((v) => {
+    s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
-    MinHeight.subscribe((v) => {
+    s.MinHeight.subscribe((v) => {
         minHeight = v;
+    });
+    onMount(() => {
+        requestIdleCallback(() => {
+            const _Chart = createChart(chartContainer, get(s.ChartConfig));
+            window.Charts.push(_Chart);
+            if (size == "fullscreen") {
+                Chart = _Chart;
+                Chart.isFullscreen = true;
+            }
+        });
     });
     beforeUpdate(() => {
         console.log(chartWidth);
@@ -119,7 +112,7 @@
         }
         previousWidth = chartWidth;
     });
-    NumberFormat.subscribe((v) => {
+    s.NumberFormat.subscribe((v) => {
         const formatter = returnFormatter(v);
         if (Chart) {
             updateChartConfig(Chart, {
@@ -132,26 +125,24 @@
         }
         console.log(Chart);
     });
-    SeriesCountMismatch.subscribe((v) => {
+    s.SeriesCountMismatch.subscribe((v) => {
         notices[v ? "add" : "delete"](seriesCountMismatchNotice);
         notices = notices;
     });
-    Classes.subscribe((v) => {
+    s.Classes.subscribe((v) => {
         classes = v;
     });
     
-    function containerUse(node) {
-        const _Chart = createChart(node);
-        window.Charts.push(_Chart);
-        if (size == "fullscreen") {
-            Chart = _Chart;
-            Chart.isFullscreen = true;
-            let userOptions = Chart.userOptions;
-            // TO DO : deep clone to avoid mutating the original?
-            // alternative would be to not use HC userOptions at all but derive it locally from other settings
-            UserOptions.set(clean(userOptions));
-        }
+    function containerUse() {
+       
     }
+    s.ChartConfig.subscribe(v => {
+        if ( Chart ){
+            window.Charts.forEach(chart => {
+                chart.update(v, true, true);
+            });
+        }
+    });
     /*function replaceFn(_, p1, p2){
         return `<a href="${p1}">${p2.replace(/\//g, '/&#8203')}</a>`;
     }*/
@@ -161,35 +152,35 @@
         //return chartSources.replace(/<a href="(.*?)">(.*?)<\/a>/g, replaceFn);
         return chartSources.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;');
     })();*/
-    ChartLabel.subscribe((v) => {
+    s.ChartLabel.subscribe((v) => {
         chartLabel = v;
     });
-    ChartTitle.subscribe((v) => {
+    s.ChartTitle.subscribe((v) => {
         chartTitle = v;
     });
-    ChartSubtitle.subscribe((v) => {
+    s.ChartSubtitle.subscribe((v) => {
         chartSubtitle = v;
     });
-    ChartNotes.subscribe((v) => {
+    s.ChartNotes.subscribe((v) => {
         chartNotes = v;
     });
-    ChartSources.subscribe((v) => {
+    s.ChartSources.subscribe((v) => {
         chartSources = v;
     });
-    ChartCredit.subscribe((v) => {
+    s.ChartCredit.subscribe((v) => {
         chartCredit = v;
     });
-    ChartType.subscribe((v) => {
+    s.ChartType.subscribe((v) => {
         if (Chart) {
             updateChartConfig(Chart, { chart: { type: v } });
         }
     });
-    Stacking.subscribe(v => {
+    s.Stacking.subscribe(v => {
         if (Chart){
             updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
         }
     })
-    ColorIndeces.subscribe((v) => {
+    s.ColorIndeces.subscribe((v) => {
         if (!v || !Chart) return;
         const series = get(UserOptions).series;
         const colorByPoint = get(ColorByPoint);
@@ -237,7 +228,7 @@
                     {/if}
                 </header>
             {/if}
-            <div
+            <div bind:this="{chartContainer}" 
                 class="container js-hc-container {classes.join(' ')}"
                 use:containerUse
             />

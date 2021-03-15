@@ -4,7 +4,7 @@
     import Notices from './Notices.svelte';
     import updateChartData from "@Script/update-chart-data.js";
     import EditableCell from "@Component/EditableCell.svelte";
-    import { ChartType, XAxisType, SeriesCountMismatch, LoadedDataConfig } from "@Project/store";
+    import { s } from "@Project/store";
 
     /* for testing data is being imported directly. will come from user input */
     const alphabet = [
@@ -97,7 +97,7 @@
         updateChartData(data, Chart);
     }
     
-    LoadedDataConfig.subscribe(v => {
+    s.LoadedDataConfig.subscribe(v => {
         /**
          * TO DO: NONCATEGORICAL
         */
@@ -111,7 +111,7 @@
         updateChartData(_data, Chart, data);
 
     })
-    ChartType.subscribe(v => {
+    s.ChartType.subscribe(v => {
         chartType = v;
         if (v == 'pie') {
             let _data = _transpose(data);
@@ -122,15 +122,15 @@
             },1000);
         }
     });
-    XAxisType.subscribe((v) => {
+    s.XAxisType.subscribe((v) => {
         xAxisType = v;
     });
-    SeriesCountMismatch.subscribe(v => {
+    s.SeriesCountMismatch.subscribe(v => {
         seriesCountMismatch = v;
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;
     });
-    //updateChartData(data, Chart);
+    updateChartData(data, Chart);
 </script>
 
 <style>

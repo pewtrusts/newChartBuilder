@@ -35,12 +35,14 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
 };
 export function extendObj(base, properties, value){
     properties.reduce(function(acc,cur,i){
-        if (!acc[cur]){
-            acc[cur] = i == properties.length - 1 ? value : {};
-        }
+        acc[cur] = i == properties.length - 1 ? value : ( acc[cur] || {} );
         return acc[cur] 
     }, base);
     console.log(base);
+    /**
+     * TO DO: somewhere there's inconsistency with 'categorical' and 'category' axis types
+     * prevent chartUpdate from redrawing until end.
+     */
 }
 const griffins = document.querySelectorAll('.js-griffin');
 griffins.forEach(griffin => {

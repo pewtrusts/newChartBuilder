@@ -1,4 +1,5 @@
 <script context="module">
+    import {s} from './store';
     import Banner from "./components/Banner.svelte";
     import Text from './components/Text.svelte';
     import Start from './components/Start.svelte';
@@ -24,7 +25,7 @@
     import { onMount } from 'svelte';
     import getImageData from './scripts/get-image-data';
     function picClickHandler(){
-        IsWorking.set(true);
+        s.IsWorking.set(true);
         requestIdleCallback(getImageData, { timeout: 2000 });
     }
     export const pictureIsMissingOrOldNotice = {
@@ -71,13 +72,13 @@
     let clickSave = () => {};
     let chartWidth = 650;
     let checkHeight = null;
-    IsWorking.subscribe(v => {
+    s.IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
     function pushSection(node){
         sections.push(node);
     }
-    ActiveSection.subscribe(v => {
+    s.ActiveSection.subscribe(v => {
         activeSection = v.value;
         if (!leftColumn) return;
         if ( v.method == 'click'){
@@ -85,13 +86,13 @@
             anchor.scrollIntoView();
         }
     });
-    ChartWidth.subscribe(v => {
+    s.ChartWidth.subscribe(v => {
         chartWidth = v;
     });
     function intersectionHandler(e){
         const intersecting = e.find(_e => _e.isIntersecting);
         if ( intersecting ){
-            ActiveSection.set({method: 'scroll', value: intersecting.target.dataset.section});
+            s.ActiveSection.set({method: 'scroll', value: intersecting.target.dataset.section});
         }
     }
     onMount(() => {
@@ -190,17 +191,17 @@
             class="left-column ctn--inner flex flex-column flex-ac"
             style="flex-grow: 1;">
             <h1>Griffin Chart Builder</h1>
-            <section use:pushSection>
+          <!--  <section use:pushSection>
                 <SectionHead text="Start" />
                 <Start />
-            </section>
+            </section> -->
             <section use:pushSection>
                 <SectionHead text="Data" />
                 {#if Chart}
                     <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data {seriesCountMismatchNotice} />
                 {/if}
             </section>
-            <section use:pushSection>
+<!--        <section use:pushSection>
                 <SectionHead text="Settings" />
                 <Settings {savedCharts}/>
             </section>
@@ -237,19 +238,19 @@
             <section use:pushSection>
                 <SectionHead text="Print" />
                 <Print bind:enablePrint/>
-            </section>
+            </section>-->
             
         </div>
         <div class="right-column">
-            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" style="padding: 1em;">
+           <!-- <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" style="padding: 1em;">
                 <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
                 <ChartSizeSelector bind:checkHeight {Chart}/>
-            </div>
+            </div>-->
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
                 <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
-            <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
+         <!--   <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 
                     bind:resolveSaved
                     bind:savedCharts 
@@ -263,7 +264,7 @@
             </div>
             {#if enablePrint && activeSection == 'print'}
                 <PrintChart />
-            {/if}
+            {/if}-->
         </div>
     </div>
 </div>

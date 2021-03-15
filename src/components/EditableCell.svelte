@@ -1,12 +1,12 @@
 <script context="module">
-    import  { CellBeingEdited } from '@Project/store.js';
+    import  { s } from '@Project/store.js';
     import { createEventDispatcher } from 'svelte';
     import CellContents from './CellContents.svelte';
     import Move from './../scripts/move-focus';
     import Sprite from './Sprite.svelte';
     //let previousValue = undefined;
     let _cellBeingEdited;
-    CellBeingEdited.subscribe(v => {
+    s.CellBeingEdited.subscribe(v => {
         _cellBeingEdited = v;
     });
     
@@ -24,7 +24,7 @@
     let cellBeingEdited = null;
     let showForm = false;
     const dispatch = createEventDispatcher();
-    CellBeingEdited.subscribe(v => {
+    s.CellBeingEdited.subscribe(v => {
         cellBeingEdited = v;
     });
     function keyupHandler(e){
@@ -73,10 +73,10 @@
             get: function(){return this._isEditable;},
             set: function(bool){
                 if ( bool ){
-                    CellBeingEdited.set(this);
+                    s.CellBeingEdited.set(this);
                     document.body.addEventListener('click', bodyClickHandler);
                 } else {
-                    CellBeingEdited.set(null);
+                    s.CellBeingEdited.set(null);
                     document.body.removeEventListener('click', bodyClickHandler);
                 }
                 this.classList[bool ? 'add' : 'remove']('isEditable');

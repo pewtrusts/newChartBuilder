@@ -2,6 +2,12 @@
     "chart": {
         "styledMode": true
     },
+    "credits": {
+        "enabled": false
+    },
+    "exporting": {
+        "enabled": false
+    },
     "lang": {
         "thousandsSep": ",",
         "numericSymbols": [
@@ -21,7 +27,7 @@
         "useUTC": false
     },
     "title": {
-        
+        "text": ""
     },
     "xAxis": {
        

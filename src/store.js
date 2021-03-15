@@ -1,29 +1,49 @@
 import hash from './griffin/scripts/hash';
 import slugger from 'slugger';
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import baseConfig from './base-chart-config.json';
+import { extendObj } from './griffin/griffin';
+import returnPointFormatter from './griffin/scripts/return-point-formatter';
 
 export const s = {};
 export const hMap = {};
 export const gMap = {};
-function createWritable({ name, value, config }, map) {
+s.ChartConfig = writable({});
+function createWritable({ name, value, config }, configType) {
+    const map = configType == 'highcharts' ? hMap : configType == 'griffin' ? gMap : null;
     s[name] = writable(value);
-    map[config || name] = s[name];
+    if ( map ){
+        map[config || name] = s[name];
+    }
+    if ( configType == 'highcharts'){
+        s[name].subscribe(v => {
+            const chartConfig = get(s.ChartConfig);
+            extendObj(chartConfig, config.split('.'), v);
+            s.ChartConfig.set(chartConfig);
+        });
+    }
 }
+s.ChartConfig.subscribe(v => {
+    window.chartConfig = v;
+});
 
 /**
  *  Stores that correspond to settings in the Highcharts configuration object
  */
 [
     ['ChartHeight', '56.25%', 'chart.height'],
+    ['ChartSeries', [], 'series'],
     ['ChartType', baseConfig.chart.type, 'chart.type'],
-    ['CreditsEnabled', true, 'credits.enabled'],
+    ['LegendEnabled', true, 'legend.enabled'],
     ['MinHeight', 300, 'responsive.rules[0].chartOptions.chart.height'],
     ['Stacking', 'none', 'plotOptions.series.stacking'],
-    ['UserOptions', {}],
-    ['XAxisType', 'linear', 'xAxis.type'],
+    ['StartOfWeek', 1, 'xAxis.startOfWeek'],
+    ['TooltipFormatter', returnPointFormatter({numberFormat: undefined, seriesLength: 2}), 'tooltip.pointFormatter' ],
+    ['XAxisCategories', null, 'xAxis.categories'],
+    ['XAxisTitle', '', 'xAxis.title.text'],
+    ['XAxisType', 'linear', 'xAxis.type']
 ].forEach(d => {
-    createWritable({ name: d[0], value: d[1], config: d[2] }, hMap);
+    createWritable({ name: d[0], value: d[1], config: d[2] }, 'highcharts');
 });
 
 /**
@@ -43,11 +63,12 @@ function createWritable({ name, value, config }, map) {
     ['ChartSources', ''],
     ['ChartSubtitle', ''],
 ].forEach(d => {
-    createWritable({ name: d[0], value: d[1], config: d[2] }, gMap);
+    createWritable({ name: d[0], value: d[1], config: d[2] }, 'griffin');
 });
 /**
  * Stores that govern app state but are not saved as HC or Griffin configuration with charts
  */
+/* TO DO :  instead of newChart config, you can more simply reset hc config and griffin config to defaults */
 s.newChartConfig = {
     config: "{\"highchartsConfig\":{\"title\":null,\"chart\":{\"type\":\"column\"},\"credits\":{\"enabled\":false},\"yAxis\":{\"title\":null},\"series\":[{\"name\":\"Apples\",\"data\":[{\"y\":2},{\"y\":1},{\"y\":15}],\"colorIndex\":0},{\"name\":\"Oranges\",\"data\":[{\"y\":13},{\"y\":7},{\"y\":5}],\"colorIndex\":1},{\"name\":\"Peaches\",\"data\":[{\"y\":4},{\"y\":10},{\"y\":2}],\"colorIndex\":2}],\"xAxis\":{\"title\":{\"text\":\"\"},\"type\":\"category\",\"categories\":[\"Spring\",\"Summer\",\"Fall\"]}},\"griffinConfig\":{\"chartCredit\":\"© 2021 The Pew Charitable Trusts and the Urban Institute\",\"chartDescription\":\"Bar chart showing that most apples are harvested in the fall.\",\"chartLabel\":\"Figure 1\",\"chartNotes\":\"Some of the increase in apples harvested is due to unusually high rainfall in September. See <a href=\\\"http://example.com\\\">this report</a>.\",\"chartSources\":\"Source: John Adams, <em>Economics</em>, 1789.\",\"chartSubtitle\":\"Fruits by season\",\"chartTitle\":\"Most Apples Are Harvested in the Fall\",\"customColors\":[],\"selectedColorPalette\":\"default\",\"numberFormat\":\"default\"}}",
 };
@@ -76,7 +97,7 @@ s.Picture = writable('');
 s.PictureIsMissingOrOld = writable(true);
 s.Thumbnail = writable('');
 s.NumberFormat = writable(undefined);
-s.SeriesCount = derived([s.UserOptions], ([userOptions]) => !userOptions.series ? 0 : userOptions.series.length);
+s.SeriesCount = derived([s.ChartConfig], ([chartConfig]) => !chartConfig.series ? 0 : chartConfig.series.length);
 s.SeriesCountMismatch = derived([s.SeriesCountFromTable, s.SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
 s.MaxPointCount = derived([s.UserOptions], ([userOptions]) => {
     if ( !userOptions.series || userOptions.series.length == 0){
@@ -246,8 +267,8 @@ s.importConfig = { // THIS SHOULD BECOME UNNECESSARY
     ChartWidth: s.ChartWidth,
     NominalMinHeigh: s.NominalMinHeight
 };
-s.UserOptions.subscribe(v => {
+/*s.UserOptions.subscribe(() => {
     s.ChartHasBeenSaved.set(false);
-    /*if (!v || !v.chart || !v.chart.type) return;
-    s.ChartType.set(v.chart.type);*/
-});
+    if (!v || !v.chart || !v.chart.type) return;
+    s.ChartType.set(v.chart.type);
+});*/
