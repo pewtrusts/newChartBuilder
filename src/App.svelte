@@ -244,7 +244,7 @@
         <div class="right-column">
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" style="padding: 1em;">
                 <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-              <!--  <ChartSizeSelector bind:checkHeight {Chart}/>-->
+                <ChartSizeSelector bind:checkHeight {Chart}/>
             </div>
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>

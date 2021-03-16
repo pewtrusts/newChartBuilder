@@ -35,8 +35,17 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
 };
 export function extendObj(base, properties, value){
     properties.reduce(function(acc,cur,i){
-        acc[cur] = i == properties.length - 1 ? value : ( acc[cur] || {} );
-        return acc[cur] 
+        const split = cur.split('[');
+        if ( split.length == 1 ){ // ie no index, not an array
+            acc[cur] = i == properties.length - 1 ? value : ( acc[cur] || {} );
+            return acc[cur] 
+        } else {
+            let prop = split[0];
+            let index = parseInt(split[1]);
+            acc[prop] = acc[prop] || [];
+            acc[prop][index] = i == properties.length - 1 ? value : (acc[prop][index] || {});
+            return acc[prop][index];
+        }
     }, base);
     console.log(base);
     /**

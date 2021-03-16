@@ -3,7 +3,6 @@
     let chart;
     let mobile;
     let mobileChart;
-
     export function _setRealHeight(nominal){
         fullscreen = fullscreen || document.querySelector('.js-fullscreen');
         chart = chart || fullscreen.querySelector('.js-hc-container');
@@ -43,10 +42,10 @@
      * LOAD saved charts.
      */
     import { onMount } from 'svelte';
-    import {ChartWidth, ChartHeight, MinHeight, UserOptions, LoadedDataConfig, NominalMinHeight } from './../store';
+    import { s } from './../store';
     import Notices from './Notices.svelte';
-    import { get } from 'svelte/store'
-    import updateChartConfig from '../scripts/update-chart-config';
+   // import { get } from 'svelte/store'
+   // import updateChartConfig from '../scripts/update-chart-config';
     export let Chart;
     export let checkHeight;  
     
@@ -64,14 +63,14 @@
         type: 'warning'
     };
     let notices = new Set();
-    NominalMinHeight.subscribe(v => {
+    s.NominalMinHeight.subscribe(v => {
         nominalMinHeight = v;
     });
     function setRealHeight(nominal){
         const calc = _setRealHeight(nominal);
         notices[calc.warn ? 'add' : 'delete'](outOfBoundsNotice);
         notices = notices;
-        ChartHeight.set(calc.value);
+        s.ChartHeight.set(calc.value);
     }
     onMount(() => {
         checkHeight = function(isLoad){
@@ -92,7 +91,7 @@
             }
         }
         _set();
-        LoadedDataConfig.subscribe(() => {
+        s.LoadedDataConfig.subscribe(() => {
             if (!Chart) return;
             checkHeight(true);
         });
@@ -128,7 +127,7 @@
             return;
         }
         customWidth = false;
-        ChartWidth.set(this.value);
+        s.ChartWidth.set(this.value);
     }
     function heightHandler(){
          if (this.value == 'custom') {
@@ -137,15 +136,15 @@
         }
         customHeight = false;
         setRealHeight(this.value);
-        //ChartHeight.set();
+        //s.ChartHeight.set();
     }
     function customWidthHandler(){
-        ChartWidth.set(this.value);
+        s.ChartWidth.set(this.value);
     }
     function customHeightHandler(){
         setRealHeight(nominalCustomHeight);
     }
-    ChartWidth.subscribe(v => {
+    s.ChartWidth.subscribe(v => {
         chartWidth = v;
         if ( Chart ){
             requestIdleCallback(() => {
@@ -153,9 +152,9 @@
             },{timeout: 500});
         }
     });
-    ChartHeight.subscribe(v => {
+    s.ChartHeight.subscribe(v => {
         chartHeight = v;
-        if (Chart){
+       /* if (Chart){
             requestIdleCallback(() => {
                 updateChartConfig(Chart, {
                     chart: {
@@ -169,23 +168,24 @@
              * we don't want the size of how the chart is displayed in the tool to affect the user options in
              * the code export, so he we have a brute force setting of chartHeight to the userOptions.
              */
-            let _userOptions = get(UserOptions);
+           /* let _userOptions = get(UserOptions);
             _userOptions.chart.height = chartHeight;
-            UserOptions.set(_userOptions);
-
+            s.UserOptions.set(_userOptions);
         }
+        */
     });
     function setRealMinHeight(nominal){
         const value = _setRealMinHeight(nominal);
-        MinHeight.set(value);
+        s.MinHeight.set(value);
     }
     function minHeightHandler(){
-        NominalMinHeight.set(this.value);
+        s.NominalMinHeight.set(this.value);
         setRealMinHeight(this.value);
     }
-    MinHeight.subscribe(v => {
+    s.MinHeight.subscribe(v => {
         minHeight = v;
-        if (Chart){
+        
+        /*if (Chart){
             let config = get(UserOptions);
             config.responsive.rules[0] = {
                 "chartOptions": {
@@ -198,7 +198,7 @@
                 }
             };
             updateChartConfig(Chart, config);
-        }
+        }*/
     });
 </script>
 <style>

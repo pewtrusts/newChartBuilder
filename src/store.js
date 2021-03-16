@@ -36,6 +36,7 @@ s.ChartConfig.subscribe(v => {
     ['ChartType', baseConfig.chart.type, 'chart.type'],
     ['LegendEnabled', true, 'legend.enabled'],
     ['MinHeight', 300, 'responsive.rules[0].chartOptions.chart.height'],
+    ['MinHeightCondition', 300, 'responsive.rules[0].condition.maxHeight'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],
     ['StartOfWeek', 1, 'xAxis.startOfWeek'],
     ['TooltipFormatter', returnPointFormatter({numberFormat: undefined, seriesLength: 2}), 'tooltip.pointFormatter' ],
