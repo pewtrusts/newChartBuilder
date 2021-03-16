@@ -112,15 +112,15 @@
 
     })
     s.ChartType.subscribe(v => {
-        chartType = v;
-        if (v == 'pie') {
+        if (v == 'pie' && chartType !== 'pie' ) {
             let _data = _transpose(data);
             updateChartData(_transpose(_data.slice(0,2)), Chart, data);
-        } else {
-            setTimeout(() => {
+        } else if ( chartType == 'pie' && v !== 'pie' ) {
+           // setTimeout(() => {
                 updateChartData(data, Chart);
-            },1000);
+           // },1000); // what;s going on here? any way to simplify?
         }
+        chartType = v;
     });
     s.XAxisType.subscribe((v) => {
         xAxisType = v;
@@ -226,7 +226,7 @@
         iconID="spreadsheet"
         title="Import"
         iconStyle="top:2px;"
-        type="secondary"
+        type="gray"
         style="border-bottom-width: 0;border-top-width: 0;" />
 </div>
 <div bind:this={datatableContainer} class="datatable-container">

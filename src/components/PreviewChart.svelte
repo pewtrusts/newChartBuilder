@@ -10,7 +10,7 @@
    // import config from "@Project/base-chart-config.json";
     import { s } from "./../store";
     import { get } from "svelte/store";
-    import { onMount, beforeUpdate, afterUpdate } from "svelte";
+    import { onMount, afterUpdate } from "svelte";
     import updateChartConfig from "../scripts/update-chart-config";
     import Notices from "./Notices.svelte";
     let chartCount = 0;
@@ -87,6 +87,7 @@
     let previousWidth;
     let chartHeight;
     let minHeight;
+    let redrawTimeout;
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
@@ -94,17 +95,15 @@
         minHeight = v;
     });
     onMount(() => {
-        requestIdleCallback(() => {
-            const _Chart = createChart(chartContainer, get(s.ChartConfig));
+     //   requestIdleCallback(() => {
+            const config = get(s.ChartConfig);
+            const _Chart = createChart(chartContainer, config);
             window.Charts.push(_Chart);
             if (size == "fullscreen") {
                 Chart = _Chart;
-                Chart.isFullscreen = true;
+                _Chart.isFullscreen = true;
             }
-        });
-    });
-    beforeUpdate(() => {
-        console.log(chartWidth);
+     //   });
     });
     afterUpdate(() => {
         if (Chart && previousWidth && chartWidth !== previousWidth) {
@@ -112,7 +111,7 @@
         }
         previousWidth = chartWidth;
     });
-    s.NumberFormat.subscribe((v) => {
+    /*s.NumberFormat.subscribe((v) => {
         const formatter = returnFormatter(v);
         if (Chart) {
             updateChartConfig(Chart, {
@@ -124,7 +123,7 @@
             });
         }
         console.log(Chart);
-    });
+    });*/
     s.SeriesCountMismatch.subscribe((v) => {
         notices[v ? "add" : "delete"](seriesCountMismatchNotice);
         notices = notices;
@@ -138,8 +137,15 @@
     }
     s.ChartConfig.subscribe(v => {
         if ( Chart ){
+            window.cancelIdleCallback(redrawTimeout);
+            redrawTimeout = window.requestIdleCallback(() => {
+                window.Charts.forEach(chart => {
+                    chart.redraw(true);
+                    s.PictureIsMissingOrOld.set(true)
+                });
+            }, {timeout: 500});
             window.Charts.forEach(chart => {
-                chart.update(v, true, true);
+                chart.update(v, false, true, true);
             });
         }
     });
@@ -170,7 +176,7 @@
     s.ChartCredit.subscribe((v) => {
         chartCredit = v;
     });
-    s.ChartType.subscribe((v) => {
+    /*s.ChartType.subscribe((v) => {
         if (Chart) {
             updateChartConfig(Chart, { chart: { type: v } });
         }
@@ -179,8 +185,8 @@
         if (Chart){
             updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
         }
-    })
-    s.ColorIndeces.subscribe((v) => {
+    })*/
+    s.ColorIndeces.subscribe((v) => { // TO DO : how are you gonna handle this?
         if (!v || !Chart) return;
         const series = get(UserOptions).series;
         const colorByPoint = get(ColorByPoint);
@@ -197,7 +203,7 @@
                 });
             }
         });
-        updateChartConfig(Chart, { series });
+       // updateChartConfig(Chart, { series });
     });
 </script>
 

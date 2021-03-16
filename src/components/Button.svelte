@@ -29,10 +29,13 @@
         background-color: #fff;
         color: var(--brand-primary, #000);
         border: 1px solid var(--brand-primary, #000);
-
+    }
+    .gray {
+        /*color: var(--brand-primary, #000);*/
+        background-color: var(--background-medium, lightgray);
     }
 </style>
-<button {value} class="button-component" class:secondary="{type == 'secondary'}" class:primary="{type == 'primary'}" role="button" on:click="{clickHandler}" title="{title}" style="{style}" >
+<button {value} class="button-component" class:secondary="{type == 'secondary'}" class:primary="{type == 'primary'}" class:gray="{type == 'gray'}" role="button" on:click="{clickHandler}" title="{title}" style="{style}" >
     {#if iconID}
     <Sprite width="15" id="{iconID}" style="{iconStyle}" />
     {/if}

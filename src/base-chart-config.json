@@ -1,6 +1,6 @@
 {
   "chart": {
-    "type": "column",
+    "type": "line",
     "className": "griffin",
     "height": "56.25%"
   },

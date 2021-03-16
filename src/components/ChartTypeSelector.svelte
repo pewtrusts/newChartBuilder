@@ -3,17 +3,17 @@
 </script>
 <script>
     import Dropdown from './Dropdown.svelte';
-    import { w } from './../store'; 
+    import { s } from './../store'; 
    export let chartTypes;
     let options = chartTypes.sort();
     let label = 'Chart type:';
     let selected;
     count++;
-    ChartType.subscribe(v => {
+    s.ChartType.subscribe(v => {
         selected = v;
     });
     function changeHandler(e){
-        ChartType.set(e.target.value);
+        s.ChartType.set(e.target.value);
     }
 </script>
 <style></style>

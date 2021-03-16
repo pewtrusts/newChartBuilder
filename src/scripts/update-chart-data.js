@@ -29,6 +29,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
     // map of x-axis values as coerced to dates.
     // info: intervals was used to set specific tick points until i found the more immediate
     // and simpler issue was the startOfWeek setting. keeping here as comments for later
+    const storesToSet = [];
     if ( datatableData ){
         s.DatatableData.set(datatableData);
     } else {
@@ -95,18 +96,22 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
         return rtn;
     });
     if (shouldBeDateTime) {
-        s.XAxisType.set('datetime');
-        s.XAxisCategories.set(null);
+        storesToSet.push(['XAxisType', 'datetime'],['XAxisCategories',null]);
+       // s.XAxisType.set('datetime');
+       // s.XAxisCategories.set(null);
         // to do this may not work if xAxis userOptions have already been passed to Chart
        // newConfig.xAxis = { type: 'datetime', categories: null };
     } else if (shouldBeCategorical) {
        // newConfig.xAxis = { type: 'category', categories: data.slice(1).map(row => row[0]) };
-        s.XAxisType.set('category');
-        s.XAxisCategories.set(data.slice(1).map(row => row[0]));
+        storesToSet.push(['XAxisType', 'category'], ['XAxisCategories', data.slice(1).map(row => row[0])]);
+        // s.XAxisType.set('category');
+        // s.XAxisCategories.set(data.slice(1).map(row => row[0]));
     }
     else {
-        s.XAxisType.set('linear');
-        s.XAxisCategories.set(null);
+      //  s.XAxisType.set('linear');
+      //  s.XAxisCategories.set(null);
+        
+        storesToSet.push(['XAxisType', 'linear'], ['XAxisCategories', null]);
        // newConfig.xAxis = { type: 'linear', categories: null }; // TO DO : handle other data types ie categorical. will later be able to be set sepaarately, too
         // so you will not want to override explicitly set options
     }
@@ -114,28 +119,33 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
         if ([...intervals][0] === timeUnits.week) {
             let dayIndex = +Chart.time.dateFormat('%w', asDateTime[0]);
             //newConfig.xAxis.startOfWeek = dayIndex;
-            s.StartOfWeek.set(dayIndex);
+            //s.StartOfWeek.set(dayIndex);
+            storesToSet.push(['StartOfWeek',dayIndex])
         }
     }
-    s.XAxisTitle.set(data[0][0] || '');
     /* 
-     COMMENTING THIS OUT. startOfWeek SETTING WAS THE MORE IMMEDIATE ISSUE. SAVING FOR PSSIBLE ALETR USE
+    COMMENTING THIS OUT. startOfWeek SETTING WAS THE MORE IMMEDIATE ISSUE. SAVING FOR PSSIBLE ALETR USE
     if (intervals && intervals.size == 1) {
-         let positions = series[0].data.map(d => d.x);
-         newConfig.xAxis.tickPositions = positions;
-         newConfig.xAxis.labels = {
-             formatter: function () {
-                 this.dateTimeLabelFormat = '%b %e'; // TO DO: gonna need logic to select the right datetimeFormat
-                 return Chart.xAxis[0].defaultLabelFormatter.call(this);
-             }
-         };
-         //newConfig.xAxis.labels = { formatter: () => 'foo bar' };
-     }*/
+        let positions = series[0].data.map(d => d.x);
+        newConfig.xAxis.tickPositions = positions;
+        newConfig.xAxis.labels = {
+            formatter: function () {
+                this.dateTimeLabelFormat = '%b %e'; // TO DO: gonna need logic to select the right datetimeFormat
+                return Chart.xAxis[0].defaultLabelFormatter.call(this);
+            }
+        };
+        //newConfig.xAxis.labels = { formatter: () => 'foo bar' };
+    }*/
     //TODO: if datetime will have to adjust dateTimeLabelFormats for x-axis and tooltip, and tooltip.xDateFormat
+    //  extendObj(newConfig, ['legend','enabled'], series.length > 1);
+      //extendObj(newConfig, ['tooltip', 'pointFormatter'], returnPointFormatter({numberFormat: numberFormat, seriesLength: series.length}));
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
+    
+    storesToSet.forEach(d => {
+        s[d[0]].set(d[1]);
+    })
+    s.XAxisTitle.set(data[0][0] || '');
     s.LegendEnabled.set(series.length > 1);
     s.TooltipFormatter.set(returnPointFormatter({ numberFormat: numberFormat, seriesLength: series.length }))
-  //  extendObj(newConfig, ['legend','enabled'], series.length > 1);
-    //extendObj(newConfig, ['tooltip', 'pointFormatter'], returnPointFormatter({numberFormat: numberFormat, seriesLength: series.length}));
     s.ChartSeries.set(series);
 } 

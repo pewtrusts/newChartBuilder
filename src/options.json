@@ -1,6 +1,7 @@
 {
     "chart": {
-        "styledMode": true
+        "styledMode": true,
+        "className": "griffin"
     },
     "credits": {
         "enabled": false
@@ -16,6 +17,13 @@
             "b", 
             "t"
         ]
+    },
+    "legend": {
+        "itemMarginBottom": 0,
+        "symbolHeight": 16,
+        "symbolRadius": 0,
+        "squareSymbol": true,
+        "symbolWidth": 16
     },
     "tooltip": {
         "dateTimeLabelFormats": {
@@ -36,5 +44,8 @@
             "week": "%b %e" 
         }
        
+    },
+    "yAxis": {
+        "title": null
     }
 }
