@@ -65,6 +65,9 @@
     let notices = new Set();
     s.NominalMinHeight.subscribe(v => {
         nominalMinHeight = v;
+        if ( Chart ){
+            setRealMinHeight(v);
+        }
     });
     function setRealHeight(nominal){
         const calc = _setRealHeight(nominal);
@@ -74,12 +77,12 @@
     }
     onMount(() => {
         checkHeight = function(isLoad){
-           /* requestIdleCallback(() => {
+           requestIdleCallback(() => {
                 setRealHeight(nominalHeightValue);
                 if (!isLoad){
                     setRealMinHeight(nominalMinHeight);
                 }
-            },{timeout:500});*/
+            },{timeout:500});
         };
         function _set(){
             if ( Chart ){
@@ -175,12 +178,11 @@
         */
     });
     function setRealMinHeight(nominal){
-      //  const value = _setRealMinHeight(nominal);
-      //  s.MinHeight.set(value);
+      const value = _setRealMinHeight(nominal);
+      s.MinHeight.set(value);
     }
     function minHeightHandler(){
         s.NominalMinHeight.set(this.value);
-        setRealMinHeight(this.value);
     }
   /*  s.MinHeight.subscribe(v => {
         minHeight = v;

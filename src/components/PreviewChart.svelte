@@ -79,11 +79,11 @@
     export let size;
     let chartContainer;
     let classes = [];
-    let chartLabel;
-    let chartTitle;
-    let chartSubtitle;
-    let chartNotes;
-    let chartSources;
+    let chartLabel = 'Figure XX';
+    let chartTitle = 'This is the figure title.';
+    let chartSubtitle = 'This is the dek';
+    let chartNotes = 'using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts because Highcharts can mutate it, especially when the chart';
+    let chartSources = 'using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts because Highcharts can mutate it, especially when the chart';
     let chartCredit;
     let notices = new Set();
     let previousWidth;
@@ -97,7 +97,11 @@
         minHeight = v;
     });*/
     onMount(() => {
-     //   requestIdleCallback(() => {
+         /**
+          *  using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts
+          *  because Highcharts can mutate it, especially when the chart's responsive options are in
+          *  effect. perhaps better not to use a writable store for this value?
+          */
             const config = get(s.ChartConfig);
             const _Chart = createChart(chartContainer, _.cloneDeep(config));
             window.Charts.push(_Chart);
@@ -105,7 +109,6 @@
                 Chart = _Chart;
                 _Chart.isFullscreen = true;
             }
-     //   });
     });
     afterUpdate(() => {
         if (Chart && previousWidth && chartWidth !== previousWidth) {
@@ -161,19 +164,19 @@
         return chartSources.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;');
     })();*/
     s.ChartLabel.subscribe((v) => {
-        chartLabel = v;
+    //    chartLabel = v;
     });
     s.ChartTitle.subscribe((v) => {
-        chartTitle = v;
+      //  chartTitle = v;
     });
     s.ChartSubtitle.subscribe((v) => {
-        chartSubtitle = v;
+      //  chartSubtitle = v;
     });
     s.ChartNotes.subscribe((v) => {
-        chartNotes = v;
+      //  chartNotes = v;
     });
     s.ChartSources.subscribe((v) => {
-        chartSources = v;
+    //    chartSources = v;
     });
     s.ChartCredit.subscribe((v) => {
         chartCredit = v;

@@ -248,7 +248,7 @@
             </div>
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
-                <!--<PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>-->
+                <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
          <!--   <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 

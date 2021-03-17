@@ -37,8 +37,8 @@ s.ChartConfig.subscribe(v => {
     ['ChartSeries', [], 'series'],
     ['ChartType', baseConfig.chart.type, 'chart.type'],
     ['LegendEnabled', true, 'legend.enabled'],
-    ['MinHeight', 450, 'responsive.rules[0].chartOptions.chart.height'],
-    ['MinHeightCondition', 450, 'responsive.rules[0].condition.maxHeight'],
+    ['MinHeight', 0, 'responsive.rules[0].chartOptions.chart.height'],
+    ['MinHeightCondition', 0, 'responsive.rules[0].condition.maxHeight'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],
     ['StartOfWeek', 1, 'xAxis.startOfWeek'],
     ['TooltipFormatter', returnPointFormatter({numberFormat: undefined, seriesLength: 2}), 'tooltip.pointFormatter' ],
@@ -53,7 +53,7 @@ s.ChartConfig.subscribe(v => {
  *  Stores that correspond to settings in the Griffin configuration object saved with charts
  */
 [
-    ['NominalMinHeight', '366'],
+    ['NominalMinHeight', '400'],
     ['ChartWidth', '650'],
     ['ChartProject', undefined],
     ['DatatableData', []],
