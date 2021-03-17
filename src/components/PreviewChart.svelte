@@ -7,12 +7,14 @@
     import HCExporting from "highcharts/modules/exporting";
     import HCOfflineExporting from "highcharts/modules/offline-exporting";
     import options from "@Project/options.json";
-   // import config from "@Project/base-chart-config.json";
+    // import config from "@Project/base-chart-config.json";
     import { s } from "./../store";
     import { get } from "svelte/store";
     import { onMount, afterUpdate } from "svelte";
     import updateChartConfig from "../scripts/update-chart-config";
     import Notices from "./Notices.svelte";
+    import cloneDeep from 'lodash.clonedeep';
+    const _= {cloneDeep};
     let chartCount = 0;
     window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
     HCExporting(Highcharts);
@@ -91,13 +93,13 @@
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
-    s.MinHeight.subscribe((v) => {
+    /*s.MinHeight.subscribe((v) => {
         minHeight = v;
-    });
+    });*/
     onMount(() => {
      //   requestIdleCallback(() => {
             const config = get(s.ChartConfig);
-            const _Chart = createChart(chartContainer, config);
+            const _Chart = createChart(chartContainer, _.cloneDeep(config));
             window.Charts.push(_Chart);
             if (size == "fullscreen") {
                 Chart = _Chart;

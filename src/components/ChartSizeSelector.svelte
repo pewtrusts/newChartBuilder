@@ -74,12 +74,12 @@
     }
     onMount(() => {
         checkHeight = function(isLoad){
-            requestIdleCallback(() => {
+           /* requestIdleCallback(() => {
                 setRealHeight(nominalHeightValue);
                 if (!isLoad){
                     setRealMinHeight(nominalMinHeight);
                 }
-            },{timeout:500});
+            },{timeout:500});*/
         };
         function _set(){
             if ( Chart ){
@@ -90,7 +90,7 @@
                 }, 200);
             }
         }
-        _set();
+       // _set();
         s.LoadedDataConfig.subscribe(() => {
             if (!Chart) return;
             checkHeight(true);
@@ -175,16 +175,16 @@
         */
     });
     function setRealMinHeight(nominal){
-        const value = _setRealMinHeight(nominal);
-        s.MinHeight.set(value);
+      //  const value = _setRealMinHeight(nominal);
+      //  s.MinHeight.set(value);
     }
     function minHeightHandler(){
         s.NominalMinHeight.set(this.value);
         setRealMinHeight(this.value);
     }
-    s.MinHeight.subscribe(v => {
+  /*  s.MinHeight.subscribe(v => {
         minHeight = v;
-        
+        */
         /*if (Chart){
             let config = get(UserOptions);
             config.responsive.rules[0] = {
@@ -199,7 +199,7 @@
             };
             updateChartConfig(Chart, config);
         }*/
-    });
+  //  });
 </script>
 <style>
     select {

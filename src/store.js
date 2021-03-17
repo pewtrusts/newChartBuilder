@@ -19,11 +19,13 @@ function createWritable({ name, value, config }, configType) {
         s[name].subscribe(v => {
             const chartConfig = get(s.ChartConfig);
             extendObj(chartConfig, config.split('.'), v);
+            console.log(name);
             s.ChartConfig.set(chartConfig);
         });
     }
 }
 s.ChartConfig.subscribe(v => {
+    console.log(v);
     window.chartConfig = v;
 });
 
@@ -35,8 +37,8 @@ s.ChartConfig.subscribe(v => {
     ['ChartSeries', [], 'series'],
     ['ChartType', baseConfig.chart.type, 'chart.type'],
     ['LegendEnabled', true, 'legend.enabled'],
-    ['MinHeight', 300, 'responsive.rules[0].chartOptions.chart.height'],
-    ['MinHeightCondition', 300, 'responsive.rules[0].condition.maxHeight'],
+    ['MinHeight', 450, 'responsive.rules[0].chartOptions.chart.height'],
+    ['MinHeightCondition', 450, 'responsive.rules[0].condition.maxHeight'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],
     ['StartOfWeek', 1, 'xAxis.startOfWeek'],
     ['TooltipFormatter', returnPointFormatter({numberFormat: undefined, seriesLength: 2}), 'tooltip.pointFormatter' ],
@@ -70,9 +72,9 @@ s.ChartConfig.subscribe(v => {
  * Stores that govern app state but are not saved as HC or Griffin configuration with charts
  */
 /* TO DO :  instead of newChart config, you can more simply reset hc config and griffin config to defaults */
-s.newChartConfig = {
+/*s.newChartConfig = {
     config: "{\"highchartsConfig\":{\"title\":null,\"chart\":{\"type\":\"column\"},\"credits\":{\"enabled\":false},\"yAxis\":{\"title\":null},\"series\":[{\"name\":\"Apples\",\"data\":[{\"y\":2},{\"y\":1},{\"y\":15}],\"colorIndex\":0},{\"name\":\"Oranges\",\"data\":[{\"y\":13},{\"y\":7},{\"y\":5}],\"colorIndex\":1},{\"name\":\"Peaches\",\"data\":[{\"y\":4},{\"y\":10},{\"y\":2}],\"colorIndex\":2}],\"xAxis\":{\"title\":{\"text\":\"\"},\"type\":\"category\",\"categories\":[\"Spring\",\"Summer\",\"Fall\"]}},\"griffinConfig\":{\"chartCredit\":\"© 2021 The Pew Charitable Trusts and the Urban Institute\",\"chartDescription\":\"Bar chart showing that most apples are harvested in the fall.\",\"chartLabel\":\"Figure 1\",\"chartNotes\":\"Some of the increase in apples harvested is due to unusually high rainfall in September. See <a href=\\\"http://example.com\\\">this report</a>.\",\"chartSources\":\"Source: John Adams, <em>Economics</em>, 1789.\",\"chartSubtitle\":\"Fruits by season\",\"chartTitle\":\"Most Apples Are Harvested in the Fall\",\"customColors\":[],\"selectedColorPalette\":\"default\",\"numberFormat\":\"default\"}}",
-};
+};*/
 s.PrintWidth = writable(undefined);
 s.PrintHeight = writable(undefined);
 s.CellBeingEdited = writable(null);

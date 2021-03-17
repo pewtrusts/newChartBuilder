@@ -42,7 +42,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
     const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
     const shouldBeCategorical = !shouldBeDateTime && data.slice(1).every(row => typeof row[0] == 'string');
     if (shouldBeDateTime) {
-        s.XAxisType.set('datetime');
+       // s.XAxisType.set('datetime');
         intervals = asDateTime.reduce(function (acc, cur, i, array) {
             if (i === 0) {
                 return acc;
@@ -51,10 +51,6 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
             return acc;
         }, new Set());
         console.log(intervals);
-    } else if (shouldBeCategorical) {
-        s.XAxisType.set('categorical');
-    } else {
-        s.XAxisType.set('linear');
     }
     const series = data[0].slice(1).map((valueColumn, i) => {
         var rtn;
@@ -103,7 +99,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
        // newConfig.xAxis = { type: 'datetime', categories: null };
     } else if (shouldBeCategorical) {
        // newConfig.xAxis = { type: 'category', categories: data.slice(1).map(row => row[0]) };
-        storesToSet.push(['XAxisType', 'category'], ['XAxisCategories', data.slice(1).map(row => row[0])]);
+        storesToSet.push(['XAxisType', 'categorical'], ['XAxisCategories', data.slice(1).map(row => row[0])]);
         // s.XAxisType.set('category');
         // s.XAxisCategories.set(data.slice(1).map(row => row[0]));
     }

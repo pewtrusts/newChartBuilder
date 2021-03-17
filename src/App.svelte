@@ -1,9 +1,6 @@
 <script context="module">
     import {s} from './store';
     import Banner from "./components/Banner.svelte";
-    import Text from './components/Text.svelte';
-    import Start from './components/Start.svelte';
-    import ListSavedCharts from './components/ListSavedCharts.svelte';
     import DataTable from "@Component/DataTable.svelte";
     import SpriteDefs from "./sprite.svelte";
     import brandOptions from "./brand-options.json";
@@ -11,19 +8,22 @@
     import DataInput from "@Component/DataInput.svelte";
     import SectionHead from "@Component/SectionHead.svelte";
     import Nav from "@Component/Nav.svelte";
-    import SaveChart from "@Component/SaveChart.svelte";
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
-    import Code from '@Component/Code.svelte';
-    import Colors from '@Component/Colors.svelte';
-    import VerifySave from '@Component/VerifySave.svelte';
-    import Dialog from '@Component/Dialog.svelte';
-    import Print from '@Component/Print.svelte';
-    import Settings from '@Component/Settings.svelte';
     import ChartSizeSelector from '@Component/ChartSizeSelector.svelte';
-    import PrintChart from '@Component/PrintChart.svelte';
-    import {ActiveSection, IsWorking, ChartWidth} from './store';
     import { onMount } from 'svelte';
-    import getImageData from './scripts/get-image-data';
+//  import Text from './components/Text.svelte';
+    //  import Start from './components/Start.svelte';
+    //  import ListSavedCharts from './components/ListSavedCharts.svelte';
+   // import SaveChart from "@Component/SaveChart.svelte";
+ //   import Code from '@Component/Code.svelte';
+ //   import Colors from '@Component/Colors.svelte';
+ //   import VerifySave from '@Component/VerifySave.svelte';
+ //   import Dialog from '@Component/Dialog.svelte';
+ //   import Print from '@Component/Print.svelte';
+ ///   import Settings from '@Component/Settings.svelte';
+ //   import PrintChart from '@Component/PrintChart.svelte';
+ //   import {ActiveSection, IsWorking, ChartWidth} from './store';
+  //  import getImageData from './scripts/get-image-data';
     function picClickHandler(){
         s.IsWorking.set(true);
         requestIdleCallback(getImageData, { timeout: 2000 });
@@ -248,7 +248,7 @@
             </div>
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
                 <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
-                <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+                <!--<PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>-->
             </div>
          <!--   <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 
