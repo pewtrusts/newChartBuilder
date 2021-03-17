@@ -72,7 +72,7 @@
 </script>
 
 <script>
-
+    export let chartResolve;
     export let Chart;
     export let seriesCountMismatchNotice;
     export let chartWidth;
@@ -106,11 +106,12 @@
             const _Chart = createChart(chartContainer, _.cloneDeep(config));
             window.Charts.push(_Chart);
             if (size == "fullscreen") {
-                Chart = _Chart;
                 _Chart.isFullscreen = true;
+                chartResolve(_Chart);
             }
     });
-    afterUpdate(() => {
+    afterUpdate(async () => {
+        await Chart;
         if (Chart && previousWidth && chartWidth !== previousWidth) {
             Chart.reflow();
         }
@@ -140,8 +141,9 @@
     function containerUse() {
        
     }
-    s.ChartConfig.subscribe(v => {
-        if ( Chart ){
+    s.ChartConfig.subscribe(async (v) => {
+      //  if ( Chart ){
+            await Chart;
             window.cancelIdleCallback(redrawTimeout);
             redrawTimeout = window.requestIdleCallback(() => {
                 window.Charts.forEach(chart => {
@@ -152,7 +154,7 @@
             window.Charts.forEach(chart => {
                 chart.update(v, false, true, true);
             });
-        }
+     //   }
     });
     /*function replaceFn(_, p1, p2){
         return `<a href="${p1}">${p2.replace(/\//g, '/&#8203')}</a>`;
@@ -191,8 +193,9 @@
             updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
         }
     })*/
-    s.ColorIndeces.subscribe((v) => { // TO DO : how are you gonna handle this?
-        if (!v || !Chart) return;
+    s.ColorIndeces.subscribe(async (v) => { // TO DO : how are you gonna handle this?
+        await Chart;
+        if (!v) return;
         const series = get(UserOptions).series;
         const colorByPoint = get(ColorByPoint);
         series.forEach((s, i) => {

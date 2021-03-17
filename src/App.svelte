@@ -45,8 +45,10 @@
 
 <script>
 
-    
-    let Chart = "";
+    let chartResolve;
+    let Chart = new Promise(function(resolve){
+        chartResolve = resolve;
+    });
     let showDataInput = false;
     let showVerify = false;
     let verifyPromise;
@@ -247,8 +249,8 @@
                 <ChartSizeSelector bind:checkHeight {Chart}/>
             </div>
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
-                <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
-                <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+                <PreviewChart bind:Chart {chartResolve} {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
+                <PreviewChart {Chart} {chartResolve} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
          <!--   <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 

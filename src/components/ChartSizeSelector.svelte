@@ -63,11 +63,10 @@
         type: 'warning'
     };
     let notices = new Set();
-    s.NominalMinHeight.subscribe(v => {
+    s.NominalMinHeight.subscribe(async (v) => {
+        await Chart;
         nominalMinHeight = v;
-        if ( Chart ){
-            setRealMinHeight(v);
-        }
+        setRealMinHeight(v);
     });
     function setRealHeight(nominal){
         const calc = _setRealHeight(nominal);
@@ -75,29 +74,21 @@
         notices = notices;
         s.ChartHeight.set(calc.value);
     }
-    onMount(() => {
-        checkHeight = function(isLoad){
-           requestIdleCallback(() => {
-                setRealHeight(nominalHeightValue);
-                if (!isLoad){
-                    setRealMinHeight(nominalMinHeight);
-                }
-            },{timeout:500});
-        };
-        function _set(){
-            if ( Chart ){
-                setRealHeight(nominalHeightValue);
-            } else {
-                setTimeout(() => {
-                    _set();
-                }, 200);
+    checkHeight = async function(isLoad){
+        await Chart;
+        requestIdleCallback(() => {
+            setRealHeight(nominalHeightValue);
+            if (!isLoad){
+                setRealMinHeight(nominalMinHeight);
             }
-        }
-       // _set();
-        s.LoadedDataConfig.subscribe(() => {
-            if (!Chart) return;
-            checkHeight(true);
-        });
+        },{timeout:500});
+    };
+    onMount(() => {
+        checkHeight();
+    });
+    s.LoadedDataConfig.subscribe( async () => {
+        await Chart;
+        checkHeight(true);
     });
     $: widthValue = (function(){ // need to bind the selectors values for when charts are loaded
         if (chartWidth == undefined){
@@ -147,13 +138,12 @@
     function customHeightHandler(){
         setRealHeight(nominalCustomHeight);
     }
-    s.ChartWidth.subscribe(v => {
+    s.ChartWidth.subscribe(async (v) => {
         chartWidth = v;
-        if ( Chart ){
-            requestIdleCallback(() => {
-                setRealHeight(nominalHeightValue);
-            },{timeout: 500});
-        }
+        await Chart;
+        requestIdleCallback(() => {
+            setRealHeight(nominalHeightValue);
+        },{timeout: 500});
     });
     s.ChartHeight.subscribe(v => {
         chartHeight = v;
@@ -180,6 +170,7 @@
     function setRealMinHeight(nominal){
       const value = _setRealMinHeight(nominal);
       s.MinHeight.set(value);
+      s.MinHeightCondition.set(value);
     }
     function minHeightHandler(){
         s.NominalMinHeight.set(this.value);
