@@ -5,7 +5,6 @@
     import updateChartData from "@Script/update-chart-data.js";
     import EditableCell from "@Component/EditableCell.svelte";
     import { s } from "@Project/store";
-
     /* for testing data is being imported directly. will come from user input */
     const alphabet = [
         "A",
@@ -56,12 +55,7 @@
 </script>
 
 <script>
-    export let data = [
-        ["", "Apples", "Oranges", "Peaches"],
-        ["Spring", 2, 13, 4],
-        ["Summer", 1, 7, 10],
-        ["Fall", 15, 5, 2],
-    ];
+    export let data = _.cloneDeep(dummyData); // cloned to acoid mutating the dummyData which may be called later upon reset
     export let Chart;
     export let showDataInput;
     let chartType;

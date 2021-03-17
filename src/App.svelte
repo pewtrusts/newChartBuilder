@@ -11,8 +11,12 @@
     import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
     import ChartSizeSelector from '@Component/ChartSizeSelector.svelte';
     import { onMount } from 'svelte';
-//  import Text from './components/Text.svelte';
-    //  import Start from './components/Start.svelte';
+    import Start from './components/Start.svelte';
+    import cloneDeep from 'lodash.clonedeep';
+    const _= {cloneDeep};
+
+
+    //  import Text from './components/Text.svelte';
     //  import ListSavedCharts from './components/ListSavedCharts.svelte';
    // import SaveChart from "@Component/SaveChart.svelte";
  //   import Code from '@Component/Code.svelte';
@@ -24,7 +28,9 @@
  //   import PrintChart from '@Component/PrintChart.svelte';
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
   //  import getImageData from './scripts/get-image-data';
-    function picClickHandler(){
+
+
+  function picClickHandler(){
         s.IsWorking.set(true);
         requestIdleCallback(getImageData, { timeout: 2000 });
     }
@@ -40,6 +46,13 @@
         description: 'The selected chart type can only render one series, but the data supplied has more than one. Only the first series will be rendered.',
         type: 'warning'
     };
+    export const dummyData = [
+        ["", "Apples", "Oranges", "Peaches"],
+        ["Spring", 2, 13, 4],
+        ["Summer", 1, 7, 10],
+        ["Fall", 15, 5, 2],
+    ];
+
 
 </script> 
 
@@ -54,7 +67,7 @@
     let verifyPromise;
     let verifyResolve;
     let verifyReject;
-    let data;
+    let data = _.cloneDeep(dummyData);
     let leftColumn;  
     let datatableContainer = null;
     let sections = [];
@@ -193,10 +206,10 @@
             class="left-column ctn--inner flex flex-column flex-ac"
             style="flex-grow: 1;">
             <h1>Griffin Chart Builder</h1>
-          <!--  <section use:pushSection>
+            <section use:pushSection>
                 <SectionHead text="Start" />
-                <Start />
-            </section> -->
+                <Start {Chart} {checkHeight} bind:data />
+            </section>
             <section use:pushSection>
                 <SectionHead text="Data" />
                 {#if Chart}

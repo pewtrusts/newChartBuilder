@@ -1,11 +1,21 @@
 <script>
-import { ActiveSection } from '../store';
-import loadChart from '../scripts/load-chart';
+import { s, resetWritables} from '../store';
+import { dummyData } from './../App.svelte';
+import updateChartData from './../scripts/update-chart-data';
 import html from './start.md';
+import cloneDeep from 'lodash.clonedeep';
+const _= {cloneDeep};
+export let Chart;
+export let checkHeight;
+export let data;
 
-function clickHandler(){
-    loadChart();
-    ActiveSection.set({method: 'click', value: 'data'});
+async function clickHandler(){
+    await Chart;
+    resetWritables();
+    data = _.cloneDeep(dummyData);
+    updateChartData(data, Chart);
+    checkHeight();
+    s.ActiveSection.set({method: 'click', value: 'data'});
 }
 </script>
 <style>
