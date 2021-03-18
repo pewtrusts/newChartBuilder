@@ -69,7 +69,7 @@
     let verifyPromise;
     let verifyResolve;
     let verifyReject;
-    let data = _.cloneDeep(dummyData);
+    let data = _.cloneDeep(dummyData); // cloned to avoid mutating the dummyData which may be called later upon reset
     let leftColumn;  
     let datatableContainer = null;
     let sections = [];

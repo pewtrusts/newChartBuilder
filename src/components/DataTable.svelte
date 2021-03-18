@@ -55,15 +55,17 @@
 </script>
 
 <script>
-    export let data = _.cloneDeep(dummyData); // cloned to acoid mutating the dummyData which may be called later upon reset
     export let Chart;
+    export let data; 
+    export let datatableContainer;
+    export let seriesCountMismatchNotice;
     export let showDataInput;
+   
     let chartType;
     let xAxisType = "linear";
-    export let datatableContainer;
     let notices = new Set();
-    export let seriesCountMismatchNotice;
     let seriesCountMismatch = false;
+   
     function returnHeadClass(i) {
         if (
             data.slice(1).every((row) => {
@@ -90,29 +92,12 @@
         console.log({ e, data });
         updateChartData(data, Chart);
     }
-    
-    s.LoadedDataConfig.subscribe(v => {
-        /**
-         * TO DO: NONCATEGORICAL
-        */
-        if (!v) return;
-        //xaxis type == categorical
-        const _data = [
-            [(v.xAxis.title ? v.xAxis.title.text : ''), ...v.series.map(d => d.name)],
-            ...v.xAxis.categories.map((c,i) => [c, ...v.series.map(s => s.data[i].y)])
-        ];
-        data = v.datatableData || _data;
-        updateChartData(_data, Chart, data);
-
-    })
     s.ChartType.subscribe(v => {
         if (v == 'pie' && chartType !== 'pie' ) {
             let _data = _transpose(data);
             updateChartData(_transpose(_data.slice(0,2)), Chart, data);
         } else if ( chartType == 'pie' && v !== 'pie' ) {
-           // setTimeout(() => {
-                updateChartData(data, Chart);
-           // },1000); // what;s going on here? any way to simplify?
+            updateChartData(data, Chart);
         }
         chartType = v;
     });
@@ -123,6 +108,12 @@
         seriesCountMismatch = v;
         notices[v ? 'add' : 'delete'](seriesCountMismatchNotice);
         notices = notices;
+    });
+    s.DatatableData.subscribe(v => {
+        if ( v.length == 0) {
+            return;
+        }
+        data = v;
     });
     updateChartData(data, Chart);
 </script>
