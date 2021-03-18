@@ -117,6 +117,9 @@
    label {
        display: block;
    }
+   .submit {
+    display: block;
+   }
 </style>
 <!--<Notices {notices} />-->
 {#await savedCharts}
@@ -139,7 +142,7 @@
         </datalist>
         <input
             type="submit"
-            class="button button--primary"
+            class="button button--primary submit"
             value="Save chart"
             bind:this="{saveButton}"
         />
