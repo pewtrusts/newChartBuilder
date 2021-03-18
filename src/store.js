@@ -29,11 +29,8 @@ function createWritable({ name, value, config }, configType) {
         });
     }
 }
-s.ChartConfig = writable({}),
-s.ChartConfig.subscribe(v => { // TO DO CAN BE REMOVED
-    console.log(v);
-    window.chartConfig = v;
-});
+s.ChartConfig = writable({});
+
 export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
     ['ChartSeries', [], 'series'],
@@ -134,7 +131,9 @@ function initDerived(){
         },{});
         return rtn;
     });
-    
+    s.GriffinConfig.subscribe(() => {
+        s.ChartHasBeenSaved.set(false);
+    });
     s.SeriesCountFromTable = derived([s.DatatableData], ([datatableData]) => {
         return datatableData.length < 2 ? 0 : datatableData[0].length - 1;
     });
@@ -165,16 +164,6 @@ function initDerived(){
     });
     s.Classes = derived([s.ChartPaletteClassname, s.ChartProject], function(){
         return arguments[0].map(d => slugger(d));
-    });
-    /**
-     * to do: when there's a series count mismatch, append the datatable data to the griffin config so it can be loaded back in
-     */
-    /**
-     * TO DO : THIS SHOULD BE UNNECESSARY NOW. USE ALL GSTORES
-     */
-    
-    s.GriffinConfig.subscribe(() => {
-        s.ChartHasBeenSaved.set(false);
     });
     //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
     s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail]) => {
@@ -251,26 +240,3 @@ function initDerived(){
 
 initWritables();
 initDerived();
-/*
-s.importConfig = { // THIS SHOULD BECOME UNNECESSARY
-    ChartCredit: s.ChartCredit,
-    ChartDescription: s.ChartDescription,
-    SelectedColorPalette: s.SelectedColorPalette,
-    ChartLabel: s.ChartLabel,
-    ChartNotes: s.ChartNotes,
-    ChartSources: s.ChartSources,
-    ChartSubtitle: s.ChartSubtitle,
-    ChartTitle: s.ChartTitle,
-    ColorByPoint: s.ColorByPoint,
-    ColorIndeces: s.ColorIndeces,
-    CustomColors: s.CustomColors,
-    UserOptions: s.UserOptions,
-    NumberFormat: s.NumberFormat,
-    ChartWidth: s.ChartWidth,
-    NominalMinHeigh: s.NominalMinHeight
-};*/
-/*s.UserOptions.subscribe(() => {
-    s.ChartHasBeenSaved.set(false);
-    if (!v || !v.chart || !v.chart.type) return;
-    s.ChartType.set(v.chart.type);
-});*/

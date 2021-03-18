@@ -134,29 +134,13 @@
        
     }
     s.ChartConfig.subscribe(async (v) => {
-      //  if ( Chart ){
-            await Chart;
-         //   clearTimeout(redrawTimeout);
-            window.cancelIdleCallback(redrawTimeout);
-         //   redrawTimeout = setTimeout(() => {
-            redrawTimeout = window.requestIdleCallback(() => {
-                //if (!isLoading){
-                    _Chart.redraw()
-                //}
-            },{timeout:1000});
-         //   }, 500);
-            _Chart.update(v, false, true);
-     //   }
+        await Chart;
+        window.cancelIdleCallback(redrawTimeout);
+        redrawTimeout = window.requestIdleCallback(() => {
+            _Chart.redraw()
+        },{timeout:1000});
+        _Chart.update(v, false, true);
     });
-    /*function replaceFn(_, p1, p2){
-        return `<a href="${p1}">${p2.replace(/\//g, '/&#8203')}</a>`;
-    }*/
-    /* '<a href="$1">$2</a><span class="print-only">, $1</span>')
-            .replace(/(\/)/g, '/&#8203;' )*/
-    /*$:modifiedChartSources = (function(){
-        //return chartSources.replace(/<a href="(.*?)">(.*?)<\/a>/g, replaceFn);
-        return chartSources.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;');
-    })();*/
     s.ChartLabel.subscribe((v) => {
         chartLabel = v;
     });
