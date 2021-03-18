@@ -88,7 +88,7 @@
     function closeHandler(){
         showDataInput = false;
     }
-    updateChartData(data, Chart);
+   // updateChartData(data, Chart);
     /* for dev only */
     if ( dataFile ) {
         submitHandler();
