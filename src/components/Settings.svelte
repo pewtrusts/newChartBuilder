@@ -1,28 +1,27 @@
 <script context="module">
     import Login from './Login.svelte'
-    import { ChartProject, Stacking } from './../store';
+    import { s } from './../store';
     function stackingHandler(){
         const value = this.value == 'none' ? undefined : this.value;
-        Stacking.set(value);
+        s.Stacking.set(value);
     }
 </script>
 <script>
     export let savedCharts;
     let project;
     let stacking;
-    ChartProject.subscribe(v => {
+    s.ChartProject.subscribe(v => {
         project = v;
     });
-    Stacking.subscribe(v => {
+    s.Stacking.subscribe(v => {
         stacking = v;
     });
     function changeHandler(){
-        ChartProject.set(this.value);
+        s.ChartProject.set(this.value);
     }
 </script>
 <style>
     label {
-        font-weight: 900;
         display: block;
     }
 </style>
@@ -36,6 +35,7 @@
     id="project-list--settings"
     name="project"
     list="saved-projects"
+    type="text"
     on:change="{changeHandler}"
 />
 <p>

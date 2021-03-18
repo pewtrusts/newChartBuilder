@@ -13,31 +13,47 @@ function searchObject(key, obj){
     }, obj);
 }
 export default function _loadChart(data){
+    const storesToSet = [];
     resetWritables(); 
-   // s.IsLoading.set(true);
+    //s.IsLoading.set(true);
     const config = JSON.parse(data.config);
     const HCConfig = config.highchartsConfig;
     const griffinConfig = config.griffinConfig;
-    HCStores.forEach(store => {
-        const value = searchObject(store[2], HCConfig); // store[2] is the stringified rep of the property, ie, `chart.type`
-        if ( value !== null ) {
-            s[store[0]].set(value);
-        }
-    });
-    Object.keys(griffinConfig).forEach(key => {
-        const Key = key.charAt(0).toUpperCase() + key.slice(1);
-        if (s[Key] && s[Key].set ){
-            s[Key].set(griffinConfig[key]);
-        }
-        // TODO: figure out chartPalette classname etc
-    });
-   /* setTimeout(() => {
-        window.Charts.forEach(chart => {
-            chart.redraw(true);
-            s.PictureIsMissingOrOld.set(true)
+    //window.requestIdleCallback(() => {
+        HCStores.forEach(store => {
+            const value = searchObject(store[2], HCConfig); // store[2] is the stringified rep of the property, ie, `chart.type`
+            if ( value !== null ) {
+                storesToSet.push([s[store[0]], value]);
+                //s[store[0]].set(value);
+            }
         });
-    }, 1000)*/ //NECESSARY?
-    //s.IsLoading.set(false);
+        Object.keys(griffinConfig).forEach(key => {
+            const Key = key.charAt(0).toUpperCase() + key.slice(1);
+            if (s[Key] && s[Key].set ){
+                storesToSet.push([s[Key], griffinConfig[key]]);
+                //s[Key].set(griffinConfig[key]);
+            }
+            // TODO: figure out chartPalette classname etc
+        });
+        //s.IsLoading.set(false);
+        storesToSet.forEach(d => {
+            if (d[0] !== s.ChartSeries){
+                d[0].set(d[1]);
+            } else {
+                window.requestIdleCallback(() => {
+                    d[0].set(d[1]);
+                }, {timeout: 1000})
+            }
+        });
+  //  },{timeout: 1000});
+    //setTimeout(() => {
+    /*    window.requestIdleCallback(() => {
+            window.Charts.forEach(chart => {
+                chart.redraw(true);
+                s.PictureIsMissingOrOld.set(true)
+            });
+        }, {timeout: 1000});*/
+    //}, 1000);
 
 }
 

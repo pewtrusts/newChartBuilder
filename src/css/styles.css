@@ -139,6 +139,19 @@ a:hover {
     text-decoration: underline;
 }
 
+input[type="text"], input[type="number"], select {
+ 		border: 1px solid #ccc;
+        border-radius: 0;
+        line-height: 1.5;
+        color: var(--text-color, #000);
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+		min-height: 25px;
+}
+
+label {
+	font-weight: 900;
+}
 .image-export .griffin-figure a {
 	transition: none;
 	color: inherit;

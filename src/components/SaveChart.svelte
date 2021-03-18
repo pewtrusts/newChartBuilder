@@ -114,18 +114,9 @@
     console.log(resolveSaved);
 </script>
 <style>
-    label {
-        font-weight: 900;
-    }
-    .datalist-input {
-        display: block;
-        border: 1px solid #ccc;
-        border-radius: 0;
-        line-height: 1.5;
-        color: var(--text-color, #000);
-        font-size: 0.85rem;
-        margin-bottom: 0.5rem;
-    }
+   label {
+       display: block;
+   }
 </style>
 <!--<Notices {notices} />-->
 {#await savedCharts}
@@ -135,11 +126,11 @@
         <label for="project-list">Project name (select existing or add a new one):</label>
         <input
             bind:value={project}
-            class="datalist-input"
-            required
+            required    
             id="project-list"
             name="project"
             list="saved-projects"
+            type="text"
         />
         <datalist id="saved-projects">
             {#each returnProjects(value.data) as project}

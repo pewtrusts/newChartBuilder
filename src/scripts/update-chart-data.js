@@ -136,12 +136,17 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
     //  extendObj(newConfig, ['legend','enabled'], series.length > 1);
       //extendObj(newConfig, ['tooltip', 'pointFormatter'], returnPointFormatter({numberFormat: numberFormat, seriesLength: series.length}));
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
-    
+    storesToSet.push(
+        ['XAxisTitle', data[0][0] || ''],
+        ['LegendEnabled', series.length > 1],
+        ['TooltipFormatter', returnPointFormatter({ numberFormat: numberFormat, seriesLength: series.length })],
+        ['ChartSeries', series]
+    );
+   /* s.XAxisTitle.set(data[0][0] || '');
+    s.LegendEnabled.set(series.length > 1);
+    s.TooltipFormatter.set(returnPointFormatter({ numberFormat: numberFormat, seriesLength: series.length }))
+    s.ChartSeries.set(series);*/
     storesToSet.forEach(d => {
         s[d[0]].set(d[1]);
     })
-    s.XAxisTitle.set(data[0][0] || '');
-    s.LegendEnabled.set(series.length > 1);
-    s.TooltipFormatter.set(returnPointFormatter({ numberFormat: numberFormat, seriesLength: series.length }))
-    s.ChartSeries.set(series);
 } 

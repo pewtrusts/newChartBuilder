@@ -77,6 +77,7 @@
     export let seriesCountMismatchNotice;
     export let chartWidth;
     export let size;
+    let _Chart;
     let chartContainer;
     let classes = [];
     let chartLabel = 'Figure XX';
@@ -107,7 +108,7 @@
           *  effect. perhaps better not to use a writable store for this value?
           */
             const config = get(s.ChartConfig);
-            const _Chart = createChart(chartContainer, _.cloneDeep(config));
+            _Chart = createChart(chartContainer, _.cloneDeep(config));
             window.Charts.push(_Chart);
             if (size == "fullscreen") {
                 _Chart.isFullscreen = true;
@@ -148,18 +149,16 @@
     s.ChartConfig.subscribe(async (v) => {
       //  if ( Chart ){
             await Chart;
+         //   clearTimeout(redrawTimeout);
             window.cancelIdleCallback(redrawTimeout);
+         //   redrawTimeout = setTimeout(() => {
             redrawTimeout = window.requestIdleCallback(() => {
-                if (!isLoading){
-                    window.Charts.forEach(chart => {
-                        chart.redraw(true);
-                        s.PictureIsMissingOrOld.set(true)
-                    });
-                }
-            }, {timeout: 500});
-            window.Charts.forEach(chart => {
-                chart.update(v, false, true, true);
-            });
+                //if (!isLoading){
+                    _Chart.redraw()
+                //}
+            },{timeout:1000});
+         //   }, 500);
+            _Chart.update(v, false, true);
      //   }
     });
     /*function replaceFn(_, p1, p2){

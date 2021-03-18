@@ -18,6 +18,7 @@
     import SaveChart from "@Component/SaveChart.svelte";
     import SectionHead from "@Component/SectionHead.svelte";
     import Start from './components/Start.svelte';
+    import Settings from '@Component/Settings.svelte';
 
 
     //  import Text from './components/Text.svelte';
@@ -26,7 +27,6 @@
  //   import VerifySave from '@Component/VerifySave.svelte';
  //   import Dialog from '@Component/Dialog.svelte';
  //   import Print from '@Component/Print.svelte';
- ///   import Settings from '@Component/Settings.svelte';
  //   import PrintChart from '@Component/PrintChart.svelte';
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
   //  import getImageData from './scripts/get-image-data';
@@ -218,11 +218,11 @@
                     <DataTable bind:datatableContainer bind:showDataInput bind:Chart bind:data {seriesCountMismatchNotice} />
                 {/if}
             </section>
-<!--        <section use:pushSection>
+            <section use:pushSection>
                 <SectionHead text="Settings" />
                 <Settings {savedCharts}/> 
             </section> 
-            <section use:pushSection>
+            <!--<section use:pushSection>
                 <SectionHead text="Text" />
                 <Text bind:checkHeight />
             </section>
