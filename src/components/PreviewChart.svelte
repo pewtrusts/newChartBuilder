@@ -122,19 +122,6 @@
         }
         previousWidth = chartWidth;
     });
-    /*s.NumberFormat.subscribe((v) => {
-        const formatter = returnFormatter(v);
-        if (Chart) {
-            updateChartConfig(Chart, {
-                yAxis: {
-                    labels: {
-                        formatter,
-                    },
-                },
-            });
-        }
-        console.log(Chart);
-    });*/
     s.SeriesCountMismatch.subscribe((v) => {
         notices[v ? "add" : "delete"](seriesCountMismatchNotice);
         notices = notices;

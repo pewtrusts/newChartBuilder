@@ -4,6 +4,7 @@ import { writable, derived, get } from 'svelte/store';
 import baseConfig from './base-chart-config.json';
 import { extendObj } from './griffin/griffin';
 import returnPointFormatter from './griffin/scripts/return-point-formatter';
+import returnNumberFormatter from './griffin/scripts/return-number-formatter';
 
 export const s = {};
 export const hMap = {};
@@ -45,7 +46,8 @@ export const HCStores = [
     ['TooltipFormatter', returnPointFormatter({ numberFormat: undefined, seriesLength: 2 }), 'tooltip.pointFormatter'],
     ['XAxisCategories', null, 'xAxis.categories'],
     ['XAxisTitle', '', 'xAxis.title.text'],
-    ['XAxisType', 'linear', 'xAxis.type']
+    ['XAxisType', 'linear', 'xAxis.type'],
+    ['YAxisLabelsFormatter', returnNumberFormatter(undefined), 'yAxis.labels.formatter']
 ];
 const GStores = [
     ['NominalMinHeight', '400'],
@@ -106,7 +108,17 @@ function initWritables(){
         createWritable({ name: d[0], value: d[1], config: d[2] });
     });
     
+    s.NumberFormat.subscribe(v => {
+        const seriesLength = get(s.ChartSeries).lengthk
+        s.YAxisLabelsFormatter.set(returnNumberFormatter(v));
+        s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
+    });
 } // end initWritables
+
+/**
+ * subscriptions to writables
+ */
+
 
 function initDerived(){
     
