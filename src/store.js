@@ -33,7 +33,7 @@ s.ChartConfig.subscribe(v => { // TO DO CAN BE REMOVED
     console.log(v);
     window.chartConfig = v;
 });
-const HCStores = [
+export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
     ['ChartSeries', [], 'series'],
     ['ChartType', baseConfig.chart.type, 'chart.type'],
@@ -49,6 +49,7 @@ const HCStores = [
 ];
 const GStores = [
     ['NominalMinHeight', '400'],
+    ['NominalHeightValue', '56.25%'],
     ['ChartWidth', '650'],
     ['ChartProject', undefined],
     ['DatatableData', []],
@@ -78,7 +79,8 @@ const appStores = [
     ['Picture', ''],
     ['PictureIsMissingOrOld', true],
     ['Thumbnail', ''],
-    ['NumberFormat', undefined]
+    ['NumberFormat', undefined],
+    ['IsLoading', false]
 ];
 
 function initWritables(){
@@ -153,7 +155,8 @@ function initDerived(){
         s.SeriesCountMismatch,
         s.NumberFormat,
         s.ChartWidth,
-        s.NominalMinHeight 
+        s.NominalMinHeight,
+        s.NominalHeightValue
     ], ([
         chartCredit,
         chartDescription, 
@@ -168,7 +171,8 @@ function initDerived(){
         seriesCountMismatch,
         numberFormat,
         chartWidth ,
-        nominalMinHeight
+        nominalMinHeight,
+        nominalHeightValue
     ]) => {
         const obj =  {
             chartCredit,
@@ -183,7 +187,8 @@ function initDerived(){
             datatableData,
             numberFormat,
             chartWidth,
-            nominalMinHeight 
+            nominalMinHeight,
+            nominalHeightValue 
         };
         if (!seriesCountMismatch){
             delete obj.datatableData;
@@ -195,12 +200,12 @@ function initDerived(){
         s.ChartHasBeenSaved.set(false);
     });
     //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
-    s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.UserOptions, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, userOptions, griffinConfig, thumbnail]) => {
+    s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail]) => {
         return {
             type: chartType,
             hed: chartTitle,
             config: JSON.stringify({
-                highchartsConfig: userOptions,
+                highchartsConfig: chartConfig,
                 griffinConfig
             }),
             thumbnail

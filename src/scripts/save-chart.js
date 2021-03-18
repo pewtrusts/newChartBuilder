@@ -1,11 +1,11 @@
 /* global gapi */
-import { IsWorking, SavingChartData } from './../store';
+import { s } from './../store';
 import { get } from 'svelte/store';
-import s from './../secrets.json';
+import sec from './../secrets.json';
 
 export function saveChart({ googleSheetHeaders, userId, userEmail, userName, project }) {
-    IsWorking.set(true);
-    const _savingChartData = get(SavingChartData);
+    s.IsWorking.set(true);
+    const _savingChartData = get(s.SavingChartData);
     _savingChartData.timestamp = new Date().getTime();
     _savingChartData.user_email = userEmail;
     _savingChartData.user_id = userId;
@@ -14,7 +14,7 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
 
     return gapi.client.sheets.spreadsheets.values
         .append({
-            spreadsheetId: s.GoogleSheets.sheetId,
+            spreadsheetId: sec.GoogleSheets.sheetId,
             range: "Sheet1",
             valueInputOption: "RAW",
             resource: {
@@ -23,7 +23,7 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
         })
         .then(
             () => {
-                IsWorking.set(false);
+                s.IsWorking.set(false);
                 //getSavedCharts(true);
                 return _savingChartData;
             },
@@ -35,7 +35,7 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
 }
 export function deletePrevious(loadedChart) {
     return gapi.client.sheets.spreadsheets.batchUpdate({
-        spreadsheetId: s.GoogleSheets.sheetId,
+        spreadsheetId: sec.GoogleSheets.sheetId,
         resource: {
             "requests": [{
                 "deleteRange": {

@@ -1,7 +1,7 @@
 /* global CanvasPngCompression */
 import html2canvas from 'html2canvas';
 import 'canvas-png-compression';
-import {IsWorking, Picture, PictureIsMissingOrOld, Thumbnail} from './../store';
+import { s } from './../store';
 CanvasPngCompression.replaceToDataURL();
 // polyfill to add PNG compression level to Canvas toDataUri method
 // 0 => high compression; 1 => none;
@@ -69,7 +69,7 @@ export default function _getImageData(){
         }),
     ];
     return Promise.all(promises).then(([full2,full1,mobile2,mobile1, thumbnail]) => {
-        Picture.set(`
+        s.Picture.set(`
         <picture class="fullscreen">
             <source srcset="${full1.toDataURL("image/webp", 0.3)} 1x, ${full2.toDataURL("image/webp", 0.3)} 2x"> 
             <img style="${fsMargins}" width="100%" src="${full1.toDataURL("image/webp", 0.3)}">
@@ -79,8 +79,8 @@ export default function _getImageData(){
             <img style="${mbMargins}" width="100%" src="${mobile1.toDataURL("image/webp", 0.3)}">
         </picture>
         `);
-        Thumbnail.set(thumbnail.toDataURL("image/png", 0));
-        IsWorking.set(false);
-        PictureIsMissingOrOld.set(false);
+        s.Thumbnail.set(thumbnail.toDataURL("image/png", 0));
+        s.IsWorking.set(false);
+        s.PictureIsMissingOrOld.set(false);
     });
 }

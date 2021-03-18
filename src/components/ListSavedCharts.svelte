@@ -3,12 +3,13 @@
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import { returnProjects } from './SaveChart.svelte';
     import Login from './Login.svelte';
+    import { s } from './../store';
     export function loginHandler(){
         gapi.auth2.getAuthInstance().signIn();
     }
 </script>
 <script>
-    import s from './../secrets.json';
+    import sec from './../secrets.json';
     import LoadChart from './LoadChart.svelte';
     export let resolveSaved;
     export let savedCharts;
@@ -22,9 +23,9 @@
     let projectFilter = 'any';
     let typeFilter = 'any';
     let creatorFilter = 'any';
-    let isWorking = true;
-    const CLIENT_ID = s.GoogleSheets.ID
-    const API_KEY = s.GoogleSheets.key;
+    let isWorking = false;
+    const CLIENT_ID = sec.GoogleSheets.ID
+    const API_KEY = sec.GoogleSheets.key;
 
     // Array of API discovery doc URLs for APIs used by the quickstart
     const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -45,6 +46,7 @@
         googleSheetHeaders = sheetsData.googleSheetHeaders;
     }
     function initClient() {
+        s.IsWorking.set(true);
         gapi.client.init({
             apiKey: API_KEY,
             clientId: CLIENT_ID,
@@ -61,7 +63,7 @@
                 getSavedCharts();
                 updateCurrentUser();
             } else {
-                isWorking = false;
+                s.IsWorking.set(false);
             }
         }, function(error) {
             console.log(JSON.stringify(error, null, 2));
@@ -80,7 +82,7 @@
         }
     } 
     function listMounted(){
-        isWorking = false;
+        s.IsWorking.set(false)
     }
     function updateCurrentUser(){
         const user = instance.currentUser.get();
@@ -175,7 +177,7 @@
 <svelte:head>
     <script async defer src="https://apis.google.com/js/api.js" on:load="{loadHandler}"></script>
 </svelte:head>
-<section class:isWorking class="container">
+<section class="container">
     {#await savedCharts}
         <Login reason="to load saved charts" />
     {:then value}
@@ -217,7 +219,7 @@
         {/if}
         {#if otherUserCharts.length > 0 }
         <h3>Your team&rsquo;s charts</h3>
-        <section class="chart-list">
+        <section class="chart-list" use:listMounted>
             {#each sortCharts(otherUserCharts) as data}
             <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
             {/each}

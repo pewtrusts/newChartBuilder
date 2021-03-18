@@ -90,6 +90,10 @@
     let chartHeight;
     let minHeight;
     let redrawTimeout;
+    let isLoading;
+    s.IsLoading.subscribe(v => {
+        isLoading = v;
+    });
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
@@ -111,9 +115,9 @@
             }
     });
     afterUpdate(async () => {
-        await Chart;
-        if (Chart && previousWidth && chartWidth !== previousWidth) {
-            Chart.reflow();
+        const _Chart = await Chart;
+        if (previousWidth && chartWidth !== previousWidth) {
+            _Chart.reflow();
         }
         previousWidth = chartWidth;
     });
@@ -146,10 +150,12 @@
             await Chart;
             window.cancelIdleCallback(redrawTimeout);
             redrawTimeout = window.requestIdleCallback(() => {
-                window.Charts.forEach(chart => {
-                    chart.redraw(true);
-                    s.PictureIsMissingOrOld.set(true)
-                });
+                if (!isLoading){
+                    window.Charts.forEach(chart => {
+                        chart.redraw(true);
+                        s.PictureIsMissingOrOld.set(true)
+                    });
+                }
             }, {timeout: 500});
             window.Charts.forEach(chart => {
                 chart.update(v, false, true, true);

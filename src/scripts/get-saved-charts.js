@@ -1,15 +1,15 @@
 /* global gapi */
-import { IsWorking } from './../store';
-import s from './../secrets.json';
+//import { s } from './../store';
+import sec from './../secrets.json';
 
 let resolveSaved;
 export default function _init(props){
     resolveSaved = props.resolveSaved;
 }
 export function getSavedCharts() {
-    IsWorking.set(true);
+    //s.IsWorking.set(true);
     return gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: s.GoogleSheets.sheetId,
+        spreadsheetId: sec.GoogleSheets.sheetId,
         range: 'Sheet1',
     }).then(function (response) {
         const googleSheetHeaders = response.result.values[0];
@@ -22,7 +22,7 @@ export function getSavedCharts() {
         });
         console.log(data);
         resolveSaved({data, googleSheetHeaders});
-        IsWorking.set(false);
+       // s.IsWorking.set(false);
         return true; // TO DO : rather than passing resolveSaved into this context could have returned the necessary data and chained onto
                      // a `then()` in the original context
     }, function (response) {

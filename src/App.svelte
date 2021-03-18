@@ -1,24 +1,26 @@
 <script context="module">
-    import {s} from './store';
-    import Banner from "./components/Banner.svelte";
-    import DataTable from "@Component/DataTable.svelte";
-    import SpriteDefs from "./sprite.svelte";
-    import brandOptions from "./brand-options.json";
-    import PreviewChart from "./components/PreviewChart.svelte";
-    import DataInput from "@Component/DataInput.svelte";
-    import SectionHead from "@Component/SectionHead.svelte";
-    import Nav from "@Component/Nav.svelte";
-    import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
-    import ChartSizeSelector from '@Component/ChartSizeSelector.svelte';
     import { onMount } from 'svelte';
-    import Start from './components/Start.svelte';
     import cloneDeep from 'lodash.clonedeep';
     const _= {cloneDeep};
+    
+    import SpriteDefs from "./sprite.svelte";
+    import brandOptions from "./brand-options.json";
+    import {s} from './store';
+    
+    import Banner from "./components/Banner.svelte";
+    import ChartSizeSelector from '@Component/ChartSizeSelector.svelte';
+    import ChartTypeSelector from '@Component/ChartTypeSelector.svelte';
+    import DataInput from "@Component/DataInput.svelte";
+    import DataTable from "@Component/DataTable.svelte";
+    import ListSavedCharts from './components/ListSavedCharts.svelte';
+    import Nav from "@Component/Nav.svelte";
+    import PreviewChart from "./components/PreviewChart.svelte";
+    import SaveChart from "@Component/SaveChart.svelte";
+    import SectionHead from "@Component/SectionHead.svelte";
+    import Start from './components/Start.svelte';
 
 
     //  import Text from './components/Text.svelte';
-    //  import ListSavedCharts from './components/ListSavedCharts.svelte';
-   // import SaveChart from "@Component/SaveChart.svelte";
  //   import Code from '@Component/Code.svelte';
  //   import Colors from '@Component/Colors.svelte';
  //   import VerifySave from '@Component/VerifySave.svelte';
@@ -218,8 +220,8 @@
             </section>
 <!--        <section use:pushSection>
                 <SectionHead text="Settings" />
-                <Settings {savedCharts}/>
-            </section>
+                <Settings {savedCharts}/> 
+            </section> 
             <section use:pushSection>
                 <SectionHead text="Text" />
                 <Text bind:checkHeight />
@@ -231,7 +233,7 @@
             <section use:pushSection>
                 <SectionHead text="Code" />
                 <Code {pictureIsMissingOrOldNotice} bind:dialog {clickSave} />
-            </section>
+            </section> -->
             <section use:pushSection>
                 <SectionHead text="Save" />
                 <SaveChart 
@@ -250,7 +252,7 @@
                     bind:clickSave
                 />
             </section>
-            <section use:pushSection>
+    <!--        <section use:pushSection>
                 <SectionHead text="Print" />
                 <Print bind:enablePrint/>
             </section>-->
@@ -265,7 +267,7 @@
                 <PreviewChart bind:Chart {chartResolve} {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
                 <PreviewChart {Chart} {chartResolve} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
-         <!--   <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
+            <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 
                     bind:resolveSaved
                     bind:savedCharts 
@@ -277,7 +279,7 @@
                     bind:getSavedCharts
                 />
             </div>
-            {#if enablePrint && activeSection == 'print'}
+          <!--  {#if enablePrint && activeSection == 'print'}
                 <PrintChart />
             {/if}-->
         </div>

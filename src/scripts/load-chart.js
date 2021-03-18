@@ -1,13 +1,49 @@
-import { SelectedColorPalette, importConfig, LoadedDataConfig, newChartConfig, ChartHeight, MinHeight, Stacking } from './../store';
-import { writableMap } from './../store';
-import addCustomColorProperties from './../griffin/scripts/addCustomColorProperties';
+import { HCStores, s, resetWritables } from './../store';
+//import addCustomColorProperties from './../griffin/scripts/addCustomColorProperties';
 function searchObject(key, obj){
     return key.split('.').reduce(function(acc,cur){
-        return acc && acc[cur] !== undefined ? acc[cur] : null;
+        const split = cur.split('[');
+        if (split.length == 1) { // ie no index, not an array
+            return acc && acc[cur] !== undefined ? acc[cur] : null;
+        } else {
+            let prop = split[0];
+            let index = parseInt(split[1]);
+            return acc && acc[prop] && acc[prop][index] ? acc[prop][index] : null;
+        }
     }, obj);
 }
-export default function _loadChart(data = newChartConfig){ // New chart will use newChartConfig ie pass in no param
-    console.log(importConfig);
+export default function _loadChart(data){
+    resetWritables(); 
+   // s.IsLoading.set(true);
+    const config = JSON.parse(data.config);
+    const HCConfig = config.highchartsConfig;
+    const griffinConfig = config.griffinConfig;
+    HCStores.forEach(store => {
+        const value = searchObject(store[2], HCConfig); // store[2] is the stringified rep of the property, ie, `chart.type`
+        if ( value !== null ) {
+            s[store[0]].set(value);
+        }
+    });
+    Object.keys(griffinConfig).forEach(key => {
+        const Key = key.charAt(0).toUpperCase() + key.slice(1);
+        if (s[Key] && s[Key].set ){
+            s[Key].set(griffinConfig[key]);
+        }
+        // TODO: figure out chartPalette classname etc
+    });
+   /* setTimeout(() => {
+        window.Charts.forEach(chart => {
+            chart.redraw(true);
+            s.PictureIsMissingOrOld.set(true)
+        });
+    }, 1000)*/ //NECESSARY?
+    //s.IsLoading.set(false);
+
+}
+
+/*
+
+console.log(gMap, hMap, importConfig);
     const config = JSON.parse(data.config);
     Object.keys(config.griffinConfig).forEach(key => {
         const Key = key.charAt(0).toUpperCase() + key.slice(1);
@@ -39,4 +75,5 @@ export default function _loadChart(data = newChartConfig){ // New chart will use
     MinHeight.set(config.highchartsConfig.responsive ? config.highchartsConfig.responsive.rules[0].chartOptions.chart.height : 366);
     LoadedDataConfig.set({ series: config.highchartsConfig.series, xAxis: config.highchartsConfig.xAxis, datatableData: config.griffinConfig.datatableData});
     console.log(config);
-}
+
+    */

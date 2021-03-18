@@ -11,7 +11,7 @@
      * 
      */
     import Login from './Login.svelte';
-    import { ActiveSection, PictureIsMissingOrOld, IsWorking, ChartHasBeenSaved, ChartProject } from './../store';
+    import { s } from './../store';
     import { getSavedCharts } from './../scripts/get-saved-charts';
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import getImageData from './../scripts/get-image-data';
@@ -39,7 +39,7 @@
 
     import { saveChart, deletePrevious } from './../scripts/save-chart';
     let pictureIsMissingOrOld;
-    PictureIsMissingOrOld.subscribe(v => {
+    s.PictureIsMissingOrOld.subscribe(v => {
         pictureIsMissingOrOld = v;
     });
     $: project = (function(){
@@ -49,10 +49,10 @@
         } else {
             rtn = loadedChart ? loadedChart.project : '';
         }
-        ChartProject.set(rtn);
+        s.ChartProject.set(rtn);
         return rtn;
     }());
-    ChartProject.subscribe(v => {
+    s.ChartProject.subscribe(v => {
         if (!v){
             return;
         }
@@ -61,7 +61,7 @@
     });
     function _saveChart(props){
         if ( pictureIsMissingOrOld ){
-            IsWorking.set(true);
+            s.IsWorking.set(true);
             requestIdleCallback(function(){
                 getImageData().then(() => {
                     saveChart(props).then(reloadCharts);
@@ -73,13 +73,13 @@
     }
     function reloadCharts(savedChart){
         loadedChart = savedChart;
-        ChartHasBeenSaved.set(true);
+        s.ChartHasBeenSaved.set(true);
         savedCharts = new Promise(function(resolve){
             resolveSaved = resolve;
         });
         initGetSavedCharts({resolveSaved});
         getSavedCharts().then(() => {
-            ActiveSection.set({method: 'click', value: 'start'});
+            s.ActiveSection.set({method: 'click', value: 'start'});
         });
     }
     function __saveChart(project){

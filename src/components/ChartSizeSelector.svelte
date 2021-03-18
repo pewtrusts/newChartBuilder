@@ -3,6 +3,7 @@
     let chart;
     let mobile;
     let mobileChart;
+    import { s } from './../store';
     export function _setRealHeight(nominal){
         fullscreen = fullscreen || document.querySelector('.js-fullscreen');
         chart = chart || fullscreen.querySelector('.js-hc-container');
@@ -42,7 +43,7 @@
      * LOAD saved charts.
      */
     import { onMount } from 'svelte';
-    import { s } from './../store';
+    
     import Notices from './Notices.svelte';
    // import { get } from 'svelte/store'
    // import updateChartConfig from '../scripts/update-chart-config';
@@ -53,9 +54,8 @@
     let nominalMinHeight;
     let chartWidth;
     let chartHeight;
-    let nominalHeightValue = '56.25%';
-    let nominalCustomHeight = '56.25%';
-    let customHeight = false;
+    let nominalHeightValue;
+    //let nominalCustomHeight;
     let customWidth = false;
     let outOfBoundsNotice = {
         label: 'Height value too small',
@@ -68,6 +68,11 @@
         nominalMinHeight = v;
         setRealMinHeight(v);
     });
+    s.NominalHeightValue.subscribe(v => {
+        nominalHeightValue = v;
+    });
+    $: heightSelectorValue = ['56.25%','100%'].includes(nominalHeightValue) ? nominalHeightValue : 'custom';
+    $: customHeight = heightSelectorValue == 'custom';
     function setRealHeight(nominal){
         const calc = _setRealHeight(nominal);
         notices[calc.warn ? 'add' : 'delete'](outOfBoundsNotice);
@@ -124,19 +129,19 @@
         s.ChartWidth.set(this.value);
     }
     function heightHandler(){
-         if (this.value == 'custom') {
-            customHeight = true;
+        if (this.value == 'custom') {
             return;
         }
-        customHeight = false;
         setRealHeight(this.value);
+        s.NominalHeightValue.set(this.value);
         //s.ChartHeight.set();
     }
     function customWidthHandler(){
         s.ChartWidth.set(this.value);
     }
     function customHeightHandler(){
-        setRealHeight(nominalCustomHeight);
+        setRealHeight(nominalHeightValue);
+        s.NominalHeightValue.set(nominalHeightValue);
     }
     s.ChartWidth.subscribe(async (v) => {
         chartWidth = v;
@@ -229,14 +234,14 @@
 <div>
     <label for="height-selector">Chart height:</label>
     <!-- svelte-ignore a11y-no-onchange -->
-    <select id="height-selector" on:change="{heightHandler}" name="chart-height" bind:value="{nominalHeightValue}">
+    <select id="height-selector" on:change="{heightHandler}" name="chart-height" bind:value="{heightSelectorValue}">
         <option value="56.25%">16:9 (56.25% width)</option>
         <option value="100%">Square (100% width)</option>
         <option value="custom">custom</option>
     </select>
     {#if customHeight }
         <form class="custom-height-form" on:submit|preventDefault="{customHeightHandler}">
-            <input placeholder="e.g., 100, 100px, 75%" type="text" bind:value="{nominalCustomHeight}" pattern="\d+|\d+px|\d+%|\d+\.\d+%"/>
+            <input placeholder="e.g., 100, 100px, 75%" type="text" bind:value="{nominalHeightValue}" pattern="\d+|\d+px|\d+%|\d+\.\d+%"/>
             <input class="button button--primary" type="submit">
         </form>
     {/if}

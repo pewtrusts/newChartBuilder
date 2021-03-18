@@ -1,6 +1,6 @@
 <script>
     import loadChart from '../scripts/load-chart';
-    import { ActiveSection } from './../store';
+    import { s } from './../store';
     export let data;
     export let loadedChart;
     export let disabled = false;
@@ -11,7 +11,7 @@
     function clickHandler(){
         loadedChart = data;
         loadChart(data);
-        ActiveSection.set({method: 'click', value: 'data'});
+        s.ActiveSection.set({method: 'click', value: 'data'});
     }
 </script>
 <style>
