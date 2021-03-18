@@ -10,6 +10,7 @@
     import Notices from './Notices.svelte';
     export let checkHeight;
     let quills = {};
+    let descProxy;
     let isDirtyNotice = {
         label: 'Unsaved changes',
         description: 'The form has changes that have not been applied yet to the chart. Hit the submit button for the changes to take effect.',
@@ -46,14 +47,27 @@
         'chartSources': '',
         'chartSubtitle': ''
     };
+    function proxyChange(){
+        s.DescriptionProxy.set(this.value);
+    }
     function inputHandler(){
         isDirty = true;
     }
     function submitHandler(e){
+        // disabled inputs are not included in FormData
+        // handle value from quill
         const data =  new FormData(this);
         for (let [name,value] of data) {
             console.log(name,value);
-            mapStores[name].set(parseLinks(value));
+            if ( descProxy == name){
+                mapStores.chartDescription.set(sanitizeHtml(value, {
+                    allowedTags: [],
+                    allowedAttributes: {}
+                }));
+            }
+            if ( mapStores[name]) {
+                mapStores[name].set(parseLinks(value));
+            }
         }
         isSubmitting = true;
         setTimeout(() => {
@@ -91,6 +105,9 @@
         });
         quills[controls] = editor;
     }
+    s.DescriptionProxy.subscribe(v => {
+        descProxy = v;
+    });
     s.ChartCredit.subscribe(v => {
         localValues.chartCredit = v;
         localValues = localValues;
@@ -165,6 +182,7 @@
     }
     textarea {
         width: 100%;
+        min-height: 70px;
     }
     textarea[name="chartNotes"], textarea[name="chartSources"]{
         display:none;
@@ -182,16 +200,33 @@
     .isSubmitting .checkmark {
         opacity: 1;
     }
+    .desc-proxy {
+        font-weight: normal;
+        margin-top: -0.9rem;
+        
+        color: #767676;
+    }
+    .desc-proxy input {
+        position: relative;
+        top: 1px;
+    }
+    .proxied {
+        opacity: 0.5;
+    }
 </style>
 <Notices {notices} />
 <form class:isDirty class:isSubmitting on:input="{inputHandler}" on:submit|preventDefault="{submitHandler}">
     <label>{brandOptions.chartLabelName}:<br /><input bind:value="{localValues.chartLabel}" placeholder="e.g., Figure 1" name="chartLabel" type="text"></label>
     <label>{brandOptions.chartTitleName}:<br /><input bind:value="{localValues.chartTitle}" placeholder="e.g., Most Apple Are Harvested in the Fall" name="chartTitle" type="text"></label>
+    <label class="desc-proxy"><input checked="{descProxy == 'chartTitle' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartTitle"> use as description</label>
     <label>{brandOptions.chartSubtitleName}:<br /><input bind:value="{localValues.chartSubtitle}" placeholder="e.g., Mix of fruit harvest by season" name="chartSubtitle" type="text"></label>
-    <label>Description:<br /><textarea required bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season." name="chartDescription" type="text"></textarea></label>
+    <label class="desc-proxy"><input checked="{descProxy == 'chartSubtitle' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartSubtitle"> use as description</label>
+    <label class:proxied="{descProxy !== 'chartDescription'}">Description:<br /><textarea disabled="{descProxy !== 'chartDescription' ? 'disabled' : null}" required="{descProxy == 'chartDescription' ? 'required' : null}" bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season. If other fields are descriptive enough you may choose them instead." name="chartDescription" type="text"></textarea></label>
+    <label style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartDescription' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartDescription"> use as description</label>
     <p class="label">Notes:</p>
     <textarea bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
     <div class="quill-container" use:initQuill="{{controls: 'chartNotes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
+    <label style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartNotes' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartNotes"> use as description</label>
     <p class="label">Sources:</p>
     <textarea bind:value="{localValues.chartSources}" name="chartSources" type="text"></textarea>
     <div class="quill-container" use:initQuill="{{controls: 'chartSources', placeholder: 'e.g., Source: John Adams, ABCs Are Easy, 1955'}}"></div>

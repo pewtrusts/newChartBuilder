@@ -63,6 +63,7 @@ const GStores = [
     ['ChartTitle', ''],
     ['ChartSources', ''],
     ['ChartSubtitle', ''],
+    ['DescriptionProxy', 'chartDescription']
 ];
 const appStores = [
     ['PrintWidth', undefined],
@@ -159,6 +160,9 @@ function initDerived(){
     /**
      * to do: when there's a series count mismatch, append the datatable data to the griffin config so it can be loaded back in
      */
+    /**
+     * TO DO : THIS SHOULD BE UNNECESSARY NOW. USE ALL GSTORES
+     */
     s.GriffinConfig = derived([
         s.ChartCredit,
         s.ChartDescription, 
@@ -174,7 +178,8 @@ function initDerived(){
         s.NumberFormat,
         s.ChartWidth,
         s.NominalMinHeight,
-        s.NominalHeightValue
+        s.NominalHeightValue,
+        s.DescriptionProxy
     ], ([
         chartCredit,
         chartDescription, 
@@ -190,7 +195,8 @@ function initDerived(){
         numberFormat,
         chartWidth ,
         nominalMinHeight,
-        nominalHeightValue
+        nominalHeightValue,
+        descriptionProxy
     ]) => {
         const obj =  {
             chartCredit,
@@ -206,7 +212,8 @@ function initDerived(){
             numberFormat,
             chartWidth,
             nominalMinHeight,
-            nominalHeightValue 
+            nominalHeightValue,
+            descriptionProxy 
         };
         if (!seriesCountMismatch){
             delete obj.datatableData;
