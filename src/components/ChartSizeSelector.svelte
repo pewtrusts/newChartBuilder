@@ -91,10 +91,10 @@
     onMount(() => {
         checkHeight();
     });
-    s.LoadedDataConfig.subscribe( async () => {
+    /*s.LoadedDataConfig.subscribe( async () => {
         await Chart;
         checkHeight(true);
-    });
+    });*/
     $: widthValue = (function(){ // need to bind the selectors values for when charts are loaded
         if (chartWidth == undefined){
             customWidth = false;

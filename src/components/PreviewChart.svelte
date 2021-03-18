@@ -80,11 +80,11 @@
     let _Chart;
     let chartContainer;
     let classes = [];
-    let chartLabel = 'Figure XX';
-    let chartTitle = 'This is the figure title.';
-    let chartSubtitle = 'This is the dek';
-    let chartNotes = 'using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts because Highcharts can mutate it, especially when the chart';
-    let chartSources = 'using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts because Highcharts can mutate it, especially when the chart';
+    let chartLabel;
+    let chartTitle;
+    let chartSubtitle;
+    let chartNotes;
+    let chartSources;
     let chartCredit;
     let notices = new Set();
     let previousWidth;
@@ -158,19 +158,19 @@
         return chartSources.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;');
     })();*/
     s.ChartLabel.subscribe((v) => {
-    //    chartLabel = v;
+        chartLabel = v;
     });
     s.ChartTitle.subscribe((v) => {
-      //  chartTitle = v;
+        chartTitle = v;
     });
     s.ChartSubtitle.subscribe((v) => {
-      //  chartSubtitle = v;
+        chartSubtitle = v;
     });
     s.ChartNotes.subscribe((v) => {
-      //  chartNotes = v;
+        chartNotes = v;
     });
     s.ChartSources.subscribe((v) => {
-    //    chartSources = v;
+        chartSources = v;
     });
     s.ChartCredit.subscribe((v) => {
         chartCredit = v;

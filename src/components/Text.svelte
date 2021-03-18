@@ -1,18 +1,11 @@
 <script>
     
-     /**
-      * to do: toggle view of htm vs styled and
-      * bind htm inout to display. either through clipboard convert or direct
-      * to innerHTML
-      */
-     
-
     import sanitizeHtml from 'sanitize-html';
     import 'quill/dist/quill.core.css';
     import 'quill/dist/quill.snow.css';
     import Quill from 'quill';
     import brandOptions from "./../brand-options.json";
-    import {ChartCredit, ChartDescription, ChartLabel, ChartNotes, ChartTitle, ChartSources, ChartSubtitle} from './../store';
+    import {s} from './../store';
     import Sprite from './Sprite.svelte';
     import Notices from './Notices.svelte';
     export let checkHeight;
@@ -36,13 +29,13 @@
         }
     };
     let mapStores = {
-        'chartCredit': ChartCredit,
-        'chartDescription': ChartDescription,
-        'chartLabel': ChartLabel,
-        'chartNotes': ChartNotes,
-        'chartTitle': ChartTitle,
-        'chartSources': ChartSources,
-        'chartSubtitle': ChartSubtitle
+        'chartCredit': s.ChartCredit,
+        'chartDescription': s.ChartDescription,
+        'chartLabel': s.ChartLabel,
+        'chartNotes': s.ChartNotes,
+        'chartTitle': s.ChartTitle,
+        'chartSources': s.ChartSources,
+        'chartSubtitle': s.ChartSubtitle
     };
     let localValues = {
         'chartCredit': '',
@@ -98,35 +91,35 @@
         });
         quills[controls] = editor;
     }
-    ChartCredit.subscribe(v => {
+    s.ChartCredit.subscribe(v => {
         localValues.chartCredit = v;
         localValues = localValues;
     });
-    ChartDescription.subscribe(v => {
+    s.ChartDescription.subscribe(v => {
         localValues.chartDescription = v;
         localValues = localValues;
     });
-    ChartLabel.subscribe(v => {
+    s.ChartLabel.subscribe(v => {
         localValues.chartLabel = v;
         localValues = localValues;
     });
-    ChartNotes.subscribe(v => {
+    s.ChartNotes.subscribe(v => {
         localValues.chartNotes = v;
         localValues = localValues;
         if (!quills.chartNotes) return;
-        quills.chartNotes.clipboard.dangerouslyPasteHTML(0, sanitizeHtml(v));
+        quills.chartNotes.clipboard.dangerouslyPasteHTML(sanitizeHtml(v));
     });
-    ChartTitle.subscribe(v => {
+    s.ChartTitle.subscribe(v => {
         localValues.chartTitle = v;
         localValues = localValues;
     });
-    ChartSources.subscribe(v => {
+    s.ChartSources.subscribe(v => {
         localValues.chartSources = v;
         localValues = localValues;
         if (!quills.chartSources) return;
-        quills.chartSources.clipboard.dangerouslyPasteHTML(0, sanitizeHtml(v));
+        quills.chartSources.clipboard.dangerouslyPasteHTML(sanitizeHtml(v));
     });
-    ChartSubtitle.subscribe(v => {
+    s.ChartSubtitle.subscribe(v => {
         localValues.chartSubtitle = v;
         localValues = localValues;
     });

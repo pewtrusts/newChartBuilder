@@ -19,9 +19,9 @@
     import SectionHead from "@Component/SectionHead.svelte";
     import Start from './components/Start.svelte';
     import Settings from '@Component/Settings.svelte';
+    import Text from './components/Text.svelte';
 
 
-    //  import Text from './components/Text.svelte';
  //   import Code from '@Component/Code.svelte';
  //   import Colors from '@Component/Colors.svelte';
  //   import VerifySave from '@Component/VerifySave.svelte';
@@ -222,11 +222,11 @@
                 <SectionHead text="Settings" />
                 <Settings {savedCharts}/> 
             </section> 
-            <!--<section use:pushSection>
-                <SectionHead text="Text" />
-                <Text bind:checkHeight />
-            </section>
             <section use:pushSection>
+                <SectionHead text="Text" />
+                <Text {checkHeight} />
+            </section>
+            <!--<section use:pushSection>
                 <SectionHead text="Colors" />
                 <Colors />
             </section>
