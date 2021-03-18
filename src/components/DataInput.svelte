@@ -11,10 +11,12 @@
 </script>
 
 <script>
+
     export let Chart;
     export let data;
     export let showDataInput;
     export let datatableContainer;
+   
     $: (function(){
         console.log(showDataInput);
     })();
@@ -28,6 +30,8 @@
         node.focus();
     }
     function submitHandler(){
+        var numberFormatIsSet = false;  
+        var row = -1;
         const inputString = dataFile ? '' : textarea.value.replace(/\r/g, ''); // remove /\r/s from Windows text
         if ( inputString === '' && !dataFile ){
             return; // TO DO: what should happen if empty string is submitted?
@@ -41,19 +45,36 @@
                 updateChartData(data, Chart);
             },
             transform(value, column){
+                var format;
+                function possiblySetFormat(){
+                    if (!numberFormatIsSet && row == 1) {
+                        s.NumberFormat.set(format);
+                        numberFormatIsSet = true;
+                    }
+                }
                 console.log({value,column});
-                if ( column == 0){
+                if ( column == 0 || value == ''){
                     return value;
+                }
+                if ( column == 1 ){
+                    row++;
                 }
                 const rtn = value.replace(/[,$%]/g, '').trim();
                 if ( value.slice(-1) == '%'){
-                    s.NumberFormat.set('percentage');
+                    format = 'percentage';
+                    possiblySetFormat();
                     return (+rtn * 0.01).toPrecision(14);
                 } else if ( value.charAt(0) == '$'){
-                    s.NumberFormat.set('currency');
-                } else {
-                    s.NumberFormat.set(undefined);
+                    format = 'currency';
+                    possiblySetFormat();
+                    return rtn;
                 }
+                /**
+                 *  avoids setting format on basis of first rows which is usually headers
+                 * would phaps be better to use papaparse with header set to true but then 
+                 * the data model would be as 1:1 with the datatable itself
+                */
+                possiblySetFormat()
                 return rtn;
             },
             skipEmptyLines: true,

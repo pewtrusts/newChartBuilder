@@ -25,9 +25,8 @@ export default function _loadChart(data){
         }
     });
     Object.keys(griffinConfig).forEach(key => {
-        const Key = key.charAt(0).toUpperCase() + key.slice(1);
-        if (s[Key] && s[Key].set ){
-            storesToSet.push([s[Key], griffinConfig[key]]);
+        if (s[key] && s[key].set ){
+            storesToSet.push([s[key], griffinConfig[key]]);
         }
         // TODO: figure out chartPalette classname etc
     });

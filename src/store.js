@@ -63,7 +63,8 @@ const GStores = [
     ['ChartTitle', ''],
     ['ChartSources', ''],
     ['ChartSubtitle', ''],
-    ['DescriptionProxy', 'chartDescription']
+    ['DescriptionProxy', 'chartDescription'],
+    ['NumberFormat', undefined],
 ];
 const appStores = [
     ['PrintWidth', undefined],
@@ -82,7 +83,6 @@ const appStores = [
     ['Picture', ''],
     ['PictureIsMissingOrOld', true],
     ['Thumbnail', ''],
-    ['NumberFormat', undefined],
     ['IsLoading', false]
 ];
 
@@ -110,9 +110,12 @@ function initWritables(){
     });
     
     s.NumberFormat.subscribe(v => {
-        const seriesLength = get(s.ChartSeries).lengthk
+        const seriesLength = get(s.ChartSeries).length;
         s.YAxisLabelsFormatter.set(returnNumberFormatter(v));
         s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
+    });
+    s.DatatableData.subscribe(v => {
+        console.log(v);
     });
 } // end initWritables
 
@@ -122,15 +125,21 @@ function initWritables(){
 
 
 function initDerived(){
+
+    s.GriffinConfig = derived(Object.values(gMap), function(){
+        const keys = Object.keys(gMap);
+        var rtn = arguments[0].reduce(function(acc,cur,i){
+            acc[keys[i]] = cur;
+            return acc;
+        },{});
+        return rtn;
+    });
     
     s.SeriesCountFromTable = derived([s.DatatableData], ([datatableData]) => {
         return datatableData.length < 2 ? 0 : datatableData[0].length - 1;
     });
-                                                /* SeriesCountFromTable is # of series from data passed in by user.
-                                                SeriesCount is # series sent to the Chart instance. e.g., pie charts
-                                                only pass in one series regardless of the SeriesCountFromTable */
-    s.SeriesCount = derived([s.ChartConfig], ([chartConfig]) => {
-        return !chartConfig.series ? 0 : chartConfig.series.length;
+    s.SeriesCount = derived([s.ChartSeries], ([chartSeries]) => {
+        return chartSeries.length;
     });
     s.SeriesCountMismatch = derived([s.SeriesCountFromTable, s.SeriesCount], ([seriesCountFromTable, seriesCount]) => {
         return seriesCountFromTable != seriesCount;
@@ -163,70 +172,13 @@ function initDerived(){
     /**
      * TO DO : THIS SHOULD BE UNNECESSARY NOW. USE ALL GSTORES
      */
-    s.GriffinConfig = derived([
-        s.ChartCredit,
-        s.ChartDescription, 
-        s.ChartLabel, 
-        s.ChartNotes,
-        s.ChartPaletteClassname,
-        s.ChartSources, 
-        s.ChartSubtitle,
-        s.ChartTitle,
-        s.CustomColors,
-        s.DatatableData,
-        s.SeriesCountMismatch,
-        s.NumberFormat,
-        s.ChartWidth,
-        s.NominalMinHeight,
-        s.NominalHeightValue,
-        s.DescriptionProxy
-    ], ([
-        chartCredit,
-        chartDescription, 
-        chartLabel, 
-        chartNotes,
-        chartPaletteClassname,
-        chartSources, 
-        chartSubtitle,
-        chartTitle,
-        customColors,
-        datatableData,
-        seriesCountMismatch,
-        numberFormat,
-        chartWidth ,
-        nominalMinHeight,
-        nominalHeightValue,
-        descriptionProxy
-    ]) => {
-        const obj =  {
-            chartCredit,
-            chartDescription, 
-            chartLabel, 
-            chartNotes,
-            chartPaletteClassname,
-            chartSources, 
-            chartSubtitle,
-            chartTitle,
-            customColors,
-            datatableData,
-            numberFormat,
-            chartWidth,
-            nominalMinHeight,
-            nominalHeightValue,
-            descriptionProxy 
-        };
-        if (!seriesCountMismatch){
-            delete obj.datatableData;
-        }
-        s.PictureIsMissingOrOld.set(true);
-        return obj;
-    });
+    
     s.GriffinConfig.subscribe(() => {
         s.ChartHasBeenSaved.set(false);
     });
     //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
     s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail]) => {
-        return {
+        const obj = {
             type: chartType,
             hed: chartTitle,
             config: JSON.stringify({
@@ -235,6 +187,7 @@ function initDerived(){
             }),
             thumbnail
         };
+        return obj;
     });
     s.CodeExport = derived([
         s.ChartCredit,
