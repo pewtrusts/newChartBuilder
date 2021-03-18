@@ -122,12 +122,18 @@ function initWritables(){
 
 function initDerived(){
     
-    s.SeriesCountFromTable = derived([s.DatatableData], ([datatableData]) => datatableData.length - 1);
+    s.SeriesCountFromTable = derived([s.DatatableData], ([datatableData]) => {
+        return datatableData.length < 2 ? 0 : datatableData[0].length - 1;
+    });
                                                 /* SeriesCountFromTable is # of series from data passed in by user.
                                                 SeriesCount is # series sent to the Chart instance. e.g., pie charts
                                                 only pass in one series regardless of the SeriesCountFromTable */
-    s.SeriesCount = derived([s.ChartConfig], ([chartConfig]) => !chartConfig.series ? 0 : chartConfig.series.length);
-    s.SeriesCountMismatch = derived([s.SeriesCountFromTable, s.SeriesCount], ([seriesCountFromTable, seriesCount]) => seriesCountFromTable != seriesCount);
+    s.SeriesCount = derived([s.ChartConfig], ([chartConfig]) => {
+        return !chartConfig.series ? 0 : chartConfig.series.length;
+    });
+    s.SeriesCountMismatch = derived([s.SeriesCountFromTable, s.SeriesCount], ([seriesCountFromTable, seriesCount]) => {
+        return seriesCountFromTable != seriesCount;
+    });
     s.MaxPointCount = derived([s.UserOptions], ([userOptions]) => {
         if ( !userOptions.series || userOptions.series.length == 0){
             return 0;
