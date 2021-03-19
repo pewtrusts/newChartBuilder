@@ -187,7 +187,7 @@
                 });
             }
         });
-       // updateChartConfig(Chart, { series });
+       s.ChartSeries.set(series);
     });
 </script>
 
