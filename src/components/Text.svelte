@@ -10,6 +10,8 @@
     import Notices from './Notices.svelte';
     export let checkHeight;
     let quills = {};
+    let descRadio;
+    let notesRadio;
     let invalidQuill;
     let descProxy;
     let isDirtyNotice = {
@@ -17,6 +19,10 @@
         description: 'The form has changes that have not been applied yet to the chart. Hit the submit button for the changes to take effect.',
         type: 'warning'
     };
+    let dummyResolve;
+    let dummy = new Promise(function(resolve){ // dummy div at end of component will resolve this Promise. the quill inits await it
+        dummyResolve = resolve;
+    });
     $:notices = (function(){
         const _notices = notices || new Set();
         _notices[isDirty ? 'add' : 'delete'](isDirtyNotice);
@@ -48,6 +54,9 @@
         'chartSources': '',
         'chartSubtitle': ''
     };
+    function resolveDummy(){
+        dummyResolve(true);
+    }
     function proxyChange(){
         s.DescriptionProxy.set(this.value);
     }
@@ -93,16 +102,38 @@
             invalidQuill = this.name;
         }
     }
-    function initQuill(node,{controls, placeholder}){
+    async function initQuill(node,{controls, placeholder}){
+        await dummy;
+        const nextFocus = node.parentElement.nextElementSibling;
+        const previousFocus = controls == 'chartNotes' ? descRadio : notesRadio;
         const formats = ['bold','italic','link', 'list'];
         const editor = new Quill(node, {
             theme: 'snow',
             formats,
             modules: {
+                keyboard: {
+                    bindings: {
+                        tab: {
+                            key: 9,
+                            handler: function(){
+                                console.log(nextFocus);
+                                nextFocus.focus();
+                            }
+                        },
+                        esc: {
+                            key: 27,
+                            handler: function(){
+                                console.log(previousFocus);
+                                previousFocus.focus();
+                            }
+                        }
+                    }
+                },
                 toolbar: ['bold','italic','link', 'list', { 'list': 'ordered'}, { 'list': 'bullet' }, 'clean'],
             },
             placeholder
         });
+       
         editor.on('text-change', function(delta, oldDelta, source) {
             /**
              * possibly detect HTML (presence of angle brackets) or Word
@@ -124,6 +155,10 @@
         /**
          * can you set a custome setter getter on the value property?
         */
+    }
+    function changeFocus(){
+        console.log(this);
+        quills[this.name].focus();
     }
     s.DescriptionProxy.subscribe(v => {
         descProxy = v;
@@ -191,12 +226,13 @@
         font-size: 0.85rem;
         color: var(--text-color, #000);
     }
+    .quill-wrapper {
+        z-index: 1;
+        background-color: #fff;
+    }
     .quill-container {
         width: 100%;
         height: 150px;
-    }
-    .quill-container {
-        
         width: 100%;
         margin-bottom: 0.5rem;
     }
@@ -205,8 +241,9 @@
         min-height: 70px;
     }
     textarea[name="chartNotes"], textarea[name="chartSources"]{
-       /* position: absolute;
-        visibility: hidden;*/
+        position: absolute;
+        z-index: -1;
+        /*visibility: hidden;*/
     }
     :global(.ql-editor){
         font-family: var(--font-primary, sans);
@@ -265,19 +302,22 @@
     <label>{brandOptions.chartSubtitleName}:<br /><input required="{descProxy == 'chartSubtitle' ? 'required' : null}" bind:value="{localValues.chartSubtitle}" placeholder="e.g., Mix of fruit harvest by season" name="chartSubtitle" type="text"></label>
     <label class="desc-proxy"><input checked="{descProxy == 'chartSubtitle' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartSubtitle"> use as description</label>
     <label class:proxied="{descProxy !== 'chartDescription'}">Description:<br /><textarea disabled="{descProxy !== 'chartDescription' ? 'disabled' : null}" required="{descProxy == 'chartDescription' ? 'required' : null}" bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season. If other fields are descriptive enough you may choose them instead." name="chartDescription" type="text"></textarea></label>
-    <label style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartDescription' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartDescription"> use as description</label>
+    <label bind:this="{descRadio}" style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartDescription' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartDescription"> use as description</label>
     <p class="label">Notes:</p>
-    <textarea use:setMutationObserver on:invalid="{invalid}" required="{descProxy == 'chartNotes' ? 'required' : null}" bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
-    <div class:required="{descProxy == 'chartNotes'}" class:invalid="{invalidQuill == 'chartNotes'}">
+    <textarea on:focus="{changeFocus}" tabindex="0" use:setMutationObserver on:invalid="{invalid}" required="{descProxy == 'chartNotes' ? 'required' : null}" bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
+    <div class="quill-wrapper" class:required="{descProxy == 'chartNotes'}" class:invalid="{invalidQuill == 'chartNotes'}">
         <div class="quill-container" use:initQuill="{{controls: 'chartNotes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
     </div>
-    <label style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartNotes' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartNotes"> use as description</label>
+    <label bind:this="{notesRadio}" style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartNotes' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartNotes"> use as description</label>
     <p class="label">Sources:</p>
     <textarea bind:value="{localValues.chartSources}" name="chartSources" type="text"></textarea>
-    <div class="quill-container" use:initQuill="{{controls: 'chartSources', placeholder: 'e.g., Source: John Adams, ABCs Are Easy, 1955'}}"></div>
+    <div class="quill-wrapper">
+        <div class="quill-container" use:initQuill="{{controls: 'chartSources', placeholder: 'e.g., Source: John Adams, ABCs Are Easy, 1955'}}"></div>
+    </div>
     <label>Credit:<br /><input bind:value="{localValues.chartCredit}" placeholder="e.g., © 2021 The Pew Charitable Trusts" name="chartCredit" type="text"></label>
     <input disabled="{isDirty ? null : 'disabled'}" class="button button--primary" type="submit">
     <div class="checkmark">
         <Sprite width="20" id="check" brandPrimary="{true}" />
     </div>
+    <div use:resolveDummy></div>
 </form>
