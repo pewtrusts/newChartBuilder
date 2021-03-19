@@ -49,7 +49,7 @@
     }
     function clickHandler(){
         const data =  new FormData(this);
-        console.log(Array.from(data.keys()));
+        
         if (data.has('chartDescription')){
             s.ChartDescription.set(data.get('chartDescription'));
         }

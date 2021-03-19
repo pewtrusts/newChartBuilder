@@ -2,7 +2,7 @@
     import {s} from './../store';
     import { get } from 'svelte/store';
     function changeHandler(e){
-        console.log(e.target.value);
+        
         s.SelectedColorPalette.set(e.target.value);
     }
     function swatchClick(){
@@ -10,10 +10,10 @@
     }
     function selectEvenlySpacedColors({seriesCount, colorCount}){
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i,arr) => 0 + Math.round(i * (colorCount - 1) / (arr.length - 1)));
-        console.log(colorIndeces);
+        
         s.ColorIndeces.set(colorIndeces);
     }
-    function resetColorIndeces(seriesCount){
+    export function resetColorIndeces(seriesCount){
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i) => i);
         s.ColorIndeces.set(colorIndeces);
     }
@@ -24,7 +24,6 @@
     export let defaultPaletteColorCount;
     let customSwatchStep = 360 / colorCount;
     let selectedPalette;
-    
     s.ChartType.subscribe(() => {
         checkColorIndeces(get(s.ColorCount));
     });
@@ -34,9 +33,6 @@
             let colorCount = get(s.ColorCount);
             checkColorIndeces(colorCount);
         }
-    });
-    s.ColorCount.subscribe(v => {
-        checkColorIndeces(v);
     });
     function checkColorIndeces(seriesCount){
         if (seriesCount  && selectedPalette == palette){

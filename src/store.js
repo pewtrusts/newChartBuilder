@@ -24,7 +24,7 @@ function createWritable({ name, value, config }, configType) {
         s[name].subscribe(v => {
             const chartConfig = get(s.ChartConfig);
             extendObj(chartConfig, config.split('.'), v);
-            console.log(name);
+            
             s.ChartConfig.set(chartConfig);
         });
     }
@@ -60,8 +60,10 @@ const GStores = [
     ['ChartTitle', ''],
     ['ChartSources', ''],
     ['ChartSubtitle', ''],
+    ['ColorIndeces', []],
     ['DescriptionProxy', 'chartDescription'],
     ['NumberFormat', undefined],
+    ['SelectedColorPalette', 'default'],
 ];
 const appStores = [
     ['PrintWidth', undefined],
@@ -71,8 +73,6 @@ const appStores = [
     ['ExportType', 'static'],
     ['ChartHasBeenSaved', false],
     ['ImageDataUri', ''],
-    ['SelectedColorPalette', 'default'],
-    ['ColorIndeces', undefined],
     ['Indicators', {}],
     ['IsWorking', false],
     ['ColorByPoint', []],
@@ -111,9 +111,10 @@ function initWritables(){
         s.YAxisLabelsFormatter.set(returnNumberFormatter(v));
         s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
     });
-    s.DatatableData.subscribe(v => {
+    s.ColorIndeces.subscribe(v => {
         console.log(v);
     });
+   
 } // end initWritables
 
 /**
@@ -149,12 +150,13 @@ function initDerived(){
         }
         return Math.max(...chartSeries.map(d => d.data.length));
     });
-    s.ColorCount = derived([s.MaxPointCount,s.ColorByPoint, s.SeriesCount], ([maxPointCount, colorByPoint, seriesCount]) => {
+   /* s.ColorCount = derived([s.MaxPointCount,s.ColorByPoint, s.SeriesCount], ([maxPointCount, colorByPoint, seriesCount]) => {
         if (colorByPoint[0] == true){
             return maxPointCount;
         }
         return seriesCount;
-    });
+    });*/
+    s.ColorCount = derived([s.ColorIndeces], ([colorIndeces]) => colorIndeces.length);
     s.ChartPaletteClassname = derived([s.SelectedColorPalette,s.CustomColors], ([selectedPalette, customColors]) => {
         if (selectedPalette !== 'custom') {
             return selectedPalette;
