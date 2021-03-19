@@ -86,6 +86,7 @@
             isDirty = false;
         }, 500);
         checkHeight();
+        s.PictureIsMissingOrOld.set(true);
     }
     function replaceFn(url){
         return `<a href="${url}">${url.replace(/(\/(?!\/)|[.-])/g, '$1&#8203;')}</a>`;

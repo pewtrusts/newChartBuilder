@@ -1,11 +1,11 @@
 <script>
-import { ActiveSection } from './../store';
+import { s } from './../store';
 import Button from "./Button.svelte";
 export let destroy;
 export let props;
 function clickHandler(){
     if (this.value == 'yes'){
-        ActiveSection.set({method: 'click', value: 'save'});
+        s.ActiveSection.set({method: 'click', value: 'save'});
         props.clickSave();
     }
     destroy();
