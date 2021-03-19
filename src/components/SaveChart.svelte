@@ -97,7 +97,7 @@
             });
             verifyPromise.then((v) => {
                 if (v == "replace") {
-                    IsWorking.set(true);
+                    s.IsWorking.set(true);
                     deletePrevious(loadedChart).then(() => {
                         __saveChart(project);
                     });
