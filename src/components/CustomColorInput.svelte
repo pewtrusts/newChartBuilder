@@ -7,7 +7,10 @@ import hash from './../griffin/scripts/hash';
     export let seriesIndex;
     let color = getComputedStyle(document.documentElement).getPropertyValue(`--color-${seriesIndex}`).trim();
     s.CustomColors.subscribe(v => {
-        color = v[seriesIndex]; // need to bind to subscribe for when saved charts are loaded.
+        if (v.length === 0){
+            return;
+        }
+        color = v[seriesIndex] || color; // need to bind to subscribe for when saved charts are loaded.
     });
     function changeHandler(){
         const customColors = get(s.CustomColors);
@@ -20,4 +23,4 @@ import hash from './../griffin/scripts/hash';
     }
     
 </script>
-<input use:changeHandler on:change="{changeHandler}" type="color" aria-label="Custom color {seriesIndex}" value="{color}">
+<input on:change="{changeHandler}" type="color" aria-label="Custom color {seriesIndex}" value="{color}">
