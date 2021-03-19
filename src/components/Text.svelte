@@ -10,6 +10,7 @@
     import Notices from './Notices.svelte';
     export let checkHeight;
     let quills = {};
+    let invalidQuill;
     let descProxy;
     let isDirtyNotice = {
         label: 'Unsaved changes',
@@ -83,6 +84,15 @@
                                 // negative lookbehind after anything but quote or close tage
         return string.replace(/(?<![">])https?:[^ ;,:]+/g, replaceFn);
     }
+    function checkValidity(){
+        this.checkValidity();
+    }
+    function invalid(e){
+        console.log(e, this, this.validity);
+        if ( this.validity.valueMissing ){
+            invalidQuill = this.name;
+        }
+    }
     function initQuill(node,{controls, placeholder}){
         const formats = ['bold','italic','link', 'list'];
         const editor = new Quill(node, {
@@ -104,6 +114,16 @@
             localValues[controls] = sanitizeHtml(editor.root.innerHTML, sanitizeOptions);
         });
         quills[controls] = editor;
+    }
+    function callback(mutationList, observer){
+        console.log(mutationList, observer);
+    }
+    function setMutationObserver(node){
+        const observer = new MutationObserver(callback);
+        observer.observe(node, {attributes: true});
+        /**
+         * can you set a custome setter getter on the value property?
+        */
     }
     s.DescriptionProxy.subscribe(v => {
         descProxy = v;
@@ -185,8 +205,8 @@
         min-height: 70px;
     }
     textarea[name="chartNotes"], textarea[name="chartSources"]{
-        position: absolute;
-       /* visibility: hidden;*/
+       /* position: absolute;
+        visibility: hidden;*/
     }
     :global(.ql-editor){
         font-family: var(--font-primary, sans);
@@ -214,6 +234,28 @@
     .proxied {
         opacity: 0.5;
     }
+    .required.invalid {
+        border: 1px solid var(--warning, orange);
+        margin-bottom: 0.5rem;
+        position: relative;
+    }
+    .required.invalid::before {
+        content: 'required';
+        position: absolute;
+        right: 0;
+        top: -1.3rem;
+        color: var(--warning, orange);
+        font-style: italic;
+    }
+    .required.invalid .quill-container {
+        margin-bottom: 0;
+        border-color: transparent;
+    }
+    :global(.required.invalid .ql-toolbar) {
+        border-top-color: transparent;
+        border-left-color: transparent;
+        border-right-color: transparent;
+    }
 </style>
 <Notices {notices} />
 <form class:isDirty class:isSubmitting on:input="{inputHandler}" on:submit|preventDefault="{submitHandler}">
@@ -225,8 +267,10 @@
     <label class:proxied="{descProxy !== 'chartDescription'}">Description:<br /><textarea disabled="{descProxy !== 'chartDescription' ? 'disabled' : null}" required="{descProxy == 'chartDescription' ? 'required' : null}" bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season. If other fields are descriptive enough you may choose them instead." name="chartDescription" type="text"></textarea></label>
     <label style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartDescription' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartDescription"> use as description</label>
     <p class="label">Notes:</p>
-    <textarea required="{descProxy == 'chartNotes' ? 'required' : null}" bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
-    <div class="quill-container" use:initQuill="{{controls: 'chartNotes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
+    <textarea use:setMutationObserver on:invalid="{invalid}" required="{descProxy == 'chartNotes' ? 'required' : null}" bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
+    <div class:required="{descProxy == 'chartNotes'}" class:invalid="{invalidQuill == 'chartNotes'}">
+        <div class="quill-container" use:initQuill="{{controls: 'chartNotes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
+    </div>
     <label style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartNotes' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartNotes"> use as description</label>
     <p class="label">Sources:</p>
     <textarea bind:value="{localValues.chartSources}" name="chartSources" type="text"></textarea>
