@@ -59,6 +59,7 @@
     }
     function proxyChange(){
         s.DescriptionProxy.set(this.value);
+        invalidQuill = undefined;
     }
     function inputHandler(){
         isDirty = true;
