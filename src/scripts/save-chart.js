@@ -28,7 +28,7 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
                 return _savingChartData;
             },
             function (error) {
-                console.log(error);
+                
                 alert(error.result.error.message);
             }
         );

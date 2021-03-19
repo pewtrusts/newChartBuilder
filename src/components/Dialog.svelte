@@ -17,7 +17,7 @@
         dialog = null;
     }
     function init(){
-        console.log('init dialog');
+        
         
         return {
             destroy(){

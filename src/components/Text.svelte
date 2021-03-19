@@ -69,7 +69,7 @@
         // handle value from quill
         const data =  new FormData(this);
         for (let [name,value] of data) {
-            console.log(name,value);
+            
             if ( descProxy == name){
                 mapStores.chartDescription.set(sanitizeHtml(value, {
                     allowedTags: [],
@@ -99,7 +99,7 @@
         this.checkValidity();
     }
     function invalid(e){
-        console.log(e, this, this.validity);
+        
         if ( this.validity.valueMissing ){
             invalidQuill = this.name;
         }
@@ -118,14 +118,14 @@
                         tab: {
                             key: 9,
                             handler: function(){
-                                console.log(nextFocus);
+                                
                                 nextFocus.focus();
                             }
                         },
                         esc: {
                             key: 27,
                             handler: function(){
-                                console.log(previousFocus);
+                                
                                 previousFocus.focus();
                             }
                         }
@@ -143,13 +143,13 @@
              * AND rendered HTML
             */
 
-            console.log(editor.root.innerHTML, delta, oldDelta, source);
+            
             localValues[controls] = sanitizeHtml(editor.root.innerHTML, sanitizeOptions);
         });
         quills[controls] = editor;
     }
     function callback(mutationList, observer){
-        console.log(mutationList, observer);
+        
     }
     function setMutationObserver(node){
         const observer = new MutationObserver(callback);
@@ -159,7 +159,7 @@
         */
     }
     function changeFocus(){
-        console.log(this);
+        
         quills[this.name].focus();
     }
     s.DescriptionProxy.subscribe(v => {

@@ -20,7 +20,7 @@
         config = v;
     });
     afterUpdate(() => {
-        console.log(window);
+        
         config.chart.className = 'griffin griffin--for-print';
         window.PrintChart = window.Highcharts.chart(chartContainer, config);
     });

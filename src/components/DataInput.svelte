@@ -18,7 +18,7 @@
     export let datatableContainer;
    
     $: (function(){
-        console.log(showDataInput);
+        
     })();
     let textarea;
     function keydownHandler(e){
@@ -52,7 +52,7 @@
                         numberFormatIsSet = true;
                     }
                 }
-                console.log({value,column});
+                
                 if ( column == 0 || value == ''){
                     return value;
                 }

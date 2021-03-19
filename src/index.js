@@ -13,15 +13,15 @@ window.App = new App({
 });
 if (module.hot) {
 	module.hot.accept('./css/styles.css', function () {
-		console.log('accepted');
+		
 	});
 	module.hot.accept('./css/variables.css', function () {
-		console.log('accepted');
+		
 	});
 	module.hot.accept('./griffin/griffin.js', function () {
-		console.log('accepted');
+		
 	});
 	module.hot.accept('./App.svelte', function () {
-		console.log('hello svelte');
+		
 	});
 }

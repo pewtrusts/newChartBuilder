@@ -89,7 +89,7 @@
         }
     }
     function handleDataChange(e) {
-        console.log({ e, data });
+        
         updateChartData(data, Chart);
     }
     s.ChartType.subscribe(v => {

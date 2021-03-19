@@ -50,7 +50,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
             acc.add(cur - array[i - 1]);
             return acc;
         }, new Set());
-        console.log(intervals);
+        
     }
     const series = data[0].slice(1).map((valueColumn, i) => {
         var rtn;

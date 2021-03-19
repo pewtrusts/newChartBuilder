@@ -39,7 +39,7 @@
         return userOptions;
     }
     window.Charts = [];
-    //console.log(Highcharts.SVGElement.prototype.addClass);
+    //
 
     Highcharts.SVGElement.prototype.addClass = function (className, replace) {
         var currentClassName = replace ? "" : this.attr("class") || "";

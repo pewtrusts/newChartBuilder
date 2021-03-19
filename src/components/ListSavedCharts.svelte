@@ -53,12 +53,12 @@
             discoveryDocs: DISCOVERY_DOCS,
             scope: SCOPES
         }).then(function (v) {
-            console.log(v);
+            
             instance = gapi.auth2.getAuthInstance();
             instance.isSignedIn.listen(updateSigninStatus);
             instance.currentUser.listen(updateCurrentUser);
             const isSignedIn = instance.isSignedIn.get();
-            console.log({isSignedIn});
+            
             if (isSignedIn){
                 getSavedCharts();
                 updateCurrentUser();
@@ -66,7 +66,7 @@
                 s.IsWorking.set(false);
             }
         }, function(error) {
-            console.log(JSON.stringify(error, null, 2));
+            
         });
     }
     /**

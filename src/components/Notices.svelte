@@ -6,7 +6,7 @@
 </script>
 <script>
     export let notices;
-    console.log(notices);
+    
 </script>
 <style>
 /*    .container {

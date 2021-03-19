@@ -16,7 +16,7 @@ import hash from './../griffin/scripts/hash';
         const customColors = get(s.CustomColors);
         customColors[seriesIndex] = this ? this.value : color; // this is not defined when called by `use`, on mount
         s.CustomColors.set(customColors);
-        console.log(get(s.CustomColors));
+        
         if ( this ){
             addCustomColorProperties({colors: customColors, hash: hash(customColors.join(''))})
         }

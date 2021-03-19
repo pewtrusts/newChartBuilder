@@ -51,7 +51,7 @@
         return d.value ? `${d.key} column — ${parenthetical}` : d.key;
     }
     function customWidthHandler(){
-        console.log(this.value);
+        
         s.PrintWidth.set(convert.inchesToPixels(this.value))
     }
     function heightHandler(){

@@ -16,7 +16,7 @@
         }
     }
     function submitHandler(){
-        console.log(this);
+        
         verifyResolve(this.value);
         showVerify = false;
     }
@@ -24,7 +24,7 @@
         showVerify = false;
     }
     function init(){
-        console.log('init verify');
+        
         
         return {
             destroy(){

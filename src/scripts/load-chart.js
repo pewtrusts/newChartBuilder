@@ -18,6 +18,7 @@ export default function _loadChart(data){
     const config = JSON.parse(data.config);
     const HCConfig = config.highchartsConfig;
     const griffinConfig = config.griffinConfig;
+    const lastStoresToSet = [s.ChartSeries, s.ColorIndeces];
     HCStores.forEach(store => {
         const value = searchObject(store[2], HCConfig); // store[2] is the stringified rep of the property, ie, `chart.type`
         if ( value !== null ) {
@@ -30,8 +31,11 @@ export default function _loadChart(data){
         }
         // TODO: figure out chartPalette classname etc
     });
-    storesToSet.forEach(d => {
-        if (d[0] !== s.ChartSeries){
+    function sortStores(a,b){
+        return lastStoresToSet.indexOf(a) - lastStoresToSet.indexOf(b);
+    }
+    storesToSet.sort(sortStores).forEach(d => {
+        if (d[0] !== s.ChartSeries && d[0] !== s.ColorIndeces){
             d[0].set(d[1]);
         } else {
             window.requestIdleCallback(() => {
@@ -43,7 +47,7 @@ export default function _loadChart(data){
 
 /*
 
-console.log(gMap, hMap, importConfig);
+
     const config = JSON.parse(data.config);
     Object.keys(config.griffinConfig).forEach(key => {
         const Key = key.charAt(0).toUpperCase() + key.slice(1);
@@ -65,7 +69,7 @@ console.log(gMap, hMap, importConfig);
     Object.keys(writableMap).forEach(key => {
         const value = searchObject(key, config.highchartsConfig);
         if (value !== undefined) {
-            console.log(writableMap);
+            
             writableMap[key].set(value);
         }
     });
@@ -74,6 +78,6 @@ console.log(gMap, hMap, importConfig);
     Stacking.set(config.highchartsConfig.plotOptions.series.stacking);
     MinHeight.set(config.highchartsConfig.responsive ? config.highchartsConfig.responsive.rules[0].chartOptions.chart.height : 366);
     LoadedDataConfig.set({ series: config.highchartsConfig.series, xAxis: config.highchartsConfig.xAxis, datatableData: config.griffinConfig.datatableData});
-    console.log(config);
+    
 
     */

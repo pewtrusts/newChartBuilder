@@ -56,7 +56,7 @@
         if (!v){
             return;
         }
-        console.log({v})
+        
         project = v;
     });
     function _saveChart(props){
@@ -88,7 +88,7 @@
     function submitHandler() {
         const formData = new FormData(this);
         project = formData.get('project');
-        console.log({ loadedChart });
+        
         if (loadedChart) {
             showVerify = true;
             verifyPromise = new Promise(function (resolve, reject) {
@@ -111,7 +111,7 @@
             __saveChart(project);
         }
     }
-    console.log(resolveSaved);
+    
 </script>
 <style>
    label {

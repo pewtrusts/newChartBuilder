@@ -60,7 +60,7 @@
         }
     }
     function clickHandler(){
-        console.log({this: this});
+        
         if ( cellBeingEdited == this ) return; // do nothing if focusing into cell already being edited
         if ( cellBeingEdited ){
             cellBeingEdited.isEditable = false;

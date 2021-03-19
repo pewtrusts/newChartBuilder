@@ -47,7 +47,6 @@ export function extendObj(base, properties, value){
             return acc[prop][index];
         }
     }, base);
-    console.log(base);
     /**
      * TO DO: somewhere there's inconsistency with 'categorical' and 'category' axis types
      * prevent chartUpdate from redrawing until end.

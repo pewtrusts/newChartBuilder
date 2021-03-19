@@ -20,7 +20,7 @@ export function getSavedCharts() {
                 return acc;
             }, {})
         });
-        console.log(data);
+        
         resolveSaved({data, googleSheetHeaders});
        // s.IsWorking.set(false);
         return true; // TO DO : rather than passing resolveSaved into this context could have returned the necessary data and chained onto
