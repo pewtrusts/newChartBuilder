@@ -3,7 +3,7 @@
      * perhaps later if there are more required fields, put in a derived stored of missing
      * required fields and base the dialog on that. now it is only dependent on ChartDescription
      */
-    import { ChartDescription, CodeExport, PictureIsMissingOrOld, ExportType, IsWorking, ChartHasBeenSaved } from './../store';
+    import { s } from './../store';
     import getImageData from './../scripts/get-image-data';
     import Button from './Button.svelte';
     import SaveAfterCopy from './SaveAfterCopy.svelte';
@@ -16,20 +16,20 @@
     let fadeSuccess = false;
     export let dialog;
     export let clickSave;
-    ChartHasBeenSaved.subscribe(v => {
+    s.ChartHasBeenSaved.subscribe(v => {
         chartHasBeenSaved = v;
     });
-    ChartDescription.subscribe(v => {
+    s.ChartDescription.subscribe(v => {
         chartDescription = v;
     });
-    CodeExport.subscribe(v => {
+    s.CodeExport.subscribe(v => {
         codeExport = v;
     });
-    PictureIsMissingOrOld.subscribe(v => {
+    s.PictureIsMissingOrOld.subscribe(v => {
         pictureIsMissingOrOld = v;
     });
     function changeHandler(){
-        ExportType.set(this.value);
+        s.ExportType.set(this.value);
     }
     function flashSuccess(){
         showSuccess = true;
@@ -51,10 +51,10 @@
         const data =  new FormData(this);
         console.log(Array.from(data.keys()));
         if (data.has('chartDescription')){
-            ChartDescription.set(data.get('chartDescription'));
+            s.ChartDescription.set(data.get('chartDescription'));
         }
         if ( pictureIsMissingOrOld ){
-            IsWorking.set(true);
+            s.IsWorking.set(true);
             requestIdleCallback(function(){
                 getImageData().then(() => {
                     copyCode();

@@ -20,9 +20,9 @@
     import Start from './components/Start.svelte';
     import Settings from '@Component/Settings.svelte';
     import Text from './components/Text.svelte';
+    import Code from '@Component/Code.svelte';
 
 
- //   import Code from '@Component/Code.svelte';
  //   import Colors from '@Component/Colors.svelte';
  //   import VerifySave from '@Component/VerifySave.svelte';
  //   import Dialog from '@Component/Dialog.svelte';
@@ -229,11 +229,11 @@
             <!--<section use:pushSection>
                 <SectionHead text="Colors" />
                 <Colors />
-            </section>
+            </section>-->
             <section use:pushSection>
                 <SectionHead text="Code" />
                 <Code {pictureIsMissingOrOldNotice} bind:dialog {clickSave} />
-            </section> -->
+            </section> 
             <section use:pushSection>
                 <SectionHead text="Save" />
                 <SaveChart 

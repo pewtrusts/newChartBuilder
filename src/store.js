@@ -179,6 +179,7 @@ function initDerived(){
         return obj;
     });
     s.CodeExport = derived([
+        s.ChartConfig,
         s.ChartCredit,
         s.ChartDescription, 
         s.ChartLabel, 
@@ -188,10 +189,10 @@ function initDerived(){
         s.ChartSubtitle,
         s.Classes, 
         s.Picture,
-        s.UserOptions, 
         s.GriffinConfig,
         s.ExportType
     ], ([
+        chartConfig,
         chartCredit,
         chartDescription,
         chartLabel, 
@@ -201,7 +202,6 @@ function initDerived(){
         chartSubtitle,
         classes,
         picture,
-        userOptions, 
         griffinConfig,
         exportType
     ]) => {
@@ -216,7 +216,7 @@ function initDerived(){
         <p id="description-${hashTitle ? hashTitle : hash(chartDescription)}" class="visually-hidden">${chartDescription}</p>` : ''}
         <pre class="js-griffin-config" style="display: none;">
         ${JSON.stringify({
-            highchartsConfig: userOptions,
+            highchartsConfig: chartConfig,
             griffinConfig 
         })}
         </pre>
