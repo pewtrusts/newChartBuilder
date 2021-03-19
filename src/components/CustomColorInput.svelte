@@ -11,16 +11,13 @@ import hash from './../griffin/scripts/hash';
             return;
         }
         color = v[seriesIndex] || color; // need to bind to subscribe for when saved charts are loaded.
+         addCustomColorProperties({colors: v, hash: hash(v.join(''))})
     });
     function changeHandler(){
         const customColors = get(s.CustomColors);
         customColors[seriesIndex] = this ? this.value : color; // this is not defined when called by `use`, on mount
         s.CustomColors.set(customColors);
-        
-        if ( this ){
-            addCustomColorProperties({colors: customColors, hash: hash(customColors.join(''))})
-        }
     }
     
 </script>
-<input on:change="{changeHandler}" type="color" aria-label="Custom color {seriesIndex}" value="{color}">
+<input use:changeHandler on:change="{changeHandler}" type="color" aria-label="Custom color {seriesIndex}" value="{color}">
