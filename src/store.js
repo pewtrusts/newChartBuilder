@@ -190,7 +190,8 @@ function initDerived(){
         s.Classes, 
         s.Picture,
         s.GriffinConfig,
-        s.ExportType
+        s.ExportType,
+        s.DescriptionProxy
     ], ([
         chartConfig,
         chartCredit,
@@ -203,17 +204,18 @@ function initDerived(){
         classes,
         picture,
         griffinConfig,
-        exportType
+        exportType,
+        descriptionProxy
     ]) => {
-        const hashTitle = chartTitle ? hash(chartTitle) : null;
-        return `<figure${chartTitle ? ' aria-labelledby="heading-' + hashTitle + '"' : ''}${chartDescription ? ` aria-describedby="description-${hashTitle || hash(chartDescription)}"` : ''} class="ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
+        const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
+        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
         <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
         <header>${chartLabel ? `
             <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
-            <h1 id="heading-${hashTitle}">${chartTitle}</h1>` : ''}${chartSubtitle ? `
-            <p class="figure-dek">${chartSubtitle}</p>` : ''}
-        </header>` : ''}${chartDescription ? `
-        <p id="description-${hashTitle ? hashTitle : hash(chartDescription)}" class="visually-hidden">${chartDescription}</p>` : ''}
+            <h1 id="chartTitle-${hashId}">${chartTitle}</h1>` : ''}${chartSubtitle ? `
+            <p id="chartSubtitle-${hashId}" class="figure-dek">${chartSubtitle}</p>` : ''}
+        </header>` : ''}${chartDescription && descriptionProxy == 'chartDescription' ? `
+        <p id="chartDescription-${hashId}" class="visually-hidden">${chartDescription}</p>` : ''}
         <pre class="js-griffin-config" style="display: none;">
         ${JSON.stringify({
             highchartsConfig: chartConfig,
@@ -224,7 +226,7 @@ function initDerived(){
             ${picture}
         </div>${ chartNotes || chartSources || chartCredit ? `
         <figcaption>${chartNotes ? `
-            <p class="figure-note">
+            <p id="chartNotes-${hashId}" class="figure-note">
                 ${chartNotes}
             </p>` : ''}${chartSources ? `
             <p class="figure-note figure-note--source">
