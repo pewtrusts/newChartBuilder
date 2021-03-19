@@ -25,9 +25,9 @@
     import VerifySave from '@Component/VerifySave.svelte';
     import Print from '@Component/Print.svelte';
     import PrintChart from '@Component/PrintChart.svelte';
+    import Colors from '@Component/Colors.svelte';
 
 
- //   import Colors from '@Component/Colors.svelte';
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
   //  import getImageData from './scripts/get-image-data';
 
@@ -226,10 +226,10 @@
                 <SectionHead text="Text" />
                 <Text {checkHeight} />
             </section>
-            <!--<section use:pushSection>
+            <section use:pushSection>
                 <SectionHead text="Colors" />
                 <Colors />
-            </section>-->
+            </section>
             <section use:pushSection>
                 <SectionHead text="Code" />
                 <Code {pictureIsMissingOrOldNotice} bind:dialog {clickSave} />

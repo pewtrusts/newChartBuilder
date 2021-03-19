@@ -1,5 +1,5 @@
 <script>
-    import { SeriesCount, SelectedColorPalette, ColorByPoint, MaxPointCount } from './../store';
+    import { s } from './../store';
     import Checkbox from './Checkbox.svelte';
     import CustomColorInput from './CustomColorInput.svelte';
     export let selectedPalette;
@@ -8,19 +8,19 @@
     let seriesArray = [];
     let maxPointCountArray = [];
     let colorByPoint = false;
-    SeriesCount.subscribe(v => {
+    s.SeriesCount.subscribe(v => {
         if (!v) return;
         seriesArray = Array.apply(null, Array(v)).map((_,i) => i + 1);
     });
-    SelectedColorPalette.subscribe(v => {
+    s.SelectedColorPalette.subscribe(v => {
         if (!v) return;
         selectedPalette = v;
     });
-    ColorByPoint.subscribe(v => {
+    s.ColorByPoint.subscribe(v => {
         colorByPoint = v[0] == true; // TO DO. here we are only handling the first series being colorByPoint
                                      // no support yet for a mix of color by point vs not color by point
     });
-    MaxPointCount.subscribe(v => {
+    s.MaxPointCount.subscribe(v => {
         maxPointCountArray = Array.apply(null, Array(v)).map((_,i) => i + 1);
     });
     

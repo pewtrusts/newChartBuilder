@@ -1,14 +1,14 @@
 <script>
-    import {SelectedColorPalette, ColorIndeces} from './../store';
+    import {s} from './../store';
     export let seriesIndex;
     export let colorIndex;
     let selectedPalette;
     let colorIndeces;
-    SelectedColorPalette.subscribe(v => {
+    s.SelectedColorPalette.subscribe(v => {
         if (!v) return;
         selectedPalette = v;
     });
-    ColorIndeces.subscribe(v => {
+    s.ColorIndeces.subscribe(v => {
         colorIndeces = v;
     });
     $:isChecked = (() => {
@@ -16,7 +16,7 @@
     })();
     function changeHandler(){
         colorIndeces[seriesIndex] = colorIndex;
-        ColorIndeces.set(colorIndeces);
+        s.ColorIndeces.set(colorIndeces);
     }
 </script>
 <style>

@@ -143,11 +143,11 @@ function initDerived(){
     s.SeriesCountMismatch = derived([s.SeriesCountFromTable, s.SeriesCount], ([seriesCountFromTable, seriesCount]) => {
         return seriesCountFromTable != seriesCount;
     });
-    s.MaxPointCount = derived([s.UserOptions], ([userOptions]) => {
-        if ( !userOptions.series || userOptions.series.length == 0){
+    s.MaxPointCount = derived([s.ChartSeries], ([chartSeries]) => {
+        if ( chartSeries.length == 0){
             return 0;
         }
-        return Math.max(...userOptions.series.map(d => d.data.length));
+        return Math.max(...chartSeries.map(d => d.data.length));
     });
     s.ColorCount = derived([s.MaxPointCount,s.ColorByPoint, s.SeriesCount], ([maxPointCount, colorByPoint, seriesCount]) => {
         if (colorByPoint[0] == true){

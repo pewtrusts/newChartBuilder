@@ -1,21 +1,21 @@
 <script context="module">
-    import {w, ColorIndeces, SelectedColorPalette, ColorCount} from './../store';
+    import {s} from './../store';
     import { get } from 'svelte/store';
     function changeHandler(e){
         console.log(e.target.value);
-        SelectedColorPalette.set(e.target.value);
+        s.SelectedColorPalette.set(e.target.value);
     }
     function swatchClick(){
-        SelectedColorPalette.set(this.dataset.value);
+        s.SelectedColorPalette.set(this.dataset.value);
     }
     function selectEvenlySpacedColors({seriesCount, colorCount}){
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i,arr) => 0 + Math.round(i * (colorCount - 1) / (arr.length - 1)));
         console.log(colorIndeces);
-        ColorIndeces.set(colorIndeces);
+        s.ColorIndeces.set(colorIndeces);
     }
     function resetColorIndeces(seriesCount){
         const colorIndeces = Array.apply(null, Array(seriesCount)).map((_,i) => i);
-        ColorIndeces.set(colorIndeces);
+        s.ColorIndeces.set(colorIndeces);
     }
 </script>
 <script>
@@ -25,17 +25,17 @@
     let customSwatchStep = 360 / colorCount;
     let selectedPalette;
     
-    w.ChartType.subscribe(() => {
-        checkColorIndeces(get(ColorCount));
+    s.ChartType.subscribe(() => {
+        checkColorIndeces(get(s.ColorCount));
     });
-    SelectedColorPalette.subscribe(v => {
+    s.SelectedColorPalette.subscribe(v => {
         selectedPalette = v;
         if ( selectedPalette == palette){
-            let colorCount = get(ColorCount);
+            let colorCount = get(s.ColorCount);
             checkColorIndeces(colorCount);
         }
     });
-    ColorCount.subscribe(v => {
+    s.ColorCount.subscribe(v => {
         checkColorIndeces(v);
     });
     function checkColorIndeces(seriesCount){

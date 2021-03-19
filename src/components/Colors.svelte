@@ -3,12 +3,12 @@
     import SeriesColorSelectors from './SeriesColorSelectors.svelte';
     import brandOptions from '../brand-options.json';
     import griffinConfig from './../griffin/griffin-config.json';
-    import {ColorByPoint, SelectedColorPalette} from './../store';
+    import {s} from './../store';
     import Notices from './Notices.svelte';
     let palettes = ['default', ...brandOptions.additionalColorPalettes];
     let notices = new Set();
     let selectedPalette;
-    SelectedColorPalette.subscribe(v => {
+    s.SelectedColorPalette.subscribe(v => {
         if (!v) return;
         selectedPalette = v;
     });
@@ -18,7 +18,7 @@
                      'This is automatic for some chart types, such as pie charts.',
         type: 'info'
     };
-    ColorByPoint.subscribe(v => {
+    s.ColorByPoint.subscribe(v => {
         notices[v.includes(true) ? 'add' : 'delete'](colorByPointNotice);
         notices = notices;
     });

@@ -172,8 +172,8 @@
     s.ColorIndeces.subscribe(async (v) => { // TO DO : how are you gonna handle this?
         await Chart;
         if (!v) return;
-        const series = get(UserOptions).series;
-        const colorByPoint = get(ColorByPoint);
+        const series = get(s.ChartSeries);
+        const colorByPoint = get(s.ColorByPoint);
         series.forEach((s, i) => {
             if (colorByPoint[i]) {
                 s.colorIndex = undefined;
