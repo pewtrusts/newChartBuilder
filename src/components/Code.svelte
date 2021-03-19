@@ -87,10 +87,12 @@
     
 </script>
 <style>
-    textarea {
+    .code-export {
         width: 100%;
         font-family: var(--mono, monospace);
+        font-size: 1rem;
         height: calc(100% - 40px);
+        display: none;
     }
     .container {
         display: inline-block;
@@ -125,7 +127,7 @@
     .form-wrapper textarea {
         display: block;
         width: 100%;
-        font-size: 0.85em;
+        font-size: 0.85rem;
         line-height: 1.5;
     }
     .form-wrapper textarea::placeholder {
@@ -153,6 +155,9 @@ it will replace the image with a dynamic Highcharts version if you have <em>dyna
             ></textarea>
         </label>
     </div>
+    <p>The chart is missing a description, which is required for screen readers and search engines.
+        Please enter a description above or go the <a on:click|preventDefault="{() => s.ActiveSection.set({method:'click', value: 'text'})}" href="?">the text section</a>
+        to select another field to serv as the description</p>
     {/if}
 </form>
-<textarea value="{codeExport}"></textarea>
+<textarea class="code-export" value="{codeExport}"></textarea>

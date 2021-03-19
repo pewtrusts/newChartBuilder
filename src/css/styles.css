@@ -139,7 +139,7 @@ a:hover {
     text-decoration: underline;
 }
 
-input[type="text"], input[type="number"], select {
+input[type="text"], input[type="number"], select, textarea {
  		border: 1px solid #ccc;
         border-radius: 0;
         line-height: 1.5;

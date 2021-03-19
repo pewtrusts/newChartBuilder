@@ -207,15 +207,7 @@
         margin: 0;
         font-weight: 900;
     }
-    input[type="text"], textarea {
-        border: 1px solid #ccc;
-        border-radius: 0;
-        line-height: 1.5;
-        color: var(--text-color, #000);
-    }
-    input[type="text"], textarea {
-        font-size: 0.85rem;
-    }
+    
     input[type="text"]:not([name="chart-label"]) {
         width: 100%;
     }
