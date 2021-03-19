@@ -23,11 +23,11 @@
     import Code from '@Component/Code.svelte';
     import Dialog from '@Component/Dialog.svelte';
     import VerifySave from '@Component/VerifySave.svelte';
+    import Print from '@Component/Print.svelte';
+    import PrintChart from '@Component/PrintChart.svelte';
 
 
  //   import Colors from '@Component/Colors.svelte';
- //   import Print from '@Component/Print.svelte';
- //   import PrintChart from '@Component/PrintChart.svelte';
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
   //  import getImageData from './scripts/get-image-data';
 
@@ -252,10 +252,10 @@
                     bind:clickSave
                 />
             </section>
-    <!--        <section use:pushSection>
+            <section use:pushSection>
                 <SectionHead text="Print" />
                 <Print bind:enablePrint/>
-            </section>-->
+            </section>
             
         </div>
         <div class="right-column">
@@ -279,9 +279,9 @@
                     bind:getSavedCharts
                 />
             </div>
-          <!--  {#if enablePrint && activeSection == 'print'}
+            {#if enablePrint && activeSection == 'print'}
                 <PrintChart />
-            {/if}-->
+            {/if}
         </div>
     </div>
 </div>

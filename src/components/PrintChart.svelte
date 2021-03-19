@@ -1,5 +1,5 @@
 <script>
-    import { Classes, PrintWidth, PrintHeight, UserOptions } from './../store';
+    import { s } from './../store';
     import convert from './../scripts/unit-conversions';
     import { afterUpdate } from 'svelte';
     let printWidth;
@@ -7,16 +7,16 @@
     let chartContainer;
     let config;
     let classes = [];
-    Classes.subscribe(v => {
+    s.Classes.subscribe(v => {
         classes = v;
     });
-    PrintWidth.subscribe(v => {
+    s.PrintWidth.subscribe(v => {
         printWidth = v;
     });
-    PrintHeight.subscribe(v => {
+    s.PrintHeight.subscribe(v => {
         printHeight = v;
     });
-    UserOptions.subscribe(v => {
+    s.ChartConfig.subscribe(v => {
         config = v;
     });
     afterUpdate(() => {
@@ -50,6 +50,6 @@
     }
 </style>
 <div class="container griffin-figure">
-    <h2 data-width="{convert.pixelsToInches(printWidth)}" data-height="{convert.pixelsToInches(printHeight)}">Print preview</h2>
+    <h2 data-width="{convert.pixelsToInches(printWidth)}" data-height="{convert.pixelsToInches(printHeight)}">Print preview (WIP)</h2>
     <div bind:this="{chartContainer}" class="chart-container {classes.join(' ')}" style="width: {printWidth}px; height: {printHeight}px;"></div>
 </div>

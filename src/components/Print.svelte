@@ -1,7 +1,7 @@
 
 <script>
     import Button from './Button.svelte';
-    import { PrintWidth, PrintHeight } from './../store';
+    import { s } from './../store';
     import convert from './../scripts/unit-conversions';
     export let enablePrint = false; 
     let customWidth = false;
@@ -39,7 +39,7 @@
             return;
         }
         const pixels = convert.inchesToPixels(convert.picaToInches(this.value));
-        PrintWidth.set(pixels);
+        s.PrintWidth.set(pixels);
         customWidth = false;
     }
     function widthDisplay(d){
@@ -52,21 +52,21 @@
     }
     function customWidthHandler(){
         console.log(this.value);
-        PrintWidth.set(convert.inchesToPixels(this.value))
+        s.PrintWidth.set(convert.inchesToPixels(this.value))
     }
     function heightHandler(){
-        PrintHeight.set(convert.inchesToPixels(this.value));
+        s.PrintHeight.set(convert.inchesToPixels(this.value));
     }
-    PrintWidth.set(convert.inchesToPixels(convert.picaToInches('39p0')));
-    PrintWidth.subscribe(v => {
+    s.PrintWidth.set(convert.inchesToPixels(convert.picaToInches('39p0')));
+    s.PrintWidth.subscribe(v => {
         printWidth = v;
     });
-    PrintHeight.set(convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625);
-    PrintHeight.subscribe(v => {
+    s.PrintHeight.set(convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625);
+    s.PrintHeight.subscribe(v => {
         printHeight = v;
     });
     function clickHandler(){
-        PrintHeight.set(printWidth * 0.5625);
+        s.PrintHeight.set(printWidth * 0.5625);
     }
     function downloadSVG(){
         const exportingOptions = {
