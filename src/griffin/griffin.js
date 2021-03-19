@@ -7,6 +7,7 @@ import options from '@Project/options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
 import addCustomColorProperties from './scripts/addCustomColorProperties';
 import returnFormatter from './scripts/return-number-formatter';
+import hash from './scripts/hash';
 window.Highcharts = Highcharts;
 Highcharts.setOptions(options);
 Highcharts.SVGElement.prototype.addClass = function (className, replace) {
@@ -59,13 +60,12 @@ griffins.forEach(griffin => {
     const formatter = returnFormatter(config.griffinConfig.numberFormat);
     extendObj(config.highchartsConfig, ['yAxis','labels','formatter'], formatter);
   //  config.highchartsConfig.yAxis.labels.formatter = formatter;
-    config.highchartsConfig.title.text = config.highchartsConfig.title.text || undefined;
+  //  config.highchartsConfig.title.text = config.highchartsConfig.title.text || undefined;
     container.classList.add(config.griffinConfig.chartPaletteClassname);
-    if (config.griffinConfig.chartPaletteClassname.indexOf('cc') === 0 
-        && config.griffinConfig.customColors.length > 0){
+    if (config.griffinConfig.SelectedColorPalette == 'custom'){
             addCustomColorProperties({
-                colors: config.griffinConfig.customColors, 
-                hash: config.griffinConfig.chartPaletteClassname.replace('cc','')
+                colors: config.griffinConfig.CustomColors, 
+                hash: hash(config.griffinConfig.CustomColors.join(''))
             });
         }
     

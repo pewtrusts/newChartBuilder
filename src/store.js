@@ -111,10 +111,6 @@ function initWritables(){
         s.YAxisLabelsFormatter.set(returnNumberFormatter(v));
         s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
     });
-    s.ColorIndeces.subscribe(v => {
-        console.log(v);
-    });
-   
 } // end initWritables
 
 /**
