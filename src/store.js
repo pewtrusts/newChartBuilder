@@ -28,6 +28,18 @@ function createWritable({ name, value, config }, configType) {
             s.ChartConfig.set(chartConfig);
         });
     }
+    
+}
+export function initDynamicStore(node, { configType, localObj }) {
+    const name = node.name.charAt(0).toUpperCase() + node.name.slice(1);
+    const value = node.value || undefined;
+    createWritable({ name, value, config: node.name }, configType);
+    s[name].subscribe(v => {
+        localObj[node.name] = v;
+    });
+    if (configType == 'highcharts') {
+        HCStores.push([name, value, node.name]);
+    }
 }
 s.ChartConfig = writable({});
 
@@ -64,7 +76,7 @@ const GStores = [
     ['ColorIndeces', []],
     ['DescriptionProxy', 'chartDescription'],
     ['NumberFormat', undefined],
-    ['SelectedColorPalette', 'default'],
+    ['SelectedColorPalette', 'default']
 ];
 const appStores = [
     ['PrintWidth', undefined],
