@@ -19,7 +19,7 @@
         ]
     },
     "legend": {
-        "itemMarginBottom": 0,
+        "itemMarginBottom": 10,
         "symbolHeight": 16,
         "symbolRadius": 0,
         "squareSymbol": true,
