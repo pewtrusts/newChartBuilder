@@ -1,0 +1,25 @@
+.philly-dashboard .ai2html-griffin-figure {
+    .highcharts-container.griffin {
+
+        .highcharts-graph {
+            stroke-width: 6px;
+        }  
+        .highcharts-markers {
+            display: inline;
+        } 
+        .highcharts-axis-labels {
+            font-size: 1.2em;
+        }
+    }
+    header h1 {
+        font-size: 1.5rem;
+        /* TODO: clamp */
+    }
+    .figure-caption {
+        font-size: 1.2rem;
+    }
+    .figure-note  {
+        font-size: 1rem;
+        /* TO DO: new clamp */
+    }
+}
