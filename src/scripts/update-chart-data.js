@@ -56,7 +56,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
         var rtn;
         if (shouldBeCategorical) {
             rtn = {
-                name: valueColumn,
+                name: valueColumn || '',
                 data: data.slice(1).map(row => {
                     return {
                         y: row[i + 1]
@@ -65,7 +65,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
             };
         } else {
             rtn = {
-                name: valueColumn,
+                name: valueColumn || '',
                 data: data.slice(1).map((row, j) => {
                     return {
                         x: shouldBeDateTime ? asDateTime[j].getTime() : row[0],

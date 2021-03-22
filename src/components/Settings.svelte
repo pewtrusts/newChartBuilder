@@ -1,6 +1,7 @@
 <script context="module">
     import Login from './Login.svelte'
     import YAxis from './YAxis.svelte';
+    import Legend from './Legend.svelte';
     import { s } from './../store';
     function stackingHandler(){
         const value = this.value == 'none' ? undefined : this.value;
@@ -53,4 +54,5 @@
     <option value="normal">Normal</option>
     <option value="percent">Percent</option>
 </select>
+<Legend />
 <YAxis />
