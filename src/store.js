@@ -1,7 +1,7 @@
 import hash from './griffin/scripts/hash';
 import slugger from 'slugger';
 import { writable, derived, get } from 'svelte/store';
-import baseConfig from './base-chart-config.json';
+//import baseConfig from './base-chart-config.json';
 import { extendObj } from './griffin/griffin';
 import returnPointFormatter from './griffin/scripts/return-point-formatter';
 import returnNumberFormatter from './griffin/scripts/return-number-formatter';
@@ -34,7 +34,7 @@ s.ChartConfig = writable({});
 export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
     ['ChartSeries', [], 'series'],
-    ['ChartType', baseConfig.chart.type, 'chart.type'],
+    ['ChartType', 'line', 'chart.type'],
     ['LegendEnabled', true, 'legend.enabled'],
     ['MinHeight', 0, 'responsive.rules[0].chartOptions.chart.height'],
     ['MinHeightCondition', 0, 'responsive.rules[0].condition.maxHeight'],
@@ -44,7 +44,7 @@ export const HCStores = [
     ['XAxisCategories', null, 'xAxis.categories'],
     ['XAxisTitle', '', 'xAxis.title.text'],
     ['XAxisType', 'linear', 'xAxis.type'],
-    ['YAxisLabelsFormatter', returnNumberFormatter(undefined), 'yAxis.labels.formatter']
+    ['YAxisLabelsFormatter', returnNumberFormatter(undefined), 'yAxis[0].labels.formatter']
 ];
 const GStores = [
     ['NominalMinHeight', '400'],

@@ -45,7 +45,7 @@
         }
        
     },
-    "yAxis": {
+    "yAxis": [{
         "title": null
-    }
+    }]
 }
