@@ -198,7 +198,7 @@
         data-height={chartHeight}
         data-width={chartWidth}
         data-size={size}
-        class="wrapper js-figure-wrapper"
+        class="wrapper js-figure-wrapper {classes.join(' ')}"
     >
         <figure
             style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
@@ -219,7 +219,7 @@
                 </header>
             {/if}
             <div bind:this="{chartContainer}" 
-                class="container js-hc-container {classes.join(' ')}"
+                class="container js-hc-container"
                 use:containerUse
             />
             <figcaption>
