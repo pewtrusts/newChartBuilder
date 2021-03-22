@@ -30,12 +30,16 @@ function createWritable({ name, value, config }, configType) {
     }
     
 }
-export function initDynamicStore(node, { configType, localObj }) {
+export function initDynamicStore(node, { configType, localValue }) {
     const name = node.name.charAt(0).toUpperCase() + node.name.slice(1);
     const value = node.value || undefined;
     createWritable({ name, value, config: node.name }, configType);
     s[name].subscribe(v => {
-        localObj[node.name] = v;
+        if (typeof localValue == 'object'){
+            localValue[node.name] = v;
+        } else {
+            localValue = v;
+        }
     });
     if (configType == 'highcharts') {
         HCStores.push([name, value, node.name]);
