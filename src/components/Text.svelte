@@ -12,6 +12,7 @@
     let quills = {};
     let descRadio;
     let notesRadio;
+    let captionRadio;
     let invalidQuill;
     let descProxy;
     let isDirtyNotice = {
@@ -36,19 +37,23 @@
             'a': [ 'href' ]
         }
     };
+    // to do: ought to be a way to automate this: `use` function?
     let mapStores = {
         'chartCredit': s.ChartCredit,
         'chartDescription': s.ChartDescription,
         'chartLabel': s.ChartLabel,
+        'chartCaption': s.ChartCaption,
         'chartNotes': s.ChartNotes,
         'chartTitle': s.ChartTitle,
         'chartSources': s.ChartSources,
         'chartSubtitle': s.ChartSubtitle
     };
+    // to do: ought to be a way to automate this: `use` function?
     let localValues = {
         'chartCredit': '',
         'chartDescription': '',
         'chartLabel': '',
+        'chartCaption': '',
         'chartNotes': '',
         'chartTitle': '',
         'chartSources': '',
@@ -95,9 +100,7 @@
                                 // negative lookbehind after anything but quote or close tage
         return string.replace(/(?<![">])https?:[^ ;,:]+/g, replaceFn);
     }
-    function checkValidity(){
-        this.checkValidity();
-    }
+    
     function invalid(e){
         
         if ( this.validity.valueMissing ){
@@ -107,7 +110,7 @@
     async function initQuill(node,{controls, placeholder}){
         await dummy;
         const nextFocus = node.parentElement.nextElementSibling;
-        const previousFocus = controls == 'chartNotes' ? descRadio : notesRadio;
+        const previousFocus = controls == 'chartNotes' ? captionRadio : controls == 'chartCaption' ? descRadio : notesRadio;
         const formats = ['bold','italic','link', 'list'];
         const editor = new Quill(node, {
             theme: 'snow',
@@ -137,26 +140,9 @@
         });
        
         editor.on('text-change', function(delta, oldDelta, source) {
-            /**
-             * possibly detect HTML (presence of angle brackets) or Word
-             * ACTUALLY  it handles Word perfectly
-             * AND rendered HTML
-            */
-
-            
             localValues[controls] = sanitizeHtml(editor.root.innerHTML, sanitizeOptions);
         });
         quills[controls] = editor;
-    }
-    function callback(mutationList, observer){
-        
-    }
-    function setMutationObserver(node){
-        const observer = new MutationObserver(callback);
-        observer.observe(node, {attributes: true});
-        /**
-         * can you set a custome setter getter on the value property?
-        */
     }
     function changeFocus(){
         
@@ -182,6 +168,12 @@
         localValues = localValues;
         if (!quills.chartNotes) return;
         quills.chartNotes.clipboard.dangerouslyPasteHTML(sanitizeHtml(v));
+    });
+    s.ChartCaption.subscribe(v => {
+        localValues.chartCaption = v;
+        localValues = localValues;
+        if (!quills.chartCaption) return;
+        quills.chartCaption.clipboard.dangerouslyPasteHTML(sanitizeHtml(v));
     });
     s.ChartTitle.subscribe(v => {
         localValues.chartTitle = v;
@@ -297,8 +289,16 @@
     <label class="desc-proxy"><input checked="{descProxy == 'chartSubtitle' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartSubtitle"> use as description</label>
     <label class:proxied="{descProxy !== 'chartDescription'}">Description:<br /><textarea disabled="{descProxy !== 'chartDescription' ? 'disabled' : null}" required="{descProxy == 'chartDescription' ? 'required' : null}" bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season. If other fields are descriptive enough you may choose them instead." name="chartDescription" type="text"></textarea></label>
     <label bind:this="{descRadio}" style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartDescription' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartDescription"> use as description</label>
+    
+    <p class="label">Caption:</p>
+    <textarea on:focus="{changeFocus}" tabindex="0" on:invalid="{invalid}" required="{descProxy == 'chartCaption' ? 'required' : null}" bind:value="{localValues.chartCaption}" name="chartCaption" type="text"></textarea>
+    <div class="quill-wrapper" class:required="{descProxy == 'chartCaption'}" class:invalid="{invalidQuill == 'chartCaption'}">
+        <div class="quill-container" use:initQuill="{{controls: 'chartCaption',placeholder: ''}}"></div>
+    </div>
+    <label bind:this="{captionRadio}" style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartCaption' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartCaption"> use as description</label>
+    
     <p class="label">Notes:</p>
-    <textarea on:focus="{changeFocus}" tabindex="0" use:setMutationObserver on:invalid="{invalid}" required="{descProxy == 'chartNotes' ? 'required' : null}" bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
+    <textarea on:focus="{changeFocus}" tabindex="0" on:invalid="{invalid}" required="{descProxy == 'chartNotes' ? 'required' : null}" bind:value="{localValues.chartNotes}" name="chartNotes" type="text"></textarea>
     <div class="quill-wrapper" class:required="{descProxy == 'chartNotes'}" class:invalid="{invalidQuill == 'chartNotes'}">
         <div class="quill-container" use:initQuill="{{controls: 'chartNotes',placeholder: 'e.g., Note: Data for 2020 is tentative.'}}"></div>
     </div>

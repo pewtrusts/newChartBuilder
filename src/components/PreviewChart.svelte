@@ -84,6 +84,7 @@
     let chartTitle;
     let chartSubtitle;
     let chartNotes;
+    let chartCaption;
     let chartSources;
     let chartCredit;
     let notices = new Set();
@@ -91,10 +92,6 @@
     let chartHeight;
     let minHeight;
     let redrawTimeout;
-    let isLoading;
-    s.IsLoading.subscribe(v => {
-        isLoading = v;
-    });
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
@@ -158,6 +155,9 @@
     });
     s.ChartCredit.subscribe((v) => {
         chartCredit = v;
+    });
+    s.ChartCaption.subscribe((v) => {
+        chartCaption = v;
     });
     /*s.ChartType.subscribe((v) => {
         if (Chart) {
@@ -223,6 +223,11 @@
                 use:containerUse
             />
             <figcaption>
+                {#if chartCaption}
+                    <p class="figure-caption">
+                        {@html chartCaption}
+                    </p>
+                {/if}
                 {#if chartNotes}
                     <p class="figure-note">
                         {@html chartNotes}

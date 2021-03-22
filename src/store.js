@@ -53,6 +53,7 @@ const GStores = [
     ['ChartProject', undefined],
     ['DatatableData', []],
     ['CustomColors', []],
+    ['ChartCaption', ''],
     ['ChartCredit', `© ${new Date().getFullYear()} The Pew Charitable Trusts`],
     ['ChartDescription', ''],
     ['ChartLabel', ''],
