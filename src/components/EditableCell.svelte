@@ -4,6 +4,7 @@
     import CellContents from './CellContents.svelte';
     import Move from './../scripts/move-focus';
     import Sprite from './Sprite.svelte';
+    import ParseDynamic from './../scripts/parse-dynamic.js';
     //let previousValue = undefined;
     let _cellBeingEdited;
     s.CellBeingEdited.subscribe(v => {
@@ -51,6 +52,7 @@
     }
     function changeHandler(){
         showForm = false;
+        value = ParseDynamic(this.value);
         dispatch('dataChange', {row, column, value});
     }
     function bodyClickHandler(){
