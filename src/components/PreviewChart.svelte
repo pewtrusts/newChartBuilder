@@ -134,7 +134,10 @@
         await Chart;
         window.cancelIdleCallback(redrawTimeout);
         redrawTimeout = window.requestIdleCallback(() => {
-            _Chart.redraw()
+            _Chart.redraw();
+            window.requestIdleCallback(() => {
+                _Chart.reflow();
+            },{timeout: 1000});
         },{timeout:1000});
         _Chart.update(v, false, true);
     });
@@ -198,11 +201,11 @@
         data-height={chartHeight}
         data-width={chartWidth}
         data-size={size}
-        class="wrapper js-figure-wrapper {classes.join(' ')}"
+        class="wrapper js-figure-wrapper"
     >
         <figure
             style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
-            class="ai2html-griffin-figure griffin-figure js-griffin js-{size}"
+            class="ai2html-griffin-figure griffin-figure js-griffin js-{size} {classes.join(' ')}"
         >
             <meta name="format-detection" content="telephone=no" />
             {#if chartLabel || chartTitle || chartSubtitle}
@@ -219,7 +222,7 @@
                 </header>
             {/if}
             <div bind:this="{chartContainer}" 
-                class="container js-hc-container"
+                class="hc-container js-hc-container"
                 use:containerUse
             />
             <figcaption>
@@ -253,9 +256,7 @@
         margin-bottom: 2em;
         align-self: center;
     }
-    .container {
-        margin-top: 1.5rem;
-    }
+   
     .griffin-figure {
         margin: 0 auto;
         background-color: #fff;
