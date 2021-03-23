@@ -1,4 +1,4 @@
-.philly-dashboard .ai2html-griffin-figure {
+.philly-dashboard.ai2html-griffin-figure {
     .highcharts-container.griffin {
 
         .highcharts-graph {
@@ -7,19 +7,30 @@
         .highcharts-markers {
             display: inline;
         } 
-        .highcharts-axis-labels {
+        .highcharts-axis-labels, .highcharts-legend-item > text, .highcharts-axis-title {
             font-size: 1.2em;
+            font-size: clamp(1rem, 1.939vw, 1.2rem);
         }
     }
     header h1 {
         font-size: 1.5rem;
-        /* TODO: clamp */
+        font-size: clamp(1.243rem, 2.424vw, 1.5rem);
+    }
+    .figure-dek {
+        font-size: 1.28rem;
+        font-size: clamp(1.1rem, 2.069vw, 1.28rem);
+
     }
     .figure-caption {
         font-size: 1.2rem;
+        font-size: clamp(1rem, 1.939vw, 1.2rem);
     }
     .figure-note  {
         font-size: 1rem;
-        /* TO DO: new clamp */
+        font-size: clamp(0.8rem, 1.616vw, 1rem);
+        
+    }
+    .hc-container {
+        margin-top: 2rem;
     }
 }

@@ -9,6 +9,9 @@ picture.fullscreen {
     display: none;
   }
 }
+.griffin-figure figcaption p:first-child {
+  margin-top: 0;
+}
 
 .hc-container {
   overflow-y: hidden;
@@ -16,6 +19,7 @@ picture.fullscreen {
 .highcharts-container.griffin {
   font-family: lato;
   font-size: 13.3333px;
+  line-height: 1.2;
   
   .highcharts-axis-labels {
     font-size: 1em;
@@ -91,7 +95,3 @@ picture.fullscreen {
       stroke-width: 3px
     }
   }
-.griffin-figure figcaption {
-    margin-top: -0.5em;
-  }
-
