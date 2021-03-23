@@ -7,6 +7,7 @@ import options from '@Project/options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
 import addCustomColorProperties from './scripts/addCustomColorProperties';
 import returnFormatter from './scripts/return-number-formatter';
+import returnPointFormatter from './scripts/return-point-formatter';
 import hash from './scripts/hash';
 window.Highcharts = Highcharts;
 Highcharts.setOptions(options);
@@ -57,11 +58,17 @@ const griffins = document.querySelectorAll('.js-griffin');
 griffins.forEach(griffin => {
     const config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
     const container = griffin.querySelector('.js-hc-container');
-    const formatter = returnFormatter(config.griffinConfig.numberFormat);
-    extendObj(config.highchartsConfig, ['yAxis','labels','formatter'], formatter);
-  //  config.highchartsConfig.yAxis.labels.formatter = formatter;
-  //  config.highchartsConfig.title.text = config.highchartsConfig.title.text || undefined;
-    container.classList.add(config.griffinConfig.chartPaletteClassname);
+    extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat));
+    extendObj(config.highchartsConfig,
+        ['tooltip', 'pointFormatter'], 
+        returnPointFormatter({
+            numberFormat: config.griffinConfig.NumberFormat,
+            seriesLength: config.highchartsConfig.series.length
+        })
+    );
+    config.highchartsConfig.yAxis.forEach(axis => {
+        axis.title.text = axis.title.text || null;
+    });
     if (config.griffinConfig.SelectedColorPalette == 'custom'){
             addCustomColorProperties({
                 colors: config.griffinConfig.CustomColors, 
