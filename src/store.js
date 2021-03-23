@@ -59,6 +59,7 @@ export const HCStores = [
     ['TooltipFormatter', returnPointFormatter({ numberFormat: undefined, seriesLength: 2 }), 'tooltip.pointFormatter'],
     ['XAxisCategories', null, 'xAxis.categories'],
     ['XAxisTitle', '', 'xAxis.title.text'],
+    ['XAxisReversedStacks', false, 'xAxis.reversedStacks'],
     ['XAxisType', 'linear', 'xAxis.type'],
     ['YAxisLabelsFormatter', returnNumberFormatter(undefined), 'yAxis[0].labels.formatter']
 ];

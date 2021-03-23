@@ -2,7 +2,9 @@
     import Login from './Login.svelte'
     import YAxis from './YAxis.svelte';
     import Legend from './Legend.svelte';
+    import Notices from './Notices.svelte';
     import { s } from './../store';
+    
     function stackingHandler(){
         const value = this.value == 'none' ? undefined : this.value;
         s.Stacking.set(value);
@@ -13,23 +15,42 @@
     export let savedCharts;
     let project;
     let stacking;
-    let yAxes;
-    let yAxisExtents = {};
+    let reverseStacks;
+    let notices = new Set();
+    let stackingNotice = {
+        label: 'Reversing stacks?',
+        description: 'Reversing stacks is not working as expected in Highcharts 8.2.2 when the series are stacked vertically. You may go to the data section and reverse the series there.',
+        type: 'warning'
+    };
     s.ChartProject.subscribe(v => {
         project = v;
     });
     s.Stacking.subscribe(v => {
         stacking = v;
+        requestIdleCallback(checkMessage, {timeout: 500});
     });
+    s.XAxisReversedStacks.subscribe(v => {
+        reverseStacks = v;
+        requestIdleCallback(checkMessage, {timeout: 500});
+    });
+    function checkMessage(){
+        notices[stacking !== 'none' && reverseStacks ? 'add' : 'delete'](stackingNotice);
+        notices = notices;
+    }
     function changeHandler(){
         s.ChartProject.set(this.value);
     }
+    function stackHandler(){
+        s.XAxisReversedStacks.set(this.checked);
+    }
+
 </script>
 <style>
     label {
         display: block;
     }
 </style>
+<Notices {notices} />
 {#await savedCharts}
 <Login reason="to load previous projects" />
 {:then _}
@@ -54,5 +75,6 @@
     <option value="normal">Normal</option>
     <option value="percent">Percent</option>
 </select>
+<label><input on:change="{stackHandler}" checked="{reverseStacks}" type="checkbox"> Reverse stacks</label>
 <Legend />
 <YAxis />
