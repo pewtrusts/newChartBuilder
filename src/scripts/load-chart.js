@@ -18,7 +18,7 @@ export default function _loadChart(data){
     const config = JSON.parse(data.config);
     const HCConfig = config.highchartsConfig;
     const griffinConfig = config.griffinConfig;
-    const lastStoresToSet = [s.ChartSeries, s.ColorIndeces];
+    const lastStoresToSet = [s.ChartSeries, s.ColorIndeces, s.ChartHeight];
     HCStores.forEach(store => {
         const value = searchObject(store[2], HCConfig); // store[2] is the stringified rep of the property, ie, `chart.type`
         if ( value !== null ) {

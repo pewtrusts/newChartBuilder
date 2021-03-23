@@ -92,7 +92,6 @@
         font-family: var(--mono, monospace);
         font-size: 1rem;
         height: calc(100% - 40px);
-        display: none;
     }
     .container {
         display: inline-block;
