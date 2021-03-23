@@ -59,6 +59,8 @@
 </script> 
 
 <script>
+import { resetColorIndeces } from './components/ColorPalette.svelte';
+
 
     let chartResolve;
     let Chart = new Promise(function(resolve){
@@ -89,6 +91,7 @@
     let clickSave = () => {};
     let chartWidth = 650;
     let checkHeight = null;
+    resetColorIndeces(data.length - 1);
     s.IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });

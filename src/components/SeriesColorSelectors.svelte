@@ -1,7 +1,10 @@
 <script>
+import { get } from 'svelte/store';
+
     import { s } from './../store';
     import Checkbox from './Checkbox.svelte';
     import CustomColorInput from './CustomColorInput.svelte';
+    import Button from './Button.svelte';
     export let selectedPalette;
     export let colorCount;
     export let defaultPaletteColorCount;
@@ -23,6 +26,11 @@
     s.MaxPointCount.subscribe(v => {
         maxPointCountArray = Array.apply(null, Array(v)).map((_,i) => i + 1);
     });
+    function reverseColors(){
+        const colorIndeces = get(s.ColorIndeces);
+        colorIndeces.reverse();
+        s.ColorIndeces.set(colorIndeces);
+    }
     
 </script>
 <style>
@@ -49,6 +57,7 @@
         {:else}
             <CustomColorInput seriesIndex="{j}" />
         {/if}
-        </div>
+    </div>
     {/each}
+    <Button type="primary" title="Reverse" clickHandler="{reverseColors}" />
 </div>

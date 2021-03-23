@@ -19,7 +19,8 @@
     let notices = new Set();
     let stackingNotice = {
         label: 'Reversing stacks?',
-        description: 'Reversing stacks is not working as expected in Highcharts 8.2.2 when the series are stacked vertically. You may go to the data section and reverse the series there.',
+        description: 'Reversing stacks is not working as expected in Highcharts 8.2.2 when the series are stacked vertically. ' +
+        'You may go to the data section and reverse the series there. You may also want to reverse the legend.',
         type: 'warning'
     };
     s.ChartProject.subscribe(v => {
@@ -50,7 +51,6 @@
         display: block;
     }
 </style>
-<Notices {notices} />
 {#await savedCharts}
 <Login reason="to load previous projects" />
 {:then _}
@@ -68,6 +68,7 @@
     The project name is necessary if you are designing a chart for project with custom styles. Otherwise, the project name is optional.
     Saved charts will have the project name saved with them for easier retrieval later.</p>
 {/await}
+<Notices {notices} position="left" />
 <label for="stacking-selector">Stacking:</label>
 <!-- svelte-ignore a11y-no-onchange -->
 <select on:change="{stackingHandler}" name="stacking" id="stacking-selector" bind:value="{stacking}">

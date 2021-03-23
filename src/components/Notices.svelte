@@ -6,6 +6,7 @@
 </script>
 <script>
     export let notices;
+    export let position;
     
 </script>
 <style>
@@ -19,6 +20,9 @@
         margin: 0;
         padding: 0;
         min-height: 21px;
+    }
+    dl.left {
+        justify-content: start;
     }
     dt {
         font-size: 0.75rem;
@@ -48,7 +52,7 @@
 </style>
 <div class="container">
     <p class="visually-hidden">Notices</p>
-    <dl>
+    <dl class:left="{position == 'left'}">
         {#each [...notices] as notice}
     <dt class:isActive="{!!notice.onclick}" on:click="{!!notice.onclick ? notice.onclick : null}" use:initTippy={{content: notice.description}} class="{notice.type}">{notice.label}</dt>
         <dd class="visually-hidden">{notice.description}</dd>
