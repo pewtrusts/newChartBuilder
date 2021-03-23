@@ -208,7 +208,8 @@ function initDerived(){
         s.Picture,
         s.GriffinConfig,
         s.ExportType,
-        s.DescriptionProxy
+        s.DescriptionProxy,
+        s.ChartCaption
     ], ([
         chartConfig,
         chartCredit,
@@ -222,10 +223,11 @@ function initDerived(){
         picture,
         griffinConfig,
         exportType,
-        descriptionProxy
+        descriptionProxy,
+        chartCaption
     ]) => {
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
-        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
+        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
         <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
         <header>${chartLabel ? `
             <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
@@ -239,10 +241,13 @@ function initDerived(){
             griffinConfig 
         })}
         </pre>
-        <div aria-hidden="true" class="js-hc-container hc-container ${classes.join(' ')}">
+        <div aria-hidden="true" class="js-hc-container hc-container">
             ${picture}
-        </div>${ chartNotes || chartSources || chartCredit ? `
-        <figcaption>${chartNotes ? `
+        </div>${ chartNotes || chartSources || chartCredit  || chartCaption ? `
+        <figcaption>${chartCaption ? `
+            <p id="chartCaption-${hashId}" class="figure-caption">
+                ${chartCaption}
+            </p>` : ''}${chartNotes ? `
             <p id="chartNotes-${hashId}" class="figure-note">
                 ${chartNotes}
             </p>` : ''}${chartSources ? `
