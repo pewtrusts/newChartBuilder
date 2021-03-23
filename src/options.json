@@ -1,7 +1,8 @@
 {
     "chart": {
         "styledMode": true,
-        "className": "griffin"
+        "className": "griffin",
+        "spacingBottom": 0
     },
     "credits": {
         "enabled": false
@@ -43,6 +44,7 @@
             "day": "%b %e", 
             "week": "%b %e" 
         }
+
        
     },
     "yAxis": [{
