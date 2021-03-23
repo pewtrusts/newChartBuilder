@@ -52,6 +52,7 @@ export const HCStores = [
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
     ['LegendEnabled', true, 'legend.enabled'],
+    ['LegendReversed', false, 'legend.reversed'],
     ['MinHeight', 0, 'responsive.rules[0].chartOptions.chart.height'],
     ['MinHeightCondition', 0, 'responsive.rules[0].condition.maxHeight'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],

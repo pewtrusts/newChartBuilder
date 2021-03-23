@@ -88,6 +88,21 @@
             updateChartData(data, Chart);
         }
     }
+    function _reverseSeries(data){
+       return data.map(row => [row[0], ...row.slice(1).reverse()]);
+    }
+    function reverseSeries(){
+        data = _reverseSeries(data);
+        updateChartData(data, Chart);
+        
+    }
+    function _reverseRows(){
+        return [data[0], ...data.slice(1).reverse()];
+    }
+    function reverseRows(){
+        data = _reverseRows(data);
+        updateChartData(data, Chart);
+    }
     function handleDataChange(e) {
         
         updateChartData(data, Chart);
@@ -213,6 +228,23 @@
         iconStyle="top:2px;"
         type="gray"
         style="border-bottom-width: 0;border-top-width: 0;" />
+    <Button
+        clickHandler={reverseSeries}
+        showIconAndText="true"
+        iconID="resize-width"
+        title="Reverse series"
+        iconStyle="top:2px;"
+        type="gray"
+        style="border-bottom-width: 0;border-top-width: 0;" />
+    <Button
+        clickHandler={reverseRows}
+        showIconAndText="true"
+        iconID="resize-height"
+        title="Reverse rows"
+        iconStyle="top:2px;"
+        type="gray"
+        style="border-bottom-width: 0;border-top-width: 0;" />
+   
 </div>
 <div bind:this={datatableContainer} class="datatable-container">
     <div class="bar bar--top">
@@ -224,6 +256,7 @@
             <Sprite width="15" id="loop-circular" />
             <span class="visually-hidden">transpose data</span>
         </button>
+        
         {#if data}
             {#each data[0] as _, i}
                 <div class="bar-slot bar-slot--column" class:unused="{seriesCountMismatch && i > 1}">
