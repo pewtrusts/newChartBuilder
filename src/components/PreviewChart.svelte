@@ -205,7 +205,7 @@
     >
         <figure
             style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
-            class="ai2html-griffin-figure griffin-figure js-griffin js-{size} {classes.join(' ')}"
+            class="ai2html-griffin-figure griffin-figure js-griffin js-{size} griffin-chart-builder--{size} {classes.join(' ')}"
         >
             <meta name="format-detection" content="telephone=no" />
             {#if chartLabel || chartTitle || chartSubtitle}
