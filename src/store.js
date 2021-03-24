@@ -142,7 +142,7 @@ function initDerived(){
     s.GriffinConfig = derived(Object.values(gMap), function(){
         const keys = Object.keys(gMap);
         var rtn = arguments[0].reduce(function(acc,cur,i){
-            acc[keys[i]] = cur;
+            acc[keys[i]] = typeof cur == 'string' ? cur.replace(/</g, '&lt;').replace(/>/g, '&gt;') : cur;
             return acc;
         },{});
         return rtn;
