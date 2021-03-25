@@ -19,6 +19,16 @@
             "t"
         ]
     },
+    "plotOptions": {
+        "pie": {
+            "innerSize": "56%",
+            "dataLabels": {
+                "enabled": false,
+                "connectorShape": "straight"
+            },
+            "showInLegend": true
+        }
+    },
     "legend": {
         "itemMarginBottom": 10,
         "symbolHeight": 16,
@@ -43,7 +53,8 @@
         "dateTimeLabelFormats": {
             "day": "%b %e", 
             "week": "%b %e" 
-        }
+        },
+        "tickLength": 0
 
        
     },

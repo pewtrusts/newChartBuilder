@@ -81,12 +81,12 @@
     }
     function transpose() {
         data = _transpose(data);
-        if (chartType == 'pie') {
+       /* if (chartType == 'pie') {
             let _data = _transpose(data);
-            updateChartData(_transpose(_data.slice(0,2)), Chart, data);
-        } else {
+            updateChartData(_transpose(_data.slice(0,2)), Chart, data, 'pie');
+        } else {*/
             updateChartData(data, Chart);
-        }
+        //}
     }
     function _reverseSeries(data){
        return data.map(row => [row[0], ...row.slice(1).reverse()]);
@@ -108,13 +108,8 @@
         updateChartData(data, Chart);
     }
     s.ChartType.subscribe(v => {
-        if (v == 'pie' && chartType !== 'pie' ) {
-            let _data = _transpose(data);
-            updateChartData(_transpose(_data.slice(0,2)), Chart, data);
-        } else if ( chartType == 'pie' && v !== 'pie' ) {
-            updateChartData(data, Chart);
-        }
         chartType = v;
+        updateChartData(data, Chart, null, chartType);
     });
     s.XAxisType.subscribe((v) => {
         xAxisType = v;

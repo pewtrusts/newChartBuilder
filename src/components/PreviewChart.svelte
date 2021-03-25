@@ -19,6 +19,9 @@
     window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
     HCExporting(Highcharts);
     HCOfflineExporting(Highcharts);
+    options.plotOptions.pie.dataLabels.formatter = function(){
+        return this.point.x;
+    };
     Highcharts.setOptions(options);
     /*config.title = config.title || {};
     config.title.text = undefined;
@@ -82,6 +85,7 @@
     let classes = [];
     let chartLabel;
     let chartTitle;
+    let chartType;
     let chartSubtitle;
     let chartNotes;
     let chartCaption;
@@ -137,6 +141,7 @@
             _Chart.redraw();
             window.requestIdleCallback(() => {
                 _Chart.reflow();
+                _Chart.legend.update(); // bd legend was not updating after color change for pie charts
             },{timeout: 1000});
         },{timeout:1000});
         _Chart.update(v, false, true);
@@ -162,12 +167,10 @@
     s.ChartCaption.subscribe((v) => {
         chartCaption = v;
     });
-    /*s.ChartType.subscribe((v) => {
-        if (Chart) {
-            updateChartConfig(Chart, { chart: { type: v } });
-        }
+    s.ChartType.subscribe((v) => {
+        chartType = v;
     });
-    s.Stacking.subscribe(v => {
+    /*s.Stacking.subscribe(v => {
         if (Chart){
             updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
         }
@@ -222,7 +225,7 @@
                 </header>
             {/if}
             <div bind:this="{chartContainer}" 
-                class="hc-container js-hc-container"
+                class="hc-container js-hc-container {chartType}"
                 use:containerUse
             />
             <figcaption>

@@ -1,6 +1,7 @@
 <script context="module">
     import Login from './Login.svelte'
     import YAxis from './YAxis.svelte';
+    import XAxis from './XAxis.svelte';
     import Legend from './Legend.svelte';
     import Notices from './Notices.svelte';
     import { s } from './../store';
@@ -79,3 +80,4 @@
 <label><input on:change="{stackHandler}" checked="{reverseStacks}" type="checkbox"> Reverse stacks</label>
 <Legend />
 <YAxis />
+<XAxis />

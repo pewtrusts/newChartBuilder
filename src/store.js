@@ -51,7 +51,10 @@ export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
+    ['LegendAlign', 'center', 'legend.align'],
     ['LegendEnabled', true, 'legend.enabled'],
+    ['LegendLayout', 'horizontal', 'legend.layout'],
+    ['LegendVerticalAlign', 'bottom', 'legend.verticalAlign'],
     ['LegendReversed', false, 'legend.reversed'],
     ['MinHeight', 0, 'responsive.rules[0].chartOptions.chart.height'],
     ['MinHeightCondition', 0, 'responsive.rules[0].condition.maxHeight'],
@@ -62,6 +65,7 @@ export const HCStores = [
     ['XAxisTitle', '', 'xAxis.title.text'],
     ['XAxisReversedStacks', false, 'xAxis.reversedStacks'],
     ['XAxisType', 'linear', 'xAxis.type'],
+    ['XAxisLabelsY', undefined, 'xAxis.labels.y'],
     ['YAxisLabelsFormatter', returnNumberFormatter(undefined), 'yAxis[0].labels.formatter']
 ];
 const GStores = [
@@ -130,11 +134,18 @@ function initWritables(){
         s.YAxisLabelsFormatter.set(returnNumberFormatter(v));
         s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
     });
+    s.ChartType.subscribe(v => {
+        if (v == 'pie') {
+            s.ColorByPoint.set([true]);
+        }
+    })
 } // end initWritables
 
 /**
  * subscriptions to writables
  */
+
+
 
 
 function initDerived(){
@@ -209,7 +220,8 @@ function initDerived(){
         s.GriffinConfig,
         s.ExportType,
         s.DescriptionProxy,
-        s.ChartCaption
+        s.ChartCaption,
+        s.ChartType
     ], ([
         chartConfig,
         chartCredit,
@@ -224,7 +236,8 @@ function initDerived(){
         griffinConfig,
         exportType,
         descriptionProxy,
-        chartCaption
+        chartCaption,
+        chartType
     ]) => {
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
         return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
@@ -241,7 +254,7 @@ function initDerived(){
             griffinConfig 
         })}
         </pre>
-        <div aria-hidden="true" class="js-hc-container hc-container">
+        <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
             ${picture}
         </div>${ chartNotes || chartSources || chartCredit  || chartCaption ? `
         <figcaption>${chartCaption ? `

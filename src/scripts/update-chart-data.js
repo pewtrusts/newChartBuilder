@@ -24,7 +24,7 @@ const timeUnits =
     year:        31449600000,
 };
 // return a HC series config object based on the data
-export default function _updateChartData(data, Chart, datatableData = null) { // pass in third arg when the chart uses fewer series than what's in the
+export default function _updateChartData(data, Chart, datatableData = null, chartType) { // pass in third arg when the chart uses fewer series than what's in the
                                                                        // datatable, e.g., pie charts 
     // map of x-axis values as coerced to dates.
     // info: intervals was used to set specific tick points until i found the more immediate
@@ -58,6 +58,12 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
             rtn = {
                 name: valueColumn || '',
                 data: data.slice(1).map(row => {
+                    if (chartType == 'pie'){
+                        return {
+                            name: row[0],
+                            y: row[i + 1]
+                        };
+                    }
                     return {
                         y: row[i + 1]
                     };
@@ -91,6 +97,7 @@ export default function _updateChartData(data, Chart, datatableData = null) { //
         };
         return rtn;
     });
+    console.log(series);
     if (shouldBeDateTime) {
         storesToSet.push(['XAxisType', 'datetime'],['XAxisCategories',null]);
        // s.XAxisType.set('datetime');
