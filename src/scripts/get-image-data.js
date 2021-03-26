@@ -71,12 +71,12 @@ export default function _getImageData(){
     return Promise.all(promises).then(([full2,full1,mobile2,mobile1, thumbnail]) => {
         s.Picture.set(`
         <picture class="fullscreen">
-            <source srcset="${full1.toDataURL("image/webp", 0.3)} 1x, ${full2.toDataURL("image/webp", 0.3)} 2x"> 
-            <img style="${fsMargins}" width="100%" src="${full1.toDataURL("image/webp", 0.3)}">
+            <source srcset="${full1.toDataURL("image/png", 0)} 1x, ${full2.toDataURL("image/png", 0)} 2x"> 
+            <img style="${fsMargins}" width="100%" src="${full1.toDataURL("image/png", 0)}">
         </picture>
         <picture class="mobile">
-            <source srcset="${mobile1.toDataURL("image/webp", 0.3)} 1x, ${mobile2.toDataURL("image/webp", 0.3)} 2x">
-            <img style="${mbMargins}" width="100%" src="${mobile1.toDataURL("image/webp", 0.3)}">
+            <source srcset="${mobile1.toDataURL("image/png", 0)} 1x, ${mobile2.toDataURL("image/png", 0)} 2x">
+            <img style="${mbMargins}" width="100%" src="${mobile1.toDataURL("image/png", 0)}">
         </picture>
         `);
         s.Thumbnail.set(thumbnail.toDataURL("image/png", 0));

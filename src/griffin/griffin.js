@@ -61,9 +61,10 @@ export function extendObj(base, properties, value){
 function getImage(e){
     e.preventDefault();
     const imageSource = this.parentElement.parentElement.parentElement.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
-    const newTab = window.open();
-    newTab.document.body.innerHTML = `<img src=${imageSource} />`;
-
+    const a = document.createElement("a");
+    a.href = imageSource;
+    a.setAttribute("download", 'chart.png');
+    a.click();
 }
 const griffins = document.querySelectorAll('.js-griffin');
 griffins.forEach(griffin => {
