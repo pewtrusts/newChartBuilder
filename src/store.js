@@ -260,9 +260,13 @@ function initDerived(){
             griffinConfig 
         })}
         </pre>
+        
         <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
+        </div>
+        <div class="picture-container js-picture-container">
             ${picture}
-        </div>${ chartNotes || chartSources || chartCredit  || chartCaption ? `
+        </div>
+        ${ chartNotes || chartSources || chartCredit  || chartCaption ? `
         <figcaption>${chartCaption ? `
             <p id="chartCaption-${hashId}" class="figure-caption">
                 ${chartCaption}
@@ -273,7 +277,7 @@ function initDerived(){
             <p class="figure-note figure-note--source">
                 ${chartSources}
             </p>` : ''}${chartCredit ? `
-            <p class="figure-note figure-note--source">
+            <p class="figure-note figure-note--source js-griffin-credit">
                 ${chartCredit}
             </p>` : ''}
         </figcaption>` : ''}

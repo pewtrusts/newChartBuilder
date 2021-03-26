@@ -58,10 +58,27 @@ export function extendObj(base, properties, value){
      * prevent chartUpdate from redrawing until end.
      */
 }
+function getImage(e){
+    e.preventDefault();
+    const imageSource = this.parentElement.parentElement.parentElement.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
+    const newTab = window.open();
+    newTab.document.body.innerHTML = `<img src=${imageSource} />`;
+
+}
 const griffins = document.querySelectorAll('.js-griffin');
 griffins.forEach(griffin => {
     const config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
     const container = griffin.querySelector('.js-hc-container');
+    const sourceNote = griffin.querySelector('.js-griffin-credit');
+    const pictureContainer = griffin.querySelector('.js-picture-container');
+    pictureContainer.style.display = 'none';
+    const btn = document.createElement('a');
+    btn.textContent = 'Download image';
+    btn.href = '#';
+    btn.addEventListener('click', getImage);
+    sourceNote.insertAdjacentText('beforeend', ` | `);
+    sourceNote.insertAdjacentElement('beforeend', btn);
+
     extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat));
     extendObj(config.highchartsConfig,
         ['tooltip', 'pointFormatter'], 
