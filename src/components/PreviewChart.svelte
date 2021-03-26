@@ -19,6 +19,7 @@
     window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
     HCExporting(Highcharts);
     HCOfflineExporting(Highcharts);
+    options.legend.labelFormat = "{name}"; // shouldn't be necessary but some charts were tripping up on load
     options.plotOptions.pie.dataLabels.formatter = function(){
         return this.point.x;
     };
