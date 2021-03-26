@@ -1,17 +1,14 @@
 <script>
     import {s} from './../store';
-    import {get} from 'svelte/store';
     let value;
-    s.ChartConfig.subscribe(v => {
-        value = JSON.stringify(v.responsive.rules.slice(0), null, 2);
+    s.OtherResponsive.subscribe(v => {
+        value = JSON.stringify(v, null, 2);
         // rules[0] governs min height which is handled by the GUI
     });
     function handler(){
         //TO DO: try/catch
-        const _config = get(s.ChartConfig);
-        const _rules = JSON.parse(value);
-        _config.responsive.rules = _rules;
-        s.ChartConfig.set(_config);
+        const rules = JSON.parse(value);
+        s.OtherResponsive.set(rules);
     }
     
 </script>

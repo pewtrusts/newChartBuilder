@@ -58,9 +58,6 @@ export const HCStores = [
     ['LegendVerticalAlign', 'bottom', 'legend.verticalAlign'],
     ['LegendReversed', false, 'legend.reversed'],
     ['LegendFormatter', undefined, 'legend.labelFormatter'],
-    ['Responsive', [], 'responsive.rules'],
-    ['MinHeight', 0, 'responsive.rules[0].chartOptions.chart.height'],
-    ['MinHeightCondition', 0, 'responsive.rules[0].condition.maxHeight'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],
     ['StartOfWeek', 1, 'xAxis.startOfWeek'],
     ['TooltipFormatter', returnPointFormatter({ numberFormat: undefined, seriesLength: 2 }), 'tooltip.pointFormatter'],
@@ -89,7 +86,10 @@ const GStores = [
     ['ColorIndeces', []],
     ['DescriptionProxy', 'chartDescription'],
     ['NumberFormat', undefined],
-    ['SelectedColorPalette', 'default']
+    ['SelectedColorPalette', 'default'],
+    ['MinHeight', 0],
+    ['MinHeightCondition', 0],
+    ['OtherResponsive', []]
 ];
 const appStores = [
     ['PrintWidth', undefined],
@@ -141,8 +141,9 @@ function initWritables(){
     s.ChartType.subscribe(v => {
         if (v == 'pie') {
             s.ColorByPoint.set([true]);
+        } else {
+            s.ColorByPoint.set([false]);
         }
-        s.ColorByPoint.set([false]);
         s.LegendFormatter.set(returnLegendFormatter(v));
     })
 } // end initWritables
@@ -155,7 +156,23 @@ function initWritables(){
 
 
 function initDerived(){
-
+    s.AllResponsiveRules = derived([s.MinHeight, s.MinHeightCondition, s.OtherResponsive], ([minHeight, minHeightCondition, otherResponsive]) => {
+        return [{
+            chartOptions: {
+                chart: {
+                    height: minHeight
+                }
+            },
+            condition: {
+                maxHeight: minHeightCondition
+            }
+        }, ...otherResponsive];
+    });
+    s.AllResponsiveRules.subscribe(v => {
+        const chartConfig = get(s.ChartConfig);
+        extendObj(chartConfig, ['responsive','rules'], v);
+        s.ChartConfig.set(chartConfig);
+    });
     s.GriffinConfig = derived(Object.values(gMap), function(){
         const keys = Object.keys(gMap);
         var rtn = arguments[0].reduce(function(acc,cur,i){
