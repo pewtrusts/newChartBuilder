@@ -8,8 +8,12 @@ import options from '@Project/options.json';
 import addCustomColorProperties from './scripts/addCustomColorProperties';
 import returnFormatter from './scripts/return-number-formatter';
 import returnPointFormatter from './scripts/return-point-formatter';
+import returnLegendFormatter from './scripts/return-legend-formatter';
 import hash from './scripts/hash';
 window.Highcharts = Highcharts;
+options.plotOptions.pie.dataLabels.formatter = function () {
+    return this.point.x;
+};
 Highcharts.setOptions(options);
 Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     var currentClassName = replace ? '' : (this.attr('class') || '');
@@ -66,6 +70,7 @@ griffins.forEach(griffin => {
             seriesLength: config.highchartsConfig.series.length
         })
     );
+    extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
     config.highchartsConfig.yAxis.forEach(axis => {
         axis.title.text = axis.title.text || null;
     });

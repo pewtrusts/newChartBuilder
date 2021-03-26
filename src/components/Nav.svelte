@@ -30,6 +30,12 @@
 
         },
         {
+            name: 'Responsive',
+            icon: 'phone',
+            style: 'bottom: 2px;'
+
+        },
+        {
             name: 'Code',
             icon: 'code',
 

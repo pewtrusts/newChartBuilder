@@ -5,6 +5,7 @@ import { writable, derived, get } from 'svelte/store';
 import { extendObj } from './griffin/griffin';
 import returnPointFormatter from './griffin/scripts/return-point-formatter';
 import returnNumberFormatter from './griffin/scripts/return-number-formatter';
+import returnLegendFormatter from './griffin/scripts/return-legend-formatter';
 
 export const s = {};
 export const hMap = {};
@@ -56,6 +57,8 @@ export const HCStores = [
     ['LegendLayout', 'horizontal', 'legend.layout'],
     ['LegendVerticalAlign', 'bottom', 'legend.verticalAlign'],
     ['LegendReversed', false, 'legend.reversed'],
+    ['LegendFormatter', undefined, 'legend.labelFormatter'],
+    ['Responsive', [], 'responsive.rules'],
     ['MinHeight', 0, 'responsive.rules[0].chartOptions.chart.height'],
     ['MinHeightCondition', 0, 'responsive.rules[0].condition.maxHeight'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],
@@ -104,6 +107,7 @@ const appStores = [
     ['PictureIsMissingOrOld', true],
     ['Thumbnail', ''],
     ['IsLoading', false]
+    
 ];
 
 function initWritables(){
@@ -138,6 +142,8 @@ function initWritables(){
         if (v == 'pie') {
             s.ColorByPoint.set([true]);
         }
+        s.ColorByPoint.set([false]);
+        s.LegendFormatter.set(returnLegendFormatter(v));
     })
 } // end initWritables
 

@@ -97,7 +97,6 @@ export default function _updateChartData(data, Chart, datatableData = null, char
         };
         return rtn;
     });
-    console.log(series);
     if (shouldBeDateTime) {
         storesToSet.push(['XAxisType', 'datetime'],['XAxisCategories',null]);
        // s.XAxisType.set('datetime');

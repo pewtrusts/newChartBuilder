@@ -6,7 +6,6 @@ export default function _returnFormatter(format, context){
                 var value = this.value !== undefined ? this.value : this.y;
                 // TO DO  figure out decimals programmatically
                 var rtn = Highcharts.numberFormat(value * 100, (context == 'tooltip' ? 1 : 0)) + '%';
-                console.log({value,rtn});
                 return rtn;
             };
         case 'currency':

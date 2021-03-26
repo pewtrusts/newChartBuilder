@@ -21,6 +21,7 @@
     import Settings from '@Component/Settings.svelte';
     import Text from './components/Text.svelte';
     import Code from '@Component/Code.svelte';
+    import Responsive from '@Component/Responsive.svelte';
     import Dialog from '@Component/Dialog.svelte';
     import VerifySave from '@Component/VerifySave.svelte';
     import Print from '@Component/Print.svelte';
@@ -232,6 +233,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
             <section use:pushSection>
                 <SectionHead text="Colors" />
                 <Colors />
+            </section>
+            <section use:pushSection>
+                <SectionHead text="Responsive" />
+                <Responsive />
             </section>
             <section use:pushSection>
                 <SectionHead text="Code" />
