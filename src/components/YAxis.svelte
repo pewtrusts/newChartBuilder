@@ -2,6 +2,20 @@
     import { s, initDynamicStore } from './../store';
     let yAxes;
     let yAxisLocalValues = {};
+    let yAxisDecimals = undefined;
+    s.YAxisDecimals.subscribe(v => {
+        /**
+         * TODO multipl axes
+        */
+        if (v) {
+            yAxisDecimals = +v;
+        } else {
+            yAxisDecimals = undefined;
+        }
+    });
+    function decimalHandler(){
+        s.YAxisDecimals.set(+this.value || undefined);
+    }
     s.ChartConfig.subscribe(v => {
         yAxes = v.yAxis;
     });
@@ -27,6 +41,7 @@
         <label>Title: <input use:initDynamicStore="{{configType: 'highcharts', localValue: yAxisLocalValues}}" name="yAxis[{i}].title.text" type="text" bind:value="{yAxisLocalValues[`yAxisTitle[${i}]`]}"></label>
         <label>Min:   <input use:initDynamicStore="{{configType: 'highcharts', localValue: yAxisLocalValues}}" name="yAxis[{i}].min" type="text" bind:value="{yAxisLocalValues[`yAxisMins[${i}]`]}"></label>
         <label>Max:   <input use:initDynamicStore="{{configType: 'highcharts', localValue: yAxisLocalValues}}" name="yAxis[{i}].max" type="text" bind:value="{yAxisLocalValues[`yAxisMaxes[${i}]`]}"></label>
+        <label>Decimals: <input on:change="{decimalHandler}" type="number" bind:value="{yAxisDecimals}"></label>  
     {/each}
     <input class="button button--primary" type="submit">
 </form>

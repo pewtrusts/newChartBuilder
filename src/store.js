@@ -89,7 +89,8 @@ const GStores = [
     ['SelectedColorPalette', 'default'],
     ['MinHeight', 0],
     ['OtherResponsive', []],
-    ['LockHeight', true]
+    ['LockHeight', true],
+    ['YAxisDecimals', undefined]
 ];
 const appStores = [
     ['PrintWidth', undefined],
@@ -132,11 +133,18 @@ function initWritables(){
     appStores.forEach(d => {
         createWritable({ name: d[0], value: d[1], config: d[2] });
     });
-    
+    /**
+     * TO DO : formatters should be derived. need derived stores hooked into HC config object
+     */
     s.NumberFormat.subscribe(v => {
+        const yAxisDecimals = get(s.YAxisDecimals)
         const seriesLength = get(s.ChartSeries).length;
-        s.YAxisLabelsFormatter.set(returnNumberFormatter(v));
+        s.YAxisLabelsFormatter.set(returnNumberFormatter(v, null, yAxisDecimals));
         s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
+    });
+    s.YAxisDecimals.subscribe(v => {
+        const numberFormat = get(s.NumberFormat)
+        s.YAxisLabelsFormatter.set(returnNumberFormatter(numberFormat, null, v));
     });
     s.ChartType.subscribe(v => {
         if (v == 'pie') {
