@@ -80,7 +80,7 @@ griffins.forEach(griffin => {
     sourceNote.insertAdjacentText('beforeend', ` | `);
     sourceNote.insertAdjacentElement('beforeend', btn);
 
-    extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat));
+    extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
     extendObj(config.highchartsConfig,
         ['tooltip', 'pointFormatter'], 
         returnPointFormatter({
