@@ -88,8 +88,8 @@ const GStores = [
     ['NumberFormat', undefined],
     ['SelectedColorPalette', 'default'],
     ['MinHeight', 0],
-    ['MinHeightCondition', 0],
-    ['OtherResponsive', []]
+    ['OtherResponsive', []],
+    ['LockHeight', true]
 ];
 const appStores = [
     ['PrintWidth', undefined],
@@ -156,7 +156,7 @@ function initWritables(){
 
 
 function initDerived(){
-    s.AllResponsiveRules = derived([s.MinHeight, s.MinHeightCondition, s.OtherResponsive], ([minHeight, minHeightCondition, otherResponsive]) => {
+    s.AllResponsiveRules = derived([s.MinHeight, s.OtherResponsive], ([minHeight, otherResponsive]) => {
         return [{
             chartOptions: {
                 chart: {
@@ -164,7 +164,7 @@ function initDerived(){
                 }
             },
             condition: {
-                maxHeight: minHeightCondition
+                maxWidth: 416
             }
         }, ...otherResponsive];
     });

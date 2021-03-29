@@ -4,7 +4,7 @@
     let mobile;
     let mobileChart;
     import { s } from './../store';
-    export function _setRealHeight(nominal){
+    export function _setRealHeight(nominal, isLocked){
         fullscreen = fullscreen || document.querySelector('.js-fullscreen');
         chart = chart || fullscreen.querySelector('.js-hc-container');
         const nonChartHeight = fullscreen.offsetHeight - chart.offsetHeight;
@@ -13,7 +13,11 @@
             let desiredTotalHeight = width * parseInt(nominal) / 100;
             let desiredChartHeight = desiredTotalHeight - nonChartHeight;
             let percentage = +((100 * desiredChartHeight / width).toFixed(2));
-            return {value: Math.max(10, percentage) + '%', warn: percentage < 10};
+            if ( isLocked ){
+                return {value: parseInt(desiredChartHeight), warn: desiredChartHeight < 100};
+            } else {
+                return {value: Math.max(10, percentage) + '%', warn: percentage < 10};
+            }
         } else {
             let value = +parseInt(nominal) - nonChartHeight;
             return {value: Math.max(value,100), warn: value < 100};
@@ -54,6 +58,7 @@
     let nominalMinHeight;
     let chartWidth;
     let chartHeight;
+    let lockHeight;
     let nominalHeightValue;
     //let nominalCustomHeight;
     let customWidth = false;
@@ -74,7 +79,7 @@
     $: heightSelectorValue = ['56.25%','100%'].includes(nominalHeightValue) ? nominalHeightValue : 'custom';
     $: customHeight = heightSelectorValue == 'custom';
     function setRealHeight(nominal){
-        const calc = _setRealHeight(nominal);
+        const calc = _setRealHeight(nominal, lockHeight);
         notices[calc.warn ? 'add' : 'delete'](outOfBoundsNotice);
         notices = notices;
         s.ChartHeight.set(calc.value);
@@ -175,11 +180,17 @@
     function setRealMinHeight(nominal){
       const value = _setRealMinHeight(nominal);
       s.MinHeight.set(value);
-      s.MinHeightCondition.set(value);
     }
     function minHeightHandler(){
         s.NominalMinHeight.set(this.value);
     }
+    function lockHeightHandler(){
+        s.LockHeight.set(this.checked);
+    }
+    s.LockHeight.subscribe(v => {
+        lockHeight = v;
+        checkHeight();
+    })
   /*  s.MinHeight.subscribe(v => {
         minHeight = v;
         */
@@ -245,7 +256,8 @@
             <input class="button button--primary" type="submit">
         </form>
     {/if}
+    <label><input on:change="{lockHeightHandler}" checked="{lockHeight ? 'checked' : null}" type="checkbox"> Lock height</label>
 </div>
 <!-- svelte-ignore a11y-no-onchange -->
-<label for="min-height">Minimum chart height:</label> 
-<input id="min-height" type="number" on:change="{minHeightHandler}" increment="1" bind:value="{nominalMinHeight}" >
+<label for="min-height">Mobile chart height:</label> 
+<input id="min-height" type="number" on:change="{minHeightHandler}" increment="1" bind:value="{nominalMinHeight}" >px

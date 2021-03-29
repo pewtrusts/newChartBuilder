@@ -2,6 +2,7 @@
     import {s} from './../store';
     let value;
     s.OtherResponsive.subscribe(v => {
+        console.log('otherResponsive');
         value = JSON.stringify(v, null, 2);
         // rules[0] governs min height which is handled by the GUI
     });
