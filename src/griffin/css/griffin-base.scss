@@ -103,3 +103,14 @@ picture.fullscreen {
   .picture-container {
     overflow: hidden;
   }
+
+  .griffin-download-btn {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-width: 0;
+    background: none;
+    color: #296ec3;
+    padding: 0;
+    margin: 0;
+  }

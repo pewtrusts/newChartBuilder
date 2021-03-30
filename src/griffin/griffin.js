@@ -61,48 +61,54 @@ export function extendObj(base, properties, value){
 }
 function getImage(e){
     e.preventDefault();
-    var imageSource = this.parentElement.parentElement.parentElement.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
+    var figure = this.parentElement.parentElement.parentElement;
+    var imageSource = figure.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
+    var chartTitle = figure.querySelector('h1');
+    var chartTitleText = chartTitle ? chartTitle.textContent : '[no title]';
     var a = document.createElement("a");
     a.href = imageSource;
     a.setAttribute("download", 'chart.png');
     a.click();
     var dataLayer = window.dataLayer || null;
     if (dataLayer) {
-        dataLayer.push({ 'event': 'Interactive Click', 'eventData': 'Download Griffin image' });
+        dataLayer.push({ 'event': 'Interactive Click', 'eventData': 'Download Griffin Image | SOTC Digital 2021 | ' + chartTitleText });
     }
 }
 var griffins = document.querySelectorAll('.js-griffin');
-for (var i = 0; i < griffins.length; i++){
-    var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
-    var container = griffins[i].querySelector('.js-hc-container');
-    var sourceNote = griffins[i].querySelector('.js-griffin-credit');
-    var pictureContainer = griffins[i].querySelector('.js-picture-container');
-    pictureContainer.style.display = 'none';
-    var btn = document.createElement('a');
-    btn.textContent = 'Download image';
-    btn.href = '#';
-    btn.addEventListener('click', getImage);
-    sourceNote.insertAdjacentText('beforeend', ' | ');
-    sourceNote.insertAdjacentElement('beforeend', btn);
-
-    extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
-    extendObj(config.highchartsConfig,
-        ['tooltip', 'pointFormatter'], 
-        returnPointFormatter({
-            numberFormat: config.griffinConfig.NumberFormat,
-            seriesLength: config.highchartsConfig.series.length
-        })
-    );
-    extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
-    config.highchartsConfig.yAxis.forEach(axis => {
-        axis.title.text = axis.title.text || null;
-    });
-    if (config.griffinConfig.SelectedColorPalette == 'custom'){
-            addCustomColorProperties({
-                colors: config.griffinConfig.CustomColors, 
-                hash: hash(config.griffinConfig.CustomColors.join(''))
-            });
-        }
+if (window.CSS && CSS.supports('color', 'var(--primary)')) {
+    for (var i = 0; i < griffins.length; i++){
+        var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
+        var container = griffins[i].querySelector('.js-hc-container');
+        var sourceNote = griffins[i].querySelector('.js-griffin-credit');
+        var pictureContainer = griffins[i].querySelector('.js-picture-container');
+        pictureContainer.style.display = 'none';
+        var btn = document.createElement('button');
+        btn.textContent = 'Download image';
+        btn.className = 'griffin-download-btn';
+        btn.setAttribute('role', 'button');
+        btn.addEventListener('click', getImage);
+        sourceNote.insertAdjacentText('beforeend', ' | ');
+        sourceNote.insertAdjacentElement('beforeend', btn);
     
-    Highcharts.chart(container, config.highchartsConfig);
+        extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
+        extendObj(config.highchartsConfig,
+            ['tooltip', 'pointFormatter'], 
+            returnPointFormatter({
+                numberFormat: config.griffinConfig.NumberFormat,
+                seriesLength: config.highchartsConfig.series.length
+            })
+        );
+        extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
+        config.highchartsConfig.yAxis.forEach(function(axis){
+            axis.title.text = axis.title.text || null;
+        });
+        if (config.griffinConfig.SelectedColorPalette == 'custom'){
+                addCustomColorProperties({
+                    colors: config.griffinConfig.CustomColors, 
+                    hash: hash(config.griffinConfig.CustomColors.join(''))
+                });
+            }
+        
+        Highcharts.chart(container, config.highchartsConfig);
+    }
 }

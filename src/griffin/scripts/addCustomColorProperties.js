@@ -4,7 +4,9 @@ function removeStylesheet(id){
         document.head.removeChild(stylesheet);
     }
 }
-export default function _addCustomColorProperties({colors, hash}){
+export default function _addCustomColorProperties(obj){
+    var colors = obj.colors;
+    var hash = obj.hash;
     removeStylesheet('customColorStylesheet-' + hash);
     var customProps = colors.reduce(function(acc,cur,i){
         return acc + '--color-'+ i + ':' + cur + ';';
