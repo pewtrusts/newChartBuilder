@@ -7,6 +7,6 @@ export default function _returnLegendFormatter(type){
         };
     }
     return function(){
-        return `${this.name}, <b>${returnNumberFormatter('percentage').call(this)}</b>`;
+        return this.name + ', <b>' + returnNumberFormatter('percentage').call(this) + '</b>';
     }
 }

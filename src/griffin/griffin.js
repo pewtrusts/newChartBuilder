@@ -21,10 +21,11 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     className = (className || '')
         .split(/ /g)
         .reduce(function (newClassName, name) {
+            var split, regex;
             if (currentClassName.indexOf(name) === -1) {
-                let split = name.split(/-\d+$/);
+                split = name.split(/-\d+$/);
                 if (split.length > 1 ) {
-                    let regex = new RegExp(split[0] + '-\\d+$');
+                    regex = new RegExp(split[0] + '-\\d+$');
                     newClassName[0] = newClassName[0].replace(regex, '');
                 }
                 newClassName.push(name);
@@ -41,13 +42,13 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
 };
 export function extendObj(base, properties, value){
     properties.reduce(function(acc,cur,i){
-        const split = cur.split('[');
+        var split = cur.split('['), prop, index;
         if ( split.length == 1 ){ // ie no index, not an array
             acc[cur] = i == properties.length - 1 ? value : ( acc[cur] || {} );
             return acc[cur] 
         } else {
-            let prop = split[0];
-            let index = parseInt(split[1]);
+            prop = split[0];
+            index = parseInt(split[1]);
             acc[prop] = acc[prop] || [];
             acc[prop][index] = i == properties.length - 1 ? value : (acc[prop][index] || {});
             return acc[prop][index];
@@ -60,24 +61,28 @@ export function extendObj(base, properties, value){
 }
 function getImage(e){
     e.preventDefault();
-    const imageSource = this.parentElement.parentElement.parentElement.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
-    const a = document.createElement("a");
+    var imageSource = this.parentElement.parentElement.parentElement.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
+    var a = document.createElement("a");
     a.href = imageSource;
     a.setAttribute("download", 'chart.png');
     a.click();
+    var dataLayer = window.dataLayer || null;
+    if (dataLayer) {
+        dataLayer.push({ 'event': 'Interactive Click', 'eventData': 'Download Griffin image' });
+    }
 }
-const griffins = document.querySelectorAll('.js-griffin');
-griffins.forEach(griffin => {
-    const config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
-    const container = griffin.querySelector('.js-hc-container');
-    const sourceNote = griffin.querySelector('.js-griffin-credit');
-    const pictureContainer = griffin.querySelector('.js-picture-container');
+var griffins = document.querySelectorAll('.js-griffin');
+for (var i = 0; i < griffins.length; i++){
+    var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
+    var container = griffins[i].querySelector('.js-hc-container');
+    var sourceNote = griffins[i].querySelector('.js-griffin-credit');
+    var pictureContainer = griffins[i].querySelector('.js-picture-container');
     pictureContainer.style.display = 'none';
-    const btn = document.createElement('a');
+    var btn = document.createElement('a');
     btn.textContent = 'Download image';
     btn.href = '#';
     btn.addEventListener('click', getImage);
-    sourceNote.insertAdjacentText('beforeend', ` | `);
+    sourceNote.insertAdjacentText('beforeend', ' | ');
     sourceNote.insertAdjacentElement('beforeend', btn);
 
     extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
@@ -100,4 +105,4 @@ griffins.forEach(griffin => {
         }
     
     Highcharts.chart(container, config.highchartsConfig);
-});
+}
