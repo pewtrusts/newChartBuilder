@@ -10,6 +10,10 @@
         .highcharts-axis-labels, .highcharts-legend-item > text, .highcharts-axis-title {
             font-size: 1.2em;
             font-size: clamp(1rem, 1.939vw, 1.2rem);
+            @media screen and (max-width: 416px) {
+                font-size: 1rem;
+                font-size: clamp(1rem, 1.939vw, 1.2rem);
+            }
         }
         .highcharts-legend-item.highcharts-line-series .highcharts-graph {
             stroke-width: 16px;
@@ -18,10 +22,18 @@
     header h1 {
         font-size: 1.5rem;
         font-size: clamp(1.1rem, 2.424vw, 1.5rem);
+        @media screen and (max-width: 416px) {
+            font-size: 1.1rem;
+            font-size: clamp(1.1rem, 2.424vw, 1.5rem);
+        }
     }
     .figure-dek {
         font-size: 1.28rem;
         font-size: clamp(1.1rem, 2.069vw, 1.28rem);
+        @media screen and (max-width: 416px) {
+            font-size: 1.1rem;
+            font-size: clamp(1.1rem, 2.069vw, 1.28rem);
+        }
 
     }
     .figure-caption {
@@ -32,10 +44,15 @@
             font-size: 1rem;
             font-size: clamp(1rem, 2.332vw, 1.15rem); 
         }
+        
     }
     .figure-note  {
         font-size: 1rem;
         font-size: clamp(0.8rem, 1.616vw, 1rem);
+        @media screen and (max-width: 416px) {
+            font-size: 0.8rem;
+            font-size: clamp(0.8rem, 1.616vw, 1rem);
+        }
         
     }
     .hc-container {
