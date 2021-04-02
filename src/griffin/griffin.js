@@ -103,11 +103,20 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
             axis.title.text = axis.title.text || null;
         });
         if (config.griffinConfig.SelectedColorPalette == 'custom'){
-                addCustomColorProperties({
-                    colors: config.griffinConfig.CustomColors, 
-                    hash: hash(config.griffinConfig.CustomColors.join(''))
-                });
-            }
+            addCustomColorProperties({
+                colors: config.griffinConfig.CustomColors, 
+                hash: hash(config.griffinConfig.CustomColors.join(''))
+            });
+        }
+        /**
+         * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>
+         * in the previous one. doesn't show in DOM inspector, but does on screen
+         */
+        if (config.highchartsConfig.xAxis.categories ){
+            config.highchartsConfig.xAxis.categories = config.highchartsConfig.xAxis.categories.map(cat => {
+                return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
+            });
+        }
         
         Highcharts.chart(container, config.highchartsConfig);
     }
