@@ -74,6 +74,18 @@ function getImage(e){
         dataLayer.push({ 'event': 'Interactive Click', 'eventData': 'Download Griffin Image | SOTC Digital 2021 | ' + chartTitleText });
     }
 }
+function setObserver(anchor, container, config, pictureContainer){
+    var observer = new IntersectionObserver(function(entries){
+        if ( entries[0].isIntersecting ){
+            pictureContainer.style.display = 'none';
+            window.requestAnimationFrame(function(){
+                Highcharts.chart(container, config);
+            });
+            observer.disconnect();
+        }
+    });
+    observer.observe(anchor);
+}
 var griffins = document.querySelectorAll('.js-griffin');
 if (window.CSS && CSS.supports('color', 'var(--primary)')) {
     for (var i = 0; i < griffins.length; i++){
@@ -81,7 +93,7 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
         var container = griffins[i].querySelector('.js-hc-container');
         var sourceNote = griffins[i].querySelector('.js-griffin-credit');
         var pictureContainer = griffins[i].querySelector('.js-picture-container');
-        pictureContainer.style.display = 'none';
+        var anchor = griffins[i].querySelector('.js-griffin-anchor');
         var btn = document.createElement('button');
         btn.textContent = 'Download image';
         btn.className = 'griffin-download-btn';
@@ -117,7 +129,13 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
                 return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
             });
         }
-        
-        Highcharts.chart(container, config.highchartsConfig);
+        if ( config.griffinConfig.lazyLoad ){
+            griffins[i].classList.add('lazy-load')
+            console.log('lazy');
+            setObserver(anchor, container, config.highchartsConfig, pictureContainer);
+        } else {
+            pictureContainer.style.display = 'none';
+            Highcharts.chart(container, config.highchartsConfig);
+        }
     }
 }

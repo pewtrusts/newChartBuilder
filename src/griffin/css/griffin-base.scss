@@ -1,3 +1,14 @@
+.griffin-figure {
+  position: relative;
+}
+.griffin-anchor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background-color: cyan;
+  top: 33%;
+  left: 0;
+}
 picture.fullscreen {
   display: none;
 }
@@ -102,6 +113,16 @@ picture.fullscreen {
 
   .picture-container {
     overflow: hidden;
+    position: relative;
+  }
+  .lazy-load .picture-container::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #f0f0f0;
   }
 
   .griffin-download-btn {
