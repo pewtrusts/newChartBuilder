@@ -124,7 +124,7 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
          * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>
          * in the previous one. doesn't show in DOM inspector, but does on screen
          */
-        if (config.highchartsConfig.xAxis.categories ){
+        if (config.highchartsConfig.xAxis.categories && navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
             config.highchartsConfig.xAxis.categories = config.highchartsConfig.xAxis.categories.map(cat => {
                 return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
             });
