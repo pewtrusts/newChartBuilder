@@ -271,7 +271,8 @@ function initDerived(){
         chartType
     ]) => {
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
-        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : ''}">
+        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
+        <a class="griffin-anchor js-griffin-anchor"></a>
         <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
         <header>${chartLabel ? `
             <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `

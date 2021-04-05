@@ -95,6 +95,7 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
         var pictureContainer = griffins[i].querySelector('.js-picture-container');
         var anchor = griffins[i].querySelector('.js-griffin-anchor');
         var btn = document.createElement('button');
+        var isLazy = griffins[i].classList.contains('js-griffin--lazy');
         btn.textContent = 'Download image';
         btn.className = 'griffin-download-btn';
         btn.setAttribute('role', 'button');
@@ -129,7 +130,7 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
                 return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
             });
         }
-        if ( config.griffinConfig.lazyLoad ){
+        if ( isLazy ){
             griffins[i].classList.add('lazy-load')
             console.log('lazy');
             setObserver(anchor, container, config.highchartsConfig, pictureContainer);

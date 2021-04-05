@@ -142,6 +142,7 @@ it will replace the image with a dynamic Highcharts version if you have <em>dyna
     <div class="selectors">
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked > Static</label>
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="dynamic" > Dynamic</label>
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="lazy" > Lazy</label>
     </div>
     <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" type="primary" /></div>
     {#if !chartDescription }
