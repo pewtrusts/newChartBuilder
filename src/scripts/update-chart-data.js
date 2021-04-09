@@ -40,7 +40,7 @@ export default function _updateChartData(data, Chart, datatableData = null, char
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
     });
     const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
-    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).every(row => typeof row[0] == 'string');
+    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).some(row => typeof row[0] == 'string');
     if (shouldBeDateTime) {
        // s.XAxisType.set('datetime');
         intervals = asDateTime.reduce(function (acc, cur, i, array) {
@@ -105,7 +105,7 @@ export default function _updateChartData(data, Chart, datatableData = null, char
        // newConfig.xAxis = { type: 'datetime', categories: null };
     } else if (shouldBeCategorical) {
        // newConfig.xAxis = { type: 'category', categories: data.slice(1).map(row => row[0]) };
-        storesToSet.push(['XAxisType', 'categorical'], ['XAxisCategories', data.slice(1).map(row => row[0])]);
+        storesToSet.push(['XAxisType', 'categorical'], ['XAxisCategories', data.slice(1).map(row => row[0].toString())]);
         // s.XAxisType.set('category');
         // s.XAxisCategories.set(data.slice(1).map(row => row[0]));
     }
