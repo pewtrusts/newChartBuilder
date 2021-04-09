@@ -18,6 +18,7 @@
     let stacking;
     let reverseStacks;
     let notices = new Set();
+    let spacingRight;
     let stackingNotice = {
         label: 'Reversing stacks?',
         description: 'Reversing stacks is not working as expected in Highcharts 8.2.2 when the series are stacked vertically. ' +
@@ -35,6 +36,12 @@
         reverseStacks = v;
         requestIdleCallback(checkMessage, {timeout: 500});
     });
+    s.SpacingRight.subscribe(v => {
+        spacingRight = v;
+    });
+    function spacingHandler(){
+        s.SpacingRight.set(+this.value);
+    }
     function checkMessage(){
         notices[stacking !== 'none' && reverseStacks ? 'add' : 'delete'](stackingNotice);
         notices = notices;
@@ -70,6 +77,7 @@
     Saved charts will have the project name saved with them for easier retrieval later.</p>
 {/await}
 <Notices {notices} position="left" />
+<label>Spacing right: <input on:change="{spacingHandler}" type="number" bind:value="{spacingRight}"></label>
 <label for="stacking-selector">Stacking:</label>
 <!-- svelte-ignore a11y-no-onchange -->
 <select on:change="{stackingHandler}" name="stacking" id="stacking-selector" bind:value="{stacking}">

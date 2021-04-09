@@ -50,6 +50,7 @@ s.ChartConfig = writable({});
 
 export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
+    ['SpacingRight', 20, 'chart.spacingRight'],
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
     ['LegendAlign', 'center', 'legend.align'],
