@@ -131,7 +131,16 @@
     s.Classes.subscribe((v) => {
         classes = v;
     });
-    
+    function exportSVG(){
+         const exportingOptions = {
+            filename: 'chart',
+            scale: 1,
+            sourceHeight: _Chart.container.clientHeight,
+            sourceWidth: _Chart.container.clientWidth,
+            type: 'image/svg+xml'
+        };
+        _Chart.exportChartLocal(exportingOptions, {});   
+    }
     function containerUse() {
        
     }
@@ -246,7 +255,7 @@
                     </p>
                 {/if}
                 {#if chartCredit}
-                    <p class="figure-note figure-note--source">
+                    <p on:click="{exportSVG}" class="figure-note figure-note--source">
                         {@html chartCredit}
                     </p>
                 {/if}
