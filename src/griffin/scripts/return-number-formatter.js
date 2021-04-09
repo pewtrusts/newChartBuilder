@@ -1,11 +1,32 @@
 /* global Highcharts */
+function countDecimals(value) { //HT: https://stackoverflow.com/a/27082406
+    const text = value.toString()
+    // verify if number 0.000005 is represented as "5e-6"
+    if (text.indexOf('e-') > -1) {
+        let trail = text.split('e-')[1];
+        let deg = parseInt(trail, 10);
+        return deg;
+    }
+    // count decimals for number in representation like "0.123456"
+    if (Math.floor(value) !== value) {
+        return value.toString().split(".")[1].length || 0;
+    }
+    return 0;
+}
+function returnMaxDecimals(){
+    if (this.axis) {
+        return Math.max(...this.axis.paddedTicks.map(d => countDecimals(d)));
+    }
+    return 0;
+}
 export default function _returnFormatter(format, context, decimals){
     switch (format){
         case 'percentage':
             return function _percentage() {
+                var maxDecimals = returnMaxDecimals.call(this);
                 var value = this.value !== undefined ? this.value : this.y;
                 // TO DO  figure out decimals programmatically
-                var rtn = Highcharts.numberFormat(value * 100, (context == 'tooltip' ? 1 : decimals || 0)) + '%';
+                var rtn = value === 0 ? '0%' : Highcharts.numberFormat(value * 100, (context == 'tooltip' ? 1 : decimals || maxDecimals - 2)) + '%';
                 return rtn;
             };
         case 'currency':
