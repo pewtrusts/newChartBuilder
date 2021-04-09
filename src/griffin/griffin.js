@@ -79,7 +79,7 @@ function setObserver(anchor, container, config, pictureContainer){
         if ( entries[0].isIntersecting ){
             pictureContainer.style.display = 'none';
             window.requestAnimationFrame(function(){
-                Highcharts.chart(container, config);
+                window.Charts.push(Highcharts.chart(container, config));
             });
             observer.disconnect();
         }
@@ -87,6 +87,7 @@ function setObserver(anchor, container, config, pictureContainer){
     observer.observe(anchor);
 }
 var griffins = document.querySelectorAll('.js-griffin');
+window.Charts = [];
 if (window.CSS && CSS.supports('color', 'var(--primary)')) {
     for (var i = 0; i < griffins.length; i++){
         var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
@@ -136,7 +137,7 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
             setObserver(anchor, container, config.highchartsConfig, pictureContainer);
         } else {
             pictureContainer.style.display = 'none';
-            Highcharts.chart(container, config.highchartsConfig);
+            window.Charts.push(Highcharts.chart(container, config.highchartsConfig));
         }
     }
 }
