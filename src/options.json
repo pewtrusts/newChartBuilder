@@ -2,7 +2,8 @@
     "chart": {
         "styledMode": true,
         "className": "griffin",
-        "spacingBottom": 0
+        "spacingBottom": 0,
+        "spacingRight": 20
     },
     "credits": {
         "enabled": false
@@ -54,11 +55,17 @@
             "day": "%b %e", 
             "week": "%b %e" 
         },
+        "labels": {
+            "overflow": "allow"
+        },
         "tickLength": 0
 
        
     },
-    "yAxis": [{
-        "title": null
-    }]
+    "yAxis": {
+        "title": null,
+        "labels": {
+            "overflow": "allow"
+        }
+    }
 }
