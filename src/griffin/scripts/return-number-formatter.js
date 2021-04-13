@@ -26,7 +26,7 @@ export default function _returnFormatter(format, context, decimals){
                 var maxDecimals = returnMaxDecimals.call(this);
                 var value = this.value !== undefined ? this.value : this.y;
                 // TO DO  figure out decimals programmatically
-                var rtn = value === 0 ? '0%' : Highcharts.numberFormat(value * 100, (context == 'tooltip' ? 1 : decimals || maxDecimals - 2)) + '%';
+                var rtn = value === 0 ? '0%' : Highcharts.numberFormat(value * 100, (context == 'tooltip' ? 1 : decimals || Math.max(maxDecimals - 2, 0))) + '%';
                 return rtn;
             };
         case 'currency':

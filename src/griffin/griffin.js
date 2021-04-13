@@ -131,7 +131,7 @@ if (window.CSS && CSS.supports('color', 'var(--primary)')) {
                 return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
             });
         }
-        if ( isLazy ){
+        if ( isLazy && window.IntersectionObserver ){
             griffins[i].classList.add('lazy-load')
             console.log('lazy');
             setObserver(anchor, container, config.highchartsConfig, pictureContainer);
