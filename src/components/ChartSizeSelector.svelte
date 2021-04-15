@@ -3,13 +3,15 @@
     let chart;
     let mobile;
     let mobileChart;
+    let nonChartHeight;
+    let width;
+    
     import { s } from './../store';
     export function _setRealHeight(nominal, isLocked){
-        fullscreen = fullscreen || document.querySelector('.js-fullscreen');
-        chart = chart || fullscreen.querySelector('.js-hc-container');
-        const nonChartHeight = fullscreen.offsetHeight - chart.offsetHeight;
+        //fullscreen = fullscreen || document.querySelector('.js-fullscreen');
+        //chart = chart || fullscreen.querySelector('.js-hc-container');
         if ( nominal.slice(-1) == '%'){
-            let width = fullscreen.offsetWidth;
+            
             let desiredTotalHeight = width * parseInt(nominal) / 100;
             let desiredChartHeight = desiredTotalHeight - nonChartHeight;
             let percentage = +((100 * desiredChartHeight / width).toFixed(2));
@@ -79,6 +81,10 @@
     $: heightSelectorValue = ['56.25%','100%'].includes(nominalHeightValue) ? nominalHeightValue : 'custom';
     $: customHeight = heightSelectorValue == 'custom';
     function setRealHeight(nominal){
+        fullscreen = document.querySelector('.js-fullscreen');
+        chart = fullscreen.querySelector('.js-hc-container');
+        nonChartHeight = fullscreen.offsetHeight - chart.offsetHeight;
+        width = fullscreen.offsetWidth;
         const calc = _setRealHeight(nominal, lockHeight);
         notices[calc.warn ? 'add' : 'delete'](outOfBoundsNotice);
         notices = notices;
