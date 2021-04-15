@@ -85,7 +85,7 @@
             let _data = _transpose(data);
             updateChartData(_transpose(_data.slice(0,2)), Chart, data, 'pie');
         } else {*/
-            updateChartData(data, Chart);
+            updateChartData(data, null, chartType);
         //}
     }
     function _reverseSeries(data){
@@ -93,7 +93,7 @@
     }
     function reverseSeries(){
         data = _reverseSeries(data);
-        updateChartData(data, Chart);
+        updateChartData(data);
         
     }
     function _reverseRows(){
@@ -101,15 +101,15 @@
     }
     function reverseRows(){
         data = _reverseRows(data);
-        updateChartData(data, Chart);
+        updateChartData(data);
     }
     function handleDataChange(e) {
         
-        updateChartData(data, Chart);
+        updateChartData(data);
     }
     s.ChartType.subscribe(v => {
         chartType = v;
-        updateChartData(data, Chart, null, chartType);
+        updateChartData(data, null, chartType);
     });
     s.XAxisType.subscribe((v) => {
         xAxisType = v;
@@ -125,7 +125,7 @@
         }
         data = v;
     });
-    updateChartData(data, Chart);
+    updateChartData(data);
 </script>
 
 <style>

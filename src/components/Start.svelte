@@ -13,7 +13,7 @@ export let data;
 async function clickHandler(){
     resetWritables();
     data = _.cloneDeep(dummyData);
-    updateChartData(data, Chart);
+    updateChartData(data);
     checkHeight();
     resetColorIndeces(data[0].length - 1);
     s.ActiveSection.set({method: 'click', value: 'data'});
