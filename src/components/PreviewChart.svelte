@@ -99,6 +99,7 @@
     let minHeight;
     let redrawTimeout;
     let codeExport;
+    let node;
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
@@ -108,21 +109,16 @@
     /*s.MinHeight.subscribe((v) => {
         minHeight = v;
     });*/
-    function init(node){
+    function _initGriffin(){
         requestIdleCallback(() => {
             node.querySelector('.js-_griffin').classList.add('js-griffin');
-            const pre = node.querySelector('pre');
-            const config = { attributes: true, childList: true, subtree: true };
-            const callback = function(mutationsList) {
-                for(const mutation of mutationsList) {
-                    console.log(mutation);
-                    initGriffin();
-                }
-            };
-            const observer = new MutationObserver(callback);
-            observer.observe(pre, config);
+            node.querySelector('.js-_griffin').style.width = chartWidth + 'px';
             initGriffin();
         }, {timeout: 1000});
+    }
+    function init(_node){
+        node = _node;
+        _initGriffin();
          /**
           *  using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts
           *  because Highcharts can mutate it, especially when the chart's responsive options are in
@@ -137,6 +133,10 @@
             }*/
     }
     afterUpdate(async () => {
+        window.cancelIdleCallback(redrawTimeout);
+        redrawTimeout = window.requestIdleCallback(() => {
+            _initGriffin();
+        },{timeout: 1000});
        /* const _Chart = await Chart;
         if (previousWidth && chartWidth !== previousWidth) {
             _Chart.reflow();
