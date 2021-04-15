@@ -191,7 +191,6 @@
         }
     })*/
     s.ColorIndeces.subscribe(async (v) => { // TO DO : how are you gonna handle this?. prob should be elsewhere
-        await Chart;
         if (!v) return;
         const series = get(s.ChartSeries);
         const colorByPoint = get(s.ColorByPoint);
