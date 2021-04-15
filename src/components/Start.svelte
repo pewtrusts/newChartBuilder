@@ -11,7 +11,6 @@ export let checkHeight;
 export let data;
 
 async function clickHandler(){
-    await Chart;
     resetWritables();
     data = _.cloneDeep(dummyData);
     updateChartData(data, Chart);
