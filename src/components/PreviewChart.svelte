@@ -112,6 +112,8 @@
     function _initGriffin(){
         requestIdleCallback(() => {
             node.querySelector('.js-_griffin').classList.add('js-griffin');
+            node.querySelector('.js-_griffin').classList.add(`griffin-chart-builder--${size}`); // TO DO: will be unnecessary when/if iframed
+            node.querySelector('.js-_griffin').classList.add(`js-${size}`); 
             node.querySelector('.js-_griffin').style.width = chartWidth + 'px';
             initGriffin();
         }, {timeout: 1000});
