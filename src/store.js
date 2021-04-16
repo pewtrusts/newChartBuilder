@@ -54,7 +54,7 @@ export const HCStores = [
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
     ['LegendAlign', 'center', 'legend.align'],
-    ['LegendEnabled', true, 'legend.enabled'],
+    ['LegendEnabled', undefined, 'legend.enabled'],
     ['LegendLayout', 'horizontal', 'legend.layout'],
     ['LegendVerticalAlign', 'bottom', 'legend.verticalAlign'],
     ['LegendReversed', false, 'legend.reversed'],
@@ -272,7 +272,7 @@ function initDerived(){
         chartType
     ]) => {
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
-        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
+        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
         <a class="griffin-anchor js-griffin-anchor"></a>
         <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
         <header>${chartLabel ? `

@@ -42,7 +42,7 @@
             dynamicTyping: true,
             complete(results) {
                 data = results.data;
-                updateChartData(data, Chart);
+                updateChartData(data);
             },
             transform(value, column){
                 var format;
@@ -88,7 +88,7 @@
     function closeHandler(){
         showDataInput = false;
     }
-   // updateChartData(data, Chart);
+   // updateChartData(data);
     /* for dev only */
     if ( dataFile ) {
         submitHandler();

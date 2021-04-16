@@ -86,58 +86,67 @@ function setObserver(anchor, container, config, pictureContainer){
     });
     observer.observe(anchor);
 }
-var griffins = document.querySelectorAll('.js-griffin');
 window.Charts = [];
-if (window.CSS && CSS.supports('color', 'var(--primary)')) {
-    for (var i = 0; i < griffins.length; i++){
-        var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
-        var container = griffins[i].querySelector('.js-hc-container');
-        var sourceNote = griffins[i].querySelector('.js-griffin-credit');
-        var pictureContainer = griffins[i].querySelector('.js-picture-container');
-        var anchor = griffins[i].querySelector('.js-griffin-anchor');
-        var btn = document.createElement('button');
-        var isLazy = griffins[i].classList.contains('js-griffin--lazy');
-        btn.textContent = 'Download image';
-        btn.className = 'griffin-download-btn';
-        btn.setAttribute('role', 'button');
-        btn.addEventListener('click', getImage);
-        sourceNote.insertAdjacentText('beforeend', ' | ');
-        sourceNote.insertAdjacentElement('beforeend', btn);
-    
-        extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
-        extendObj(config.highchartsConfig,
-            ['tooltip', 'pointFormatter'], 
-            returnPointFormatter({
-                numberFormat: config.griffinConfig.NumberFormat,
-                seriesLength: config.highchartsConfig.series.length
-            })
-        );
-        extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
-        config.highchartsConfig.yAxis.forEach(function(axis){
-            axis.title.text = axis.title.text || null;
-        });
-        if (config.griffinConfig.SelectedColorPalette == 'custom'){
-            addCustomColorProperties({
-                colors: config.griffinConfig.CustomColors, 
-                hash: hash(config.griffinConfig.CustomColors.join(''))
-            });
-        }
-        /**
-         * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>
-         * in the previous one. doesn't show in DOM inspector, but does on screen
-         */
-        if (config.highchartsConfig.xAxis.categories && navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-            config.highchartsConfig.xAxis.categories = config.highchartsConfig.xAxis.categories.map(cat => {
-                return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
-            });
-        }
-        if ( isLazy && window.IntersectionObserver ){
-            griffins[i].classList.add('lazy-load')
-            console.log('lazy');
-            setObserver(anchor, container, config.highchartsConfig, pictureContainer);
-        } else {
+export function init(){
+    const griffins = document.querySelectorAll('.js-griffin');
+    if (window.CSS && CSS.supports('color', 'var(--primary)')) {
+        for (var i = 0; i < griffins.length; i++){
+            var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
+            var container = griffins[i].querySelector('.js-hc-container');
+            var sourceNote = griffins[i].querySelector('.js-griffin-credit');
+            var pictureContainer = griffins[i].querySelector('.js-picture-container');
+            var anchor = griffins[i].querySelector('.js-griffin-anchor');
+            var btn;
             pictureContainer.style.display = 'none';
-            window.Charts.push(Highcharts.chart(container, config.highchartsConfig));
+            if (!griffins[i].hasDownload) {
+                btn = document.createElement('button');
+                btn.textContent = 'Download image';
+                btn.className = 'griffin-download-btn';
+                btn.setAttribute('role', 'button');
+                btn.addEventListener('click', getImage);
+                sourceNote.insertAdjacentText('beforeend', ' | ');
+                sourceNote.insertAdjacentElement('beforeend', btn);
+                griffins[i].hasDownload = true;
+
+            }
+        
+            extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
+            extendObj(config.highchartsConfig,
+                ['tooltip', 'pointFormatter'], 
+                returnPointFormatter({
+                    numberFormat: config.griffinConfig.NumberFormat,
+                    seriesLength: config.highchartsConfig.series.length
+                })
+            );
+            extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
+            config.highchartsConfig.yAxis.forEach(function(axis){
+                axis.title.text = axis.title.text || null;
+            });
+            if (config.griffinConfig.SelectedColorPalette == 'custom'){
+                addCustomColorProperties({
+                    colors: config.griffinConfig.CustomColors, 
+                    hash: hash(config.griffinConfig.CustomColors.join(''))
+                });
+            }
+            /**
+             * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>
+             * in the previous one. doesn't show in DOM inspector, but does on screen
+             */
+            if (config.highchartsConfig.xAxis.categories && navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+                config.highchartsConfig.xAxis.categories = config.highchartsConfig.xAxis.categories.map(cat => {
+                    return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
+                });
+            }
+            if ( isLazy && window.IntersectionObserver ){
+                griffins[i].classList.add('lazy-load')
+                console.log('lazy');
+                setObserver(anchor, container, config.highchartsConfig, pictureContainer);
+            } else {
+                pictureContainer.style.display = 'none';
+                window.Charts.push(Highcharts.chart(container, config.highchartsConfig));
+            }
         }
     }
 }
+
+init();

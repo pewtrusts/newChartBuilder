@@ -14,6 +14,7 @@
     import updateChartConfig from "../scripts/update-chart-config";
     import Notices from "./Notices.svelte";
     import cloneDeep from 'lodash.clonedeep';
+    import { init as initGriffin } from './../griffin/griffin';
     const _= {cloneDeep};
     let chartCount = 0;
     window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
@@ -76,7 +77,7 @@
 </script>
 
 <script>
-    export let chartResolve;
+    //export let chartResolve;
     export let Chart;
     export let seriesCountMismatchNotice;
     export let chartWidth;
@@ -97,39 +98,56 @@
     let chartHeight;
     let minHeight;
     let redrawTimeout;
+    let codeExport;
+    let node;
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
+    });
+    s.CodeExport.subscribe(v => {
+        codeExport = v;
     });
     /*s.MinHeight.subscribe((v) => {
         minHeight = v;
     });*/
-    onMount(() => {
+    function _initGriffin(){
+        requestIdleCallback(() => {
+            node.querySelector('.js-_griffin').classList.add('js-griffin');
+            node.querySelector('.js-_griffin').classList.add(`griffin-chart-builder--${size}`); // TO DO: will be unnecessary when/if iframed
+            node.querySelector('.js-_griffin').classList.add(`js-${size}`); 
+            node.querySelector('.js-_griffin').style.width = chartWidth + 'px';
+            initGriffin();
+        }, {timeout: 1000});
+    }
+    function init(_node){
+        node = _node;
+        _initGriffin();
          /**
           *  using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts
           *  because Highcharts can mutate it, especially when the chart's responsive options are in
           *  effect. perhaps better not to use a writable store for this value?
           */
-            const config = get(s.ChartConfig);
+          /*  const config = get(s.ChartConfig);
             _Chart = createChart(chartContainer, _.cloneDeep(config));
             window.Charts.push(_Chart);
             if (size == "fullscreen") {
                 _Chart.isFullscreen = true;
                 chartResolve(_Chart);
-            }
-    });
+            }*/
+    }
     afterUpdate(async () => {
-        const _Chart = await Chart;
+        window.cancelIdleCallback(redrawTimeout);
+        redrawTimeout = window.requestIdleCallback(() => {
+            _initGriffin();
+        },{timeout: 1000});
+       /* const _Chart = await Chart;
         if (previousWidth && chartWidth !== previousWidth) {
             _Chart.reflow();
         }
-        previousWidth = chartWidth;
+        previousWidth = chartWidth;*/
     });
     s.SeriesCountMismatch.subscribe((v) => {
         notices[v ? "add" : "delete"](seriesCountMismatchNotice);
         notices = notices;
-    });
-    s.Classes.subscribe((v) => {
-        classes = v;
     });
     function exportSVG(){
          const exportingOptions = {
@@ -141,10 +159,7 @@
         };
         _Chart.exportChartLocal(exportingOptions, {});   
     }
-    function containerUse() {
-       
-    }
-    s.ChartConfig.subscribe(async (v) => {
+    /*s.ChartConfig.subscribe(async (v) => {
         await Chart;
         window.cancelIdleCallback(redrawTimeout);
         redrawTimeout = window.requestIdleCallback(() => {
@@ -155,8 +170,8 @@
             },{timeout: 1000});
         },{timeout:1000});
         _Chart.update(v, false, true);
-    });
-    s.ChartLabel.subscribe((v) => {
+    });*/
+   /* s.ChartLabel.subscribe((v) => {
         chartLabel = v;
     });
     s.ChartTitle.subscribe((v) => {
@@ -185,8 +200,7 @@
             updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
         }
     })*/
-    s.ColorIndeces.subscribe(async (v) => { // TO DO : how are you gonna handle this?
-        await Chart;
+    s.ColorIndeces.subscribe(async (v) => { // TO DO : how are you gonna handle this?. prob should be elsewhere
         if (!v) return;
         const series = get(s.ChartSeries);
         const colorByPoint = get(s.ColorByPoint);
@@ -209,58 +223,14 @@
 
 <Notices {notices} />
 <div class="outer-wrapper">
-    <div
+    <div use:init
         data-min-height={minHeight}
         data-height={chartHeight}
         data-width={chartWidth}
         data-size={size}
         class="wrapper js-figure-wrapper"
     >
-        <figure
-            style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
-            class="ai2html-griffin-figure griffin-figure js-griffin js-{size} griffin-chart-builder--{size} {classes.join(' ')}"
-        >
-            <meta name="format-detection" content="telephone=no" />
-            {#if chartLabel || chartTitle || chartSubtitle}
-                <header>
-                    {#if chartLabel}
-                        <span class="figure-label">{chartLabel}</span>
-                    {/if}
-                    {#if chartTitle}
-                        <h1>{chartTitle}</h1>
-                    {/if}
-                    {#if chartSubtitle}
-                        <p class="figure-dek">{chartSubtitle}</p>
-                    {/if}
-                </header>
-            {/if}
-            <div bind:this="{chartContainer}" 
-                class="hc-container js-hc-container {chartType}"
-                use:containerUse
-            />
-            <figcaption>
-                {#if chartCaption}
-                    <p class="figure-caption">
-                        {@html chartCaption}
-                    </p>
-                {/if}
-                {#if chartNotes}
-                    <p class="figure-note">
-                        {@html chartNotes}
-                    </p>
-                {/if}
-                {#if chartSources}
-                    <p class="figure-note figure-note--source">
-                        {@html chartSources}
-                    </p>
-                {/if}
-                {#if chartCredit}
-                    <p on:click="{exportSVG}" class="figure-note figure-note--source">
-                        {@html chartCredit}
-                    </p>
-                {/if}
-            </figcaption>
-        </figure>
+        {@html codeExport}
     </div>
 </div>
 

@@ -12,7 +12,15 @@ let numberFormat;
 s.NumberFormat.subscribe(v => {
     numberFormat = v;
 });
-const timeUnits =
+let colorIndeces;
+s.ColorIndeces.subscribe(v => {
+    colorIndeces = v;
+});
+let legendEnabled;
+s.LegendEnabled.subscribe(v => {
+    legendEnabled = v;
+});
+/*const timeUnits =
 {
     millisecond: 1,
     second:      1000,
@@ -22,9 +30,9 @@ const timeUnits =
     week:        604800000,
     month:       2419200000,
     year:        31449600000,
-};
+};*/
 // return a HC series config object based on the data
-export default function _updateChartData(data, Chart, datatableData = null, chartType) { // pass in third arg when the chart uses fewer series than what's in the
+export default function _updateChartData(data, datatableData = null, chartType) { // pass in third arg when the chart uses fewer series than what's in the
                                                                        // datatable, e.g., pie charts 
     // map of x-axis values as coerced to dates.
     // info: intervals was used to set specific tick points until i found the more immediate
@@ -35,24 +43,26 @@ export default function _updateChartData(data, Chart, datatableData = null, char
     } else {
         s.DatatableData.set(data);
     }
-    var intervals;
+    //var intervals;
     const asDateTime = data.slice(1).map(row => {
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
     });
     const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
-    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).some(row => typeof row[0] == 'string');
-    if (shouldBeDateTime) {
+    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).every(row => typeof row[0] == 'string');
+    /*if (shouldBeDateTime) {
        // s.XAxisType.set('datetime');
         intervals = asDateTime.reduce(function (acc, cur, i, array) {
             if (i === 0) {
                 return acc;
-            }
+            }       
             acc.add(cur - array[i - 1]);
             return acc;
         }, new Set());
         
-    }
-    const series = data[0].slice(1).map((valueColumn, i) => {
+    }*/
+    const valueColumns = chartType == 'pie' ? data[0].slice(1, 2) : data[0].slice(1);
+    const series = valueColumns.map((valueColumn, i) => {
+        //const _data = chartType == 'pie' ? data.slice(1,2) : data.slice(1);
         var rtn;
         if (shouldBeCategorical) {
             rtn = {
@@ -73,6 +83,12 @@ export default function _updateChartData(data, Chart, datatableData = null, char
             rtn = {
                 name: valueColumn || '',
                 data: data.slice(1).map((row, j) => {
+                    if (chartType == 'pie') {
+                        return {
+                            name: row[0],
+                            y: row[i + 1]
+                        };
+                    }
                     return {
                         x: shouldBeDateTime ? asDateTime[j].getTime() : row[0],
                         y: row[i + 1]
@@ -95,6 +111,7 @@ export default function _updateChartData(data, Chart, datatableData = null, char
                 },
             }
         };
+        rtn.colorIndex = colorIndeces ? colorIndeces[i] : undefined;
         return rtn;
     });
     if (shouldBeDateTime) {
@@ -117,14 +134,16 @@ export default function _updateChartData(data, Chart, datatableData = null, char
        // newConfig.xAxis = { type: 'linear', categories: null }; // TO DO : handle other data types ie categorical. will later be able to be set sepaarately, too
         // so you will not want to override explicitly set options
     }
-    if (intervals && intervals.size == 1) {
+   /*
+   TO DO: will have to revisit this bc Chart instance is not longer present
+   if (intervals && intervals.size == 1) {
         if ([...intervals][0] === timeUnits.week) {
             let dayIndex = +Chart.time.dateFormat('%w', asDateTime[0]);
             //newConfig.xAxis.startOfWeek = dayIndex;
             //s.StartOfWeek.set(dayIndex);
             storesToSet.push(['StartOfWeek',dayIndex])
         }
-    }
+    }*/
     /* 
     COMMENTING THIS OUT. startOfWeek SETTING WAS THE MORE IMMEDIATE ISSUE. SAVING FOR PSSIBLE ALETR USE
     if (intervals && intervals.size == 1) {
@@ -144,7 +163,7 @@ export default function _updateChartData(data, Chart, datatableData = null, char
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
     storesToSet.push(
         ['XAxisTitle', data[0][0] || ''],
-        ['LegendEnabled', series.length > 1],
+        ['LegendEnabled', legendEnabled === undefined ? series.length > 1 : legendEnabled],
         ['TooltipFormatter', returnPointFormatter({ numberFormat: numberFormat, seriesLength: series.length })],
         ['ChartSeries', series]
     );

@@ -11,10 +11,9 @@ export let checkHeight;
 export let data;
 
 async function clickHandler(){
-    await Chart;
     resetWritables();
     data = _.cloneDeep(dummyData);
-    updateChartData(data, Chart);
+    updateChartData(data);
     checkHeight();
     resetColorIndeces(data[0].length - 1);
     s.ActiveSection.set({method: 'click', value: 'data'});
