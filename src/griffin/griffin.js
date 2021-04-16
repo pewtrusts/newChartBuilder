@@ -82,14 +82,19 @@ export function init(){
             var container = griffins[i].querySelector('.js-hc-container');
             var sourceNote = griffins[i].querySelector('.js-griffin-credit');
             var pictureContainer = griffins[i].querySelector('.js-picture-container');
+            var btn;
             pictureContainer.style.display = 'none';
-            var btn = document.createElement('button');
-            btn.textContent = 'Download image';
-            btn.className = 'griffin-download-btn';
-            btn.setAttribute('role', 'button');
-            btn.addEventListener('click', getImage);
-            sourceNote.insertAdjacentText('beforeend', ' | ');
-            sourceNote.insertAdjacentElement('beforeend', btn);
+            if (!griffins[i].hasDownload){
+                btn = document.createElement('button');
+                btn.textContent = 'Download image';
+                btn.className = 'griffin-download-btn';
+                btn.setAttribute('role', 'button');
+                btn.addEventListener('click', getImage);
+                sourceNote.insertAdjacentText('beforeend', ' | ');
+                sourceNote.insertAdjacentElement('beforeend', btn);
+                griffins[i].hasDownload = true;
+
+            }
         
             extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
             extendObj(config.highchartsConfig,
