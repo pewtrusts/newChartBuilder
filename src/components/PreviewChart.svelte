@@ -1,37 +1,21 @@
 <script context="module">
     import "@Submodule/shared-css/styles.css";
-    // TO DO: SWITCH TO MINIFIED HC SRC
-    import returnFormatter from "./../griffin/scripts/return-number-formatter";
-    import Highcharts from "highcharts";
-    //import Highcharts from 'highcharts/highcharts.src.js';
-    import HCExporting from "highcharts/modules/exporting";
-    import HCOfflineExporting from "highcharts/modules/offline-exporting";
-    import options from "@Project/options.json";
-    // import config from "@Project/base-chart-config.json";
     import { s } from "./../store";
     import { get } from "svelte/store";
-    import { onMount, afterUpdate } from "svelte";
-    import updateChartConfig from "../scripts/update-chart-config";
+    import { afterUpdate } from "svelte";
     import Notices from "./Notices.svelte";
     import cloneDeep from 'lodash.clonedeep';
     import { init as initGriffin } from './../griffin/griffin';
     const _= {cloneDeep};
-    let chartCount = 0;
-    window.Highcharts = Highcharts; // TO DO:  form now ok will need to work out how HC is loaded.
-    HCExporting(Highcharts);
-    HCOfflineExporting(Highcharts);
-    options.legend.labelFormat = "{name}"; // shouldn't be necessary but some charts were tripping up on load
-    options.plotOptions.pie.dataLabels.formatter = function(){
-        return this.point.x;
-    };
-    Highcharts.setOptions(options);
+    //options.legend.labelFormat = "{name}"; // shouldn't be necessary but some charts were tripping up on load
     /*config.title = config.title || {};
     config.title.text = undefined;
     config.exporting = { enabled: false };*/
-    export function createChart(node, config) {
+   /* export function createChart(node, config) {
         return Highcharts.chart(node, config);
-    }
+    }*/
     export function clean(userOptions){
+        console.log('SHOULD BE ABLE TO DELETE THIS');
         const propsToDelete = ['_id', 'isResponsiveOptions'];
         const v = get(ChartHeight);
         propsToDelete.forEach(prop => {
@@ -43,46 +27,14 @@
         userOptions.chart.height = v;
         return userOptions;
     }
-    window.Charts = [];
-    //
-
-    Highcharts.SVGElement.prototype.addClass = function (className, replace) {
-        var currentClassName = replace ? "" : this.attr("class") || "";
-        // Trim the string and remove duplicates
-        className = (className || "")
-            .split(/ /g)
-            .reduce(
-                function (newClassName, name) {
-                    if (currentClassName.indexOf(name) === -1) {
-                        let split = name.split(/-\d+$/);
-                        if (split.length > 1) {
-                            let regex = new RegExp(split[0] + "-\\d+$");
-                            newClassName[0] = newClassName[0].replace(
-                                regex,
-                                ""
-                            );
-                        }
-                        newClassName.push(name);
-                    }
-                    return newClassName;
-                },
-                currentClassName ? [currentClassName] : []
-            )
-            .join(" ");
-        if (className !== currentClassName) {
-            this.attr("class", className);
-        }
-        return this;
-    };
+    
 </script>
 
 <script>
     //export let chartResolve;
-    export let Chart;
     export let seriesCountMismatchNotice;
     export let chartWidth;
     export let size;
-    let _Chart;
     let chartContainer;
     let classes = [];
     let chartLabel;
@@ -112,13 +64,19 @@
     function _initGriffin(){
         requestIdleCallback(() => {
             node.querySelector('.js-_griffin').classList.add('js-griffin');
+            node.querySelector('.js-_griffin').classList.add('js-griffin--chart-builder');
             node.querySelector('.js-_griffin').classList.add(`griffin-chart-builder--${size}`); // TO DO: will be unnecessary when/if iframed
             node.querySelector('.js-_griffin').classList.add(`js-${size}`); 
             node.querySelector('.js-_griffin').style.width = chartWidth + 'px';
             initGriffin();
+            requestIdleCallback(() => {
+                node.querySelector('.griffin-download-btn').addEventListener('click', exportSVG);
+            });
         }, {timeout: 1000});
     }
     function init(_node){
+       // HCExporting(Highcharts);
+       // HCOfflineExporting(Highcharts);
         node = _node;
         _initGriffin();
          /**
@@ -149,15 +107,17 @@
         notices[v ? "add" : "delete"](seriesCountMismatchNotice);
         notices = notices;
     });
-    function exportSVG(){
+    function exportSVG(e){
+        e.stopImmediatePropagation();
+        const Chart = window.Charts[+this.dataset.index];
          const exportingOptions = {
             filename: 'chart',
             scale: 1,
-            sourceHeight: _Chart.container.clientHeight,
-            sourceWidth: _Chart.container.clientWidth,
+            sourceHeight: Chart.container.clientHeight,
+            sourceWidth: Chart.container.clientWidth,
             type: 'image/svg+xml'
         };
-        _Chart.exportChartLocal(exportingOptions, {});   
+        Chart.exportChartLocal(exportingOptions, {});   
     }
     /*s.ChartConfig.subscribe(async (v) => {
         await Chart;

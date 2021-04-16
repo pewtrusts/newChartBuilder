@@ -62,6 +62,9 @@ export function extendObj(base, properties, value){
 function getImage(e){
     e.preventDefault();
     var figure = this.parentElement.parentElement.parentElement;
+    if ( figure.classList.contains('js-griffin--chart-builder') ){
+        return;
+    }
     var imageSource = figure.querySelector('picture.fullscreen source').getAttribute('srcset').split(/ \dx,? ?/)[1];
     var chartTitle = figure.querySelector('h1');
     var chartTitleText = chartTitle ? chartTitle.textContent : '[no title]';
@@ -86,8 +89,8 @@ function setObserver(anchor, container, config, pictureContainer){
     });
     observer.observe(anchor);
 }
-window.Charts = [];
 export function init(){
+    window.Charts = [];
     const griffins = document.querySelectorAll('.js-griffin');
     if (window.CSS && CSS.supports('color', 'var(--primary)')) {
         for (var i = 0; i < griffins.length; i++){
@@ -96,12 +99,15 @@ export function init(){
             var sourceNote = griffins[i].querySelector('.js-griffin-credit');
             var pictureContainer = griffins[i].querySelector('.js-picture-container');
             var anchor = griffins[i].querySelector('.js-griffin-anchor');
+            var isLazy = griffins[i].classList.contains('js-griffin--lazy');
+            var isChartBuilder = griffins[i].classList.contains('js-griffin--chart-builder');
             var btn;
             pictureContainer.style.display = 'none';
             if (!griffins[i].hasDownload) {
                 btn = document.createElement('button');
                 btn.textContent = 'Download image';
                 btn.className = 'griffin-download-btn';
+                btn.setAttribute('data-index', i);
                 btn.setAttribute('role', 'button');
                 btn.addEventListener('click', getImage);
                 sourceNote.insertAdjacentText('beforeend', ' | ');
@@ -137,7 +143,7 @@ export function init(){
                     return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
                 });
             }
-            if ( isLazy && window.IntersectionObserver ){
+            if ( isLazy && window.IntersectionObserver && !isChartBuilder ){
                 griffins[i].classList.add('lazy-load')
                 console.log('lazy');
                 setObserver(anchor, container, config.highchartsConfig, pictureContainer);
