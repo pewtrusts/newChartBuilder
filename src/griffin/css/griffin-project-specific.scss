@@ -1,24 +1,24 @@
-.philly-dashboard.ai2html-griffin-figure {
-    .highcharts-container.griffin {
+.highcharts-container.griffin.philly-dashboard {
 
-        .highcharts-graph {
-            stroke-width: 6px;
-        }  
-        .highcharts-markers {
-            display: inline;
-        } 
-        .highcharts-axis-labels, .highcharts-legend-item > text, .highcharts-axis-title {
-            font-size: 1.2em;
+    .highcharts-graph {
+        stroke-width: 6px;
+    }  
+    .highcharts-markers {
+        display: inline;
+    } 
+    .highcharts-axis-labels, .highcharts-legend-item > text, .highcharts-axis-title {
+        font-size: 1.2em;
+        font-size: clamp(1rem, 1.939vw, 1.2rem);
+        @media screen and (max-width: 416px) {
+            font-size: 1rem;
             font-size: clamp(1rem, 1.939vw, 1.2rem);
-            @media screen and (max-width: 416px) {
-                font-size: 1rem;
-                font-size: clamp(1rem, 1.939vw, 1.2rem);
-            }
-        }
-        .highcharts-legend-item.highcharts-line-series .highcharts-graph {
-            stroke-width: 16px;
         }
     }
+    .highcharts-legend-item.highcharts-line-series .highcharts-graph {
+        stroke-width: 16px;
+    }
+}
+.philly-dashboard.ai2html-griffin-figure {
     header h1 {
         font-size: 1.5rem;
         font-size: clamp(1.1rem, 2.424vw, 1.5rem);

@@ -50,6 +50,7 @@ s.ChartConfig = writable({});
 
 export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
+    ['ChartClassName', '', 'chart.className'],
     ['SpacingRight', 20, 'chart.spacingRight'],
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
@@ -223,7 +224,9 @@ function initDerived(){
         return rtn;
     });
     s.Classes = derived([s.ChartPaletteClassname, s.ChartProject], function(){
-        return arguments[0].map(d => slugger(d));
+        const rtn = arguments[0].map(d => slugger(d));
+        s.ChartClassName.set('griffin ' + rtn.join(' '));
+        return rtn;
     });
     //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
     s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail]) => {

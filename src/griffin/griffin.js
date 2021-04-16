@@ -3,14 +3,13 @@ import './css/griffin-styles.scss';
 import '@Submodule/shared-css/styles.css';
 import Highcharts from 'highcharts/highcharts.src.js';
 /* TO DO: for production, bundle HG or use CDN? */
-import options from '@Project/options.json';
+import options from './options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
 import addCustomColorProperties from './scripts/addCustomColorProperties';
 import returnFormatter from './scripts/return-number-formatter';
 import returnPointFormatter from './scripts/return-point-formatter';
 import returnLegendFormatter from './scripts/return-legend-formatter';
 import hash from './scripts/hash';
-window.Highcharts = Highcharts;
 options.plotOptions.pie.dataLabels.formatter = function () {
     return this.point.x;
 };
@@ -19,27 +18,28 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     var currentClassName = replace ? '' : (this.attr('class') || '');
     // Trim the string and remove duplicates
     className = (className || '')
-        .split(/ /g)
-        .reduce(function (newClassName, name) {
-            var split, regex;
-            if (currentClassName.indexOf(name) === -1) {
-                split = name.split(/-\d+$/);
-                if (split.length > 1 ) {
-                    regex = new RegExp(split[0] + '-\\d+$');
-                    newClassName[0] = newClassName[0].replace(regex, '');
-                }
-                newClassName.push(name);
+    .split(/ /g)
+    .reduce(function (newClassName, name) {
+        var split, regex;
+        if (currentClassName.indexOf(name) === -1) {
+            split = name.split(/-\d+$/);
+            if (split.length > 1 ) {
+                regex = new RegExp(split[0] + '-\\d+$');
+                newClassName[0] = newClassName[0].replace(regex, '');
             }
-            return newClassName;
-        }, (currentClassName ?
-            [currentClassName] :
-            []))
+            newClassName.push(name);
+        }
+        return newClassName;
+    }, (currentClassName ?
+        [currentClassName] :
+        []))
         .join(' ');
-    if (className !== currentClassName) {
-        this.attr('class', className);
-    }
-    return this;
-};
+        if (className !== currentClassName) {
+            this.attr('class', className);
+        }
+        return this;
+    };
+window.Highcharts = Highcharts;
 export function extendObj(base, properties, value){
     properties.reduce(function(acc,cur,i){
         var split = cur.split('['), prop, index;
@@ -110,7 +110,6 @@ export function init(){
                 btn.setAttribute('data-index', i);
                 btn.setAttribute('role', 'button');
                 btn.addEventListener('click', getImage);
-                sourceNote.insertAdjacentText('beforeend', ' | ');
                 sourceNote.insertAdjacentElement('beforeend', btn);
                 griffins[i].hasDownload = true;
 

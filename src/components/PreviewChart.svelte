@@ -6,14 +6,18 @@
     import { get } from "svelte/store";
     import { afterUpdate } from "svelte";
     import Notices from "./Notices.svelte";
+    import options from './../griffin/options.json';
     import cloneDeep from 'lodash.clonedeep';
     import { init as initGriffin } from './../griffin/griffin';
     const _= {cloneDeep};
+    HCExporting(Highcharts);
+    HCOfflineExporting(Highcharts);
+    Highcharts.setOptions(options);
     //options.legend.labelFormat = "{name}"; // shouldn't be necessary but some charts were tripping up on load
     /*config.title = config.title || {};
     config.title.text = undefined;
     config.exporting = { enabled: false };*/
-   /* export function createChart(node, config) {
+   /* export function createChart(node, config) {   
         return Highcharts.chart(node, config);
     }*/
     export function clean(userOptions){
@@ -77,8 +81,6 @@
         }, {timeout: 1000});
     }
     function init(_node){
-        HCExporting(Highcharts);
-        HCOfflineExporting(Highcharts);
         node = _node;
         _initGriffin();
          /**
