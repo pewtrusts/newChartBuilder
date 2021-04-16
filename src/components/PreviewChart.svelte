@@ -1,4 +1,6 @@
 <script context="module">
+    import HCExporting from "highcharts/modules/exporting";
+    import HCOfflineExporting from "highcharts/modules/offline-exporting";
     import "@Submodule/shared-css/styles.css";
     import { s } from "./../store";
     import { get } from "svelte/store";
@@ -75,8 +77,8 @@
         }, {timeout: 1000});
     }
     function init(_node){
-       // HCExporting(Highcharts);
-       // HCOfflineExporting(Highcharts);
+        HCExporting(Highcharts);
+        HCOfflineExporting(Highcharts);
         node = _node;
         _initGriffin();
          /**
@@ -117,7 +119,7 @@
             sourceWidth: Chart.container.clientWidth,
             type: 'image/svg+xml'
         };
-        Chart.exportChartLocal(exportingOptions, {});   
+        Chart.exportChartLocal(exportingOptions, {className: 'gray'});   
     }
     /*s.ChartConfig.subscribe(async (v) => {
         await Chart;
