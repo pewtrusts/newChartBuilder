@@ -16,6 +16,10 @@ let colorIndeces;
 s.ColorIndeces.subscribe(v => {
     colorIndeces = v;
 });
+let legendEnabled;
+s.LegendEnabled.subscribe(v => {
+    legendEnabled = v;
+});
 /*const timeUnits =
 {
     millisecond: 1,
@@ -159,7 +163,7 @@ export default function _updateChartData(data, datatableData = null, chartType) 
     // depending on range and specificity of time values. also may have to adjust time: useUTC see=tting
     storesToSet.push(
         ['XAxisTitle', data[0][0] || ''],
-        ['LegendEnabled', series.length > 1],
+        ['LegendEnabled', legendEnabled === undefined ? series.length > 1 : legendEnabled],
         ['TooltipFormatter', returnPointFormatter({ numberFormat: numberFormat, seriesLength: series.length })],
         ['ChartSeries', series]
     );

@@ -53,7 +53,7 @@ export const HCStores = [
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
     ['LegendAlign', 'center', 'legend.align'],
-    ['LegendEnabled', true, 'legend.enabled'],
+    ['LegendEnabled', undefined, 'legend.enabled'],
     ['LegendLayout', 'horizontal', 'legend.layout'],
     ['LegendVerticalAlign', 'bottom', 'legend.verticalAlign'],
     ['LegendReversed', false, 'legend.reversed'],

@@ -40,6 +40,7 @@
         on:change="{enableChangeHandler}"
         type="checkbox" 
         checked="{enabled}"
+        data-isChecked="{enabled}"
         > Enabled
 </label>
 <label>
