@@ -12,6 +12,10 @@ let numberFormat;
 s.NumberFormat.subscribe(v => {
     numberFormat = v;
 });
+let colorIndeces;
+s.ColorIndeces.subscribe(v => {
+    colorIndeces = v;
+});
 /*const timeUnits =
 {
     millisecond: 1,
@@ -103,6 +107,7 @@ export default function _updateChartData(data, datatableData = null, chartType) 
                 },
             }
         };
+        rtn.colorIndex = colorIndeces ? colorIndeces[i] : undefined;
         return rtn;
     });
     if (shouldBeDateTime) {
