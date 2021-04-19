@@ -30,7 +30,7 @@
 
         },
         {
-            name: 'Responsive',
+            name: 'Mobile',
             icon: 'phone',
             style: 'bottom: 2px;'
 

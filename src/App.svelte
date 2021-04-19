@@ -232,7 +232,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 <Colors />
             </section>
             <section use:pushSection>
-                <SectionHead text="Responsive" />
+                <SectionHead text="Mobile" />
                 <Responsive />
             </section>
             <section use:pushSection>

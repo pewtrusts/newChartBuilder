@@ -71,8 +71,8 @@
     };
     let notices = new Set();
     s.NominalMinHeight.subscribe(async (v) => {
-        await Chart;
         nominalMinHeight = v;
+        await Chart;
         setRealMinHeight(v);
     });
     s.NominalHeightValue.subscribe(v => {
