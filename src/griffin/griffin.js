@@ -99,7 +99,9 @@ export function initSingleGriffin(griffin, i){
     var isLazy = griffin.classList.contains('js-griffin--lazy');
     var isChartBuilder = griffin.classList.contains('js-griffin--chart-builder');
     var btn;
-    pictureContainer.style.display = 'none';
+    if ( pictureContainer ){
+        pictureContainer.style.display = 'none';
+    }
     if (!griffin.hasDownload) {
         btn = document.createElement('button');
         btn.textContent = 'Download image';
@@ -144,7 +146,6 @@ export function initSingleGriffin(griffin, i){
         console.log('lazy');
         setObserver(anchor, container, config.highchartsConfig, pictureContainer);
     } else {
-        pictureContainer.style.display = 'none';
         chart = Highcharts.chart(container, config.highchartsConfig);
         window.Charts.push(chart);
         return chart;

@@ -42,6 +42,8 @@
     export let chartWidth;
     export let size;
     export let Chart;
+    let chartConfig;
+    let griffinConfig;
     let chartResolve;
     let chartContainer;
     let classes = [];
@@ -58,27 +60,22 @@
     let chartHeight;
     let minHeight;
     let redrawTimeout;
-    let codeExport1;
-    let codeExport2;
-    let codeExport3;
     let node;
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
-    s.CodeExport1.subscribe(v => {
-        codeExport1 = v;
-    });
-    s.CodeExport2.subscribe(v => {
-        codeExport2 = v;
-    });
-    s.CodeExport3.subscribe(v => {
-        codeExport3 = v;
-    });
-    s.ChartConfig.subscribe(() => {
+    s.GriffinConfig.subscribe(v => {
+        griffinConfig = v;
+    })
+    s.ChartConfig.subscribe(v => {
+        chartConfig = v;
         window.cancelIdleCallback(redrawTimeout);
         redrawTimeout = window.requestIdleCallback(() => {
-            _initGriffin();
+           _initGriffin();
         },{timeout: 1000});
+    });
+    s.Classes.subscribe(v => {
+        classes = v;
     });
     /*s.MinHeight.subscribe((v) => {
         minHeight = v;
@@ -90,10 +87,7 @@
                     chartResolve = resolve;
                 });
             }
-            const cont = node.querySelector('.js-_griffin');
-            cont.classList.add('js-griffin', 'js-griffin--chart-builder', `griffin-chart-builder--${size}`, `js-${size}`);
-            cont.style.width = chartWidth + 'px';
-            const chart = initSingleGriffin(cont, size == 'fullscreen' ? 0 : 1);
+            const chart = initSingleGriffin(node, size == 'fullscreen' ? 0 : 1);
             if ( size == 'fullscreen' ){
                 chartResolve(chart);
             }
@@ -105,9 +99,9 @@
     }
     function init(_node){
         node = _node;
-        //setTimeout(() => {
-            _initGriffin();
-        //},1000);
+        setTimeout(() => {
+           _initGriffin();
+        },1000);
          /**
           *  using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts
           *  because Highcharts can mutate it, especially when the chart's responsive options are in
@@ -160,7 +154,7 @@
         },{timeout:1000});
         _Chart.update(v, false, true);
     });*/
-   /* s.ChartLabel.subscribe((v) => {
+    s.ChartLabel.subscribe((v) => {
         chartLabel = v;
     });
     s.ChartTitle.subscribe((v) => {
@@ -212,34 +206,64 @@
 
 <Notices {notices} />
 <div class="outer-wrapper">
-    <div use:init
+    <div 
         data-min-height={minHeight}
         data-height={chartHeight}
         data-width={chartWidth}
         data-size={size}
         class="wrapper js-figure-wrapper"
     >
-        <figure 
-            aria-labelledby="{chartTitle ? `chartTitle-${hashId}` : null }"
-            aria-describedby="{descriptionProxy}-{hashId}" 
-            class="{classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }"
+        <figure
+            use:init
+            style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
+            class="{classes.join(' ')} ai2html-griffin-figure griffin-figure js-griffin js-{size} griffin-chart-builder--{size} js-griffin--chart-builder {classes.join(' ')}"
         >
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <!-- svelte-ignore a11y-missing-content -->
-        <a class="griffin-anchor js-griffin-anchor"></a>
-        <meta name="format-detection" content="telephone=no">{ chartLabel || chartTitle || chartSubtitle ? `
-        <header>${chartLabel ? `
-            <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
-            <h1 id="chartTitle-${hashId}">${chartTitle}</h1>` : ''}${chartSubtitle ? `
-            <p id="chartSubtitle-${hashId}" class="figure-dek">${chartSubtitle}</p>` : ''}
-        </header>` : ''}{chartDescription && descriptionProxy == 'chartDescription' ? `
-        <p id="chartDescription-${hashId}" class="visually-hidden">${chartDescription}</p>` : ''}
-        <pre class="js-griffin-config" style="display: none;">
-        ${JSON.stringify({
-            highchartsConfig: chartConfig,
-            griffinConfig 
-        })}
+            <meta name="format-detection" content="telephone=no" />
+            {#if chartLabel || chartTitle || chartSubtitle}
+                <header>
+                    {#if chartLabel}
+                        <span class="figure-label">{chartLabel}</span>
+                    {/if}
+                    {#if chartTitle}
+                        <h1>{chartTitle}</h1>
+                    {/if}
+                    {#if chartSubtitle}
+                        <p class="figure-dek">{chartSubtitle}</p>
+                    {/if}
+                </header>
+            {/if}
+            <pre class="js-griffin-config" style="display: none;">
+            {JSON.stringify({
+                highchartsConfig: chartConfig,
+                griffinConfig 
+            })}
         </pre>
+            <div bind:this="{chartContainer}" 
+                class="hc-container js-hc-container {chartType}"
+            />
+            <figcaption>
+                {#if chartCaption}
+                    <p class="figure-caption">
+                        {@html chartCaption}
+                    </p>
+                {/if}
+                {#if chartNotes}
+                    <p class="figure-note">
+                        {@html chartNotes}
+                    </p>
+                {/if}
+                {#if chartSources}
+                    <p class="figure-note figure-note--source">
+                        {@html chartSources}
+                    </p>
+                {/if}
+                {#if chartCredit}
+                    <p on:click="{exportSVG}" class="figure-note figure-note--source js-griffin-credit">
+                        {@html chartCredit}
+                    </p>
+                {/if}
+            </figcaption>
+        </figure>
     </div>
 </div>
 
