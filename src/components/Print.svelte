@@ -57,11 +57,11 @@
     function heightHandler(){
         s.PrintHeight.set(convert.inchesToPixels(this.value));
     }
-    s.PrintWidth.set(convert.inchesToPixels(convert.picaToInches('39p0')));
+   // s.PrintWidth.set(convert.inchesToPixels(convert.picaToInches('39p0')));
     s.PrintWidth.subscribe(v => {
         printWidth = v;
     });
-    s.PrintHeight.set(convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625);
+   // s.PrintHeight.set(convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625);
     s.PrintHeight.subscribe(v => {
         printHeight = v;
     });

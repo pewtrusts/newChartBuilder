@@ -2,6 +2,7 @@ import hash from './griffin/scripts/hash';
 import slugger from 'slugger';
 import { writable, derived, get } from 'svelte/store';
 //import baseConfig from './base-chart-config.json';
+import convert from './scripts/unit-conversions';
 import { extendObj } from './griffin/griffin';
 import returnPointFormatter from './griffin/scripts/return-point-formatter';
 import returnNumberFormatter from './griffin/scripts/return-number-formatter';
@@ -95,8 +96,8 @@ const GStores = [
     ['YAxisDecimals', undefined]
 ];
 const appStores = [
-    ['PrintWidth', undefined],
-    ['PrintHeight', undefined],
+    ['PrintWidth', convert.inchesToPixels(convert.picaToInches('39p0'))],
+    ['PrintHeight', convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625],
     ['CellBeingEdited', null],
     ['ActiveSection', 'start'],
     ['ExportType', 'static'],

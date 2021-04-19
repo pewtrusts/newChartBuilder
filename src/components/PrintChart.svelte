@@ -2,6 +2,8 @@
     import { s } from './../store';
     import convert from './../scripts/unit-conversions';
     import { afterUpdate } from 'svelte';
+    import cloneDeep from 'lodash.clonedeep';
+    const _={cloneDeep};
     let printWidth;
     let printHeight;
     let chartContainer;
@@ -20,9 +22,10 @@
         config = v;
     });
     afterUpdate(() => {
-        
-        config.chart.className = 'griffin griffin--for-print';
-        window.PrintChart = window.Highcharts.chart(chartContainer, config);
+        const _config = _.cloneDeep(config);
+        _config.chart.height = printHeight;
+        _config.chart.className = 'griffin griffin--for-print';
+        window.PrintChart = window.Highcharts.chart(chartContainer, _config);
     });
 </script>
 <style>
