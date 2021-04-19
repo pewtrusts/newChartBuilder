@@ -8,7 +8,7 @@
     import Notices from "./Notices.svelte";
     import options from './../griffin/options.json';
     import cloneDeep from 'lodash.clonedeep';
-    import { init as initGriffin } from './../griffin/griffin';
+    import { initSingleGriffin } from './../griffin/griffin';
     const _= {cloneDeep};
     HCExporting(Highcharts);
     HCOfflineExporting(Highcharts);
@@ -69,12 +69,10 @@
     });*/
     function _initGriffin(){
         requestIdleCallback(() => {
-            node.querySelector('.js-_griffin').classList.add('js-griffin');
-            node.querySelector('.js-_griffin').classList.add('js-griffin--chart-builder');
-            node.querySelector('.js-_griffin').classList.add(`griffin-chart-builder--${size}`); // TO DO: will be unnecessary when/if iframed
-            node.querySelector('.js-_griffin').classList.add(`js-${size}`); 
-            node.querySelector('.js-_griffin').style.width = chartWidth + 'px';
-            initGriffin();
+            const cont = node.querySelector('.js-_griffin');
+            cont.classList.add('js-griffin', 'js-griffin--chart-builder', `griffin-chart-builder--${size}`, `js-${size}`);
+            cont.style.width = chartWidth + 'px';
+            initSingleGriffin(cont, size == 'fullscreen' ? 0 : 1);
             requestIdleCallback(() => {
                 node.querySelector('.griffin-download-btn').addEventListener('click', exportSVG);
             });

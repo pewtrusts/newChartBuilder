@@ -89,67 +89,70 @@ function setObserver(anchor, container, config, pictureContainer){
     });
     observer.observe(anchor);
 }
+export function initSingleGriffin(griffin, i){
+    var config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
+    var container = griffin.querySelector('.js-hc-container');
+    var sourceNote = griffin.querySelector('.js-griffin-credit');
+    var pictureContainer = griffin.querySelector('.js-picture-container');
+    var anchor = griffin.querySelector('.js-griffin-anchor');
+    var isLazy = griffin.classList.contains('js-griffin--lazy');
+    var isChartBuilder = griffin.classList.contains('js-griffin--chart-builder');
+    var btn;
+    pictureContainer.style.display = 'none';
+    if (!griffin.hasDownload) {
+        btn = document.createElement('button');
+        btn.textContent = 'Download image';
+        btn.className = 'griffin-download-btn';
+        btn.setAttribute('data-index', i);
+        btn.setAttribute('role', 'button');
+        btn.addEventListener('click', getImage);
+        sourceNote.insertAdjacentElement('beforeend', btn);
+        griffin.hasDownload = true;
+
+    }
+
+    extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
+    extendObj(config.highchartsConfig,
+        ['tooltip', 'pointFormatter'],
+        returnPointFormatter({
+            numberFormat: config.griffinConfig.NumberFormat,
+            seriesLength: config.highchartsConfig.series.length
+        })
+    );
+    extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
+    config.highchartsConfig.yAxis.forEach(function (axis) {
+        axis.title.text = axis.title.text || null;
+    });
+    if (config.griffinConfig.SelectedColorPalette == 'custom') {
+        addCustomColorProperties({
+            colors: config.griffinConfig.CustomColors,
+            hash: hash(config.griffinConfig.CustomColors.join(''))
+        });
+    }
+    /**
+     * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>
+     * in the previous one. doesn't show in DOM inspector, but does on screen
+     */
+    if (config.highchartsConfig.xAxis.categories && navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+        config.highchartsConfig.xAxis.categories = config.highchartsConfig.xAxis.categories.map(cat => {
+            return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
+        });
+    }
+    if (isLazy && window.IntersectionObserver && !isChartBuilder) {
+        griffin.classList.add('lazy-load')
+        console.log('lazy');
+        setObserver(anchor, container, config.highchartsConfig, pictureContainer);
+    } else {
+        pictureContainer.style.display = 'none';
+        window.Charts.push(Highcharts.chart(container, config.highchartsConfig));
+    }
+}
 export function init(){
     window.Charts = [];
     const griffins = document.querySelectorAll('.js-griffin');
     if (window.CSS && CSS.supports('color', 'var(--primary)')) {
         for (var i = 0; i < griffins.length; i++){
-            var config = JSON.parse(griffins[i].querySelector('.js-griffin-config').innerHTML);
-            var container = griffins[i].querySelector('.js-hc-container');
-            var sourceNote = griffins[i].querySelector('.js-griffin-credit');
-            var pictureContainer = griffins[i].querySelector('.js-picture-container');
-            var anchor = griffins[i].querySelector('.js-griffin-anchor');
-            var isLazy = griffins[i].classList.contains('js-griffin--lazy');
-            var isChartBuilder = griffins[i].classList.contains('js-griffin--chart-builder');
-            var btn;
-            pictureContainer.style.display = 'none';
-            if (!griffins[i].hasDownload) {
-                btn = document.createElement('button');
-                btn.textContent = 'Download image';
-                btn.className = 'griffin-download-btn';
-                btn.setAttribute('data-index', i);
-                btn.setAttribute('role', 'button');
-                btn.addEventListener('click', getImage);
-                sourceNote.insertAdjacentElement('beforeend', btn);
-                griffins[i].hasDownload = true;
-
-            }
-        
-            extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
-            extendObj(config.highchartsConfig,
-                ['tooltip', 'pointFormatter'], 
-                returnPointFormatter({
-                    numberFormat: config.griffinConfig.NumberFormat,
-                    seriesLength: config.highchartsConfig.series.length
-                })
-            );
-            extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
-            config.highchartsConfig.yAxis.forEach(function(axis){
-                axis.title.text = axis.title.text || null;
-            });
-            if (config.griffinConfig.SelectedColorPalette == 'custom'){
-                addCustomColorProperties({
-                    colors: config.griffinConfig.CustomColors, 
-                    hash: hash(config.griffinConfig.CustomColors.join(''))
-                });
-            }
-            /**
-             * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>
-             * in the previous one. doesn't show in DOM inspector, but does on screen
-             */
-            if (config.highchartsConfig.xAxis.categories && navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-                config.highchartsConfig.xAxis.categories = config.highchartsConfig.xAxis.categories.map(cat => {
-                    return cat.replace(/ +/g, ' ').replace(/ /g, '  ');
-                });
-            }
-            if ( isLazy && window.IntersectionObserver && !isChartBuilder ){
-                griffins[i].classList.add('lazy-load')
-                console.log('lazy');
-                setObserver(anchor, container, config.highchartsConfig, pictureContainer);
-            } else {
-                pictureContainer.style.display = 'none';
-                window.Charts.push(Highcharts.chart(container, config.highchartsConfig));
-            }
+            initSingleGriffin(griffins[i],i);
         }
     }
 }
