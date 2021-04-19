@@ -90,7 +90,7 @@
             isSubmitting = false;
             isDirty = false;
         }, 500);
-        checkHeight();
+        //checkHeight();
         s.PictureIsMissingOrOld.set(true);
     }
     function replaceFn(url){

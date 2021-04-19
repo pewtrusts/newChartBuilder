@@ -37,10 +37,12 @@
 </script>
 
 <script>
-    //export let chartResolve;
+
     export let seriesCountMismatchNotice;
     export let chartWidth;
     export let size;
+    export let Chart;
+    let chartResolve;
     let chartContainer;
     let classes = [];
     let chartLabel;
@@ -56,31 +58,56 @@
     let chartHeight;
     let minHeight;
     let redrawTimeout;
-    let codeExport;
+    let codeExport1;
+    let codeExport2;
+    let codeExport3;
     let node;
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
-    s.CodeExport.subscribe(v => {
-        codeExport = v;
+    s.CodeExport1.subscribe(v => {
+        codeExport1 = v;
+    });
+    s.CodeExport2.subscribe(v => {
+        codeExport2 = v;
+    });
+    s.CodeExport3.subscribe(v => {
+        codeExport3 = v;
+    });
+    s.ChartConfig.subscribe(() => {
+        window.cancelIdleCallback(redrawTimeout);
+        redrawTimeout = window.requestIdleCallback(() => {
+            _initGriffin();
+        },{timeout: 1000});
     });
     /*s.MinHeight.subscribe((v) => {
         minHeight = v;
     });*/
     function _initGriffin(){
         requestIdleCallback(() => {
+            if ( size == 'fullscreen' ){
+                Chart = new Promise(function(resolve){
+                    chartResolve = resolve;
+                });
+            }
             const cont = node.querySelector('.js-_griffin');
             cont.classList.add('js-griffin', 'js-griffin--chart-builder', `griffin-chart-builder--${size}`, `js-${size}`);
             cont.style.width = chartWidth + 'px';
-            initSingleGriffin(cont, size == 'fullscreen' ? 0 : 1);
+            const chart = initSingleGriffin(cont, size == 'fullscreen' ? 0 : 1);
+            if ( size == 'fullscreen' ){
+                chartResolve(chart);
+            }
             requestIdleCallback(() => {
                 node.querySelector('.griffin-download-btn').addEventListener('click', exportSVG);
             });
+            console.log(Chart);
         }, {timeout: 1000});
     }
     function init(_node){
         node = _node;
-        _initGriffin();
+        //setTimeout(() => {
+            _initGriffin();
+        //},1000);
          /**
           *  using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts
           *  because Highcharts can mutate it, especially when the chart's responsive options are in
@@ -95,7 +122,7 @@
             }*/
     }
     afterUpdate(async () => {
-        window.cancelIdleCallback(redrawTimeout);
+       /* window.cancelIdleCallback(redrawTimeout);
         redrawTimeout = window.requestIdleCallback(() => {
             _initGriffin();
         },{timeout: 1000});
@@ -192,7 +219,27 @@
         data-size={size}
         class="wrapper js-figure-wrapper"
     >
-        {@html codeExport}
+        <figure 
+            aria-labelledby="{chartTitle ? `chartTitle-${hashId}` : null }"
+            aria-describedby="{descriptionProxy}-{hashId}" 
+            class="{classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }"
+        >
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <!-- svelte-ignore a11y-missing-content -->
+        <a class="griffin-anchor js-griffin-anchor"></a>
+        <meta name="format-detection" content="telephone=no">{ chartLabel || chartTitle || chartSubtitle ? `
+        <header>${chartLabel ? `
+            <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
+            <h1 id="chartTitle-${hashId}">${chartTitle}</h1>` : ''}${chartSubtitle ? `
+            <p id="chartSubtitle-${hashId}" class="figure-dek">${chartSubtitle}</p>` : ''}
+        </header>` : ''}{chartDescription && descriptionProxy == 'chartDescription' ? `
+        <p id="chartDescription-${hashId}" class="visually-hidden">${chartDescription}</p>` : ''}
+        <pre class="js-griffin-config" style="display: none;">
+        ${JSON.stringify({
+            highchartsConfig: chartConfig,
+            griffinConfig 
+        })}
+        </pre>
     </div>
 </div>
 

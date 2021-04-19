@@ -242,38 +242,28 @@ function initDerived(){
         };
         return obj;
     });
-    s.CodeExport = derived([
+    s.CodeExport1 = derived([
         s.ChartConfig,
-        s.ChartCredit,
         s.ChartDescription, 
         s.ChartLabel, 
         s.ChartNotes,
         s.ChartTitle, 
-        s.ChartSources,
         s.ChartSubtitle,
         s.Classes, 
-        s.Picture,
         s.GriffinConfig,
         s.ExportType,
-        s.DescriptionProxy,
-        s.ChartCaption,
-        s.ChartType
+        s.DescriptionProxy
     ], ([
         chartConfig,
-        chartCredit,
         chartDescription,
         chartLabel, 
         chartNotes,
-        chartTitle, 
-        chartSources,
+        chartTitle,
         chartSubtitle,
         classes,
-        picture,
         griffinConfig,
         exportType,
-        descriptionProxy,
-        chartCaption,
-        chartType
+        descriptionProxy
     ]) => {
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
         return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
@@ -290,14 +280,44 @@ function initDerived(){
             highchartsConfig: chartConfig,
             griffinConfig 
         })}
-        </pre>
-        
+        </pre>`;
+    });
+    s.CodeExport2 = derived([
+        s.ChartType
+    ], ([
+        chartType
+    ]) => {
+        return `
         <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
-        </div>
+        </div>`;
+    });
+    s.CodeExport3 = derived([
+        s.ChartCredit,
+        s.ChartDescription,
+        s.ChartLabel,
+        s.ChartNotes,
+        s.ChartTitle,
+        s.ChartSources,
+        s.ChartSubtitle,
+        s.Picture,
+        s.ChartCaption,
+    ], ([
+        chartCredit,
+        chartDescription,
+        chartLabel,
+        chartNotes,
+        chartTitle,
+        chartSources,
+        chartSubtitle,
+        picture,
+        chartCaption
+    ]) => {
+        const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
+        return `
         <div class="picture-container js-picture-container">
             ${picture}
         </div>
-        ${ chartNotes || chartSources || chartCredit  || chartCaption ? `
+        ${chartNotes || chartSources || chartCredit || chartCaption ? `
         <figcaption>${chartCaption ? `
             <p id="chartCaption-${hashId}" class="figure-caption">
                 ${chartCaption}
@@ -314,6 +334,7 @@ function initDerived(){
         </figcaption>` : ''}
     </figure>`;
     });
+    s.CodeExport = derived([s.CodeExport1, s.CodeExport2, s.CodeExport3], ([a,b,c]) => a + b + c);
 } // end initDerived
 
 initWritables();

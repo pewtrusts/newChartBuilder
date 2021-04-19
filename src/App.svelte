@@ -63,10 +63,7 @@
 import { resetColorIndeces } from './components/ColorPalette.svelte';
 
 
-    let chartResolve;
-    let Chart = new Promise(function(resolve){
-        chartResolve = resolve;
-    });
+    let Chart = new Promise(function(){});
     let showDataInput = false;
     let showVerify = false;
     let verifyPromise;
@@ -272,8 +269,8 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 <ChartSizeSelector bind:checkHeight {Chart}/>
             </div>
             <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
-                <PreviewChart bind:Chart {chartResolve} {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
-                <PreviewChart {Chart} {chartResolve} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+                <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
+                <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
             </div>
             <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 

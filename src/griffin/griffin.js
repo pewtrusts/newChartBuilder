@@ -90,6 +90,7 @@ function setObserver(anchor, container, config, pictureContainer){
     observer.observe(anchor);
 }
 export function initSingleGriffin(griffin, i){
+    var chart;
     var config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
     var container = griffin.querySelector('.js-hc-container');
     var sourceNote = griffin.querySelector('.js-griffin-credit');
@@ -144,7 +145,9 @@ export function initSingleGriffin(griffin, i){
         setObserver(anchor, container, config.highchartsConfig, pictureContainer);
     } else {
         pictureContainer.style.display = 'none';
-        window.Charts.push(Highcharts.chart(container, config.highchartsConfig));
+        chart = Highcharts.chart(container, config.highchartsConfig);
+        window.Charts.push(chart);
+        return chart;
     }
 }
 export function init(){
