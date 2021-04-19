@@ -90,7 +90,7 @@ const GStores = [
     ['DescriptionProxy', 'chartDescription'],
     ['NumberFormat', undefined],
     ['SelectedColorPalette', 'default'],
-    ['MinHeight', 0],
+    ['MinHeight', 400],
     ['OtherResponsive', []],
     ['LockHeight', true],
     ['YAxisDecimals', undefined]
