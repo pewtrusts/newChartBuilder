@@ -28,6 +28,13 @@
                 "connectorShape": "straight"
             },
             "showInLegend": true
+        },
+        "series": {
+            "states": {
+                "inactive": {
+                    "enabled": false
+                }
+            }
         }
     },
     "legend": {

@@ -103,14 +103,14 @@ export default function _updateChartData(data, datatableData = null, chartType) 
             radius: 4,
             symbol: 'circle'
         };
-        rtn.states = {
+        /*rtn.states = {
             hover: {
                 enabled: false,
                     halo: {
                     size: 0
                 },
             }
-        };
+        };*/
         rtn.colorIndex = colorIndeces ? colorIndeces[i] : undefined;
         return rtn;
     });

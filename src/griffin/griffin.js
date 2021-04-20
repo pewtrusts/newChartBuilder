@@ -13,6 +13,12 @@ import hash from './scripts/hash';
 options.plotOptions.pie.dataLabels.formatter = function () {
     return this.point.x;
 };
+extendObj(options, ['plotOptions','pie','point','events','legendItemClick'], function(e){
+    e.preventDefault();
+    console.log('click!');
+    return false;
+});
+
 Highcharts.setOptions(options);
 Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     var currentClassName = replace ? '' : (this.attr('class') || '');
@@ -21,7 +27,7 @@ Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     .split(/ /g)
     .reduce(function (newClassName, name) {
         var split, regex;
-        if (currentClassName.indexOf(name) === -1) {
+        if (currentClassName.indexOf(name) === -1) {0
             split = name.split(/-\d+$/);
             if (split.length > 1 ) {
                 regex = new RegExp(split[0] + '-\\d+$');
