@@ -98,10 +98,10 @@ module.exports = (env) => {
                 },{
                     test: /\.svelte$/,
                     use: {
-                        loader: 'svelte-loader',
+                        loader: 'svelte-loader-hot',
                         options: {
                             emitCss: !isDev,
-                            hotReload: false,
+                            hotReload: isDev,
                             dev: isDev,
                             onwarn: function (warning, handleWarning) {
 
@@ -205,7 +205,7 @@ module.exports = (env) => {
         devServer: {
             contentBase: './dist',
             overlay: true, // shows compiler errors in full-screen overlay
-            hot: false
+            hot: true
         },
     }
 };
