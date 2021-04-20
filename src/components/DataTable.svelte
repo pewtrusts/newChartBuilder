@@ -65,7 +65,8 @@
     let xAxisType = "linear";
     let notices = new Set();
     let seriesCountMismatch = false;
-   
+    let seriesCount;
+    $:rowLength = data.length - 1;
     function returnHeadClass(i) {
         if (
             data.slice(1).every((row) => {
@@ -93,7 +94,7 @@
     }
     function reverseSeries(){
         data = _reverseSeries(data);
-        updateChartData(data);
+        updateChartData(data, null, chartType);
         
     }
     function _reverseRows(){
@@ -101,12 +102,15 @@
     }
     function reverseRows(){
         data = _reverseRows(data);
-        updateChartData(data);
+        updateChartData(data, null, chartType);
     }
     function handleDataChange(e) {
         
-        updateChartData(data);
+        updateChartData(data, null, chartType);
     }
+    s.SeriesCount.subscribe(v => {
+        seriesCount = v;
+    });
     s.ChartType.subscribe(v => {
         chartType = v;
         updateChartData(data, null, chartType);
@@ -125,7 +129,7 @@
         }
         data = v;
     });
-    updateChartData(data);
+    updateChartData(data, null, chartType);
 </script>
 
 <style>
@@ -224,19 +228,21 @@
         type="gray"
         style="border-bottom-width: 0;border-top-width: 0;" />
     <Button
-        clickHandler={reverseSeries}
-        showIconAndText="true"
-        iconID="resize-width"
-        title="Reverse series"
-        iconStyle="top:2px;"
-        type="gray"
-        style="border-bottom-width: 0;border-top-width: 0;" />
-    <Button
         clickHandler={reverseRows}
         showIconAndText="true"
         iconID="resize-height"
         title="Reverse rows"
         iconStyle="top:2px;"
+        disable={rowLength < 2}
+        type="gray"
+        style="border-bottom-width: 0;border-top-width: 0;" />
+    <Button
+        clickHandler={reverseSeries}
+        showIconAndText="true"
+        iconID="resize-width"
+        title="Reverse series"
+        iconStyle="top:2px;"
+        disable={seriesCount < 2}
         type="gray"
         style="border-bottom-width: 0;border-top-width: 0;" />
    

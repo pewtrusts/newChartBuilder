@@ -10,6 +10,7 @@
     export let style = null;
     export let showIconAndText = false;
     export let value = null;
+    export let disable = false;
     
 </script>
 <style>
@@ -34,10 +35,13 @@
         /*color: var(--brand-primary, #000);*/
         background-color: var(--background-medium, lightgray);
     }
+    .button-component[disabled] {
+        cursor: not-allowed;
+    }
 </style>
-<button {value} class="button-component" class:secondary="{type == 'secondary'}" class:primary="{type == 'primary'}" class:gray="{type == 'gray'}" role="button" on:click="{clickHandler}" title="{title}" style="{style}" >
+<button disabled="{disable || null}" {value} class="button-component" class:secondary="{type == 'secondary'}" class:primary="{type == 'primary'}" class:gray="{type == 'gray'}" role="button" on:click="{clickHandler}" title="{title}" style="{style}" >
     {#if iconID}
-    <Sprite width="15" id="{iconID}" style="{iconStyle}" />
+    <Sprite width="15" id="{iconID}" style="{iconStyle}" gray="{disable}" />
     {/if}
     <span class:visually-hidden="{!!iconID && !showIconAndText}">{title}</span>
 </button>

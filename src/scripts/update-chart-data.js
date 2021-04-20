@@ -48,7 +48,7 @@ export default function _updateChartData(data, datatableData = null, chartType) 
         return typeof row[0] == 'string' ? toDate(row[0]) : 'invalid';
     });
     const shouldBeDateTime = asDateTime.every(value => typeof value == 'object');
-    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).every(row => typeof row[0] == 'string');
+    const shouldBeCategorical = !shouldBeDateTime && data.slice(1).some(row => typeof row[0] == 'string');
     /*if (shouldBeDateTime) {
        // s.XAxisType.set('datetime');
         intervals = asDateTime.reduce(function (acc, cur, i, array) {
