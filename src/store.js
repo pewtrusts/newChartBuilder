@@ -55,6 +55,7 @@ export const HCStores = [
     ['SpacingRight', 20, 'chart.spacingRight'],
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
+    ['DataLabels', false, 'plotOptions.series.dataLabels.enabled'],
     ['LegendAlign', 'center', 'legend.align'],
     ['LegendEnabled', undefined, 'legend.enabled'],
     ['LegendLayout', 'horizontal', 'legend.layout'],

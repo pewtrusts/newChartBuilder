@@ -4,6 +4,7 @@
     import XAxis from './XAxis.svelte';
     import Legend from './Legend.svelte';
     import Notices from './Notices.svelte';
+    import DataLabels from './DataLabels.svelte';
     import { s } from './../store';
     
     function stackingHandler(){
@@ -86,6 +87,7 @@
     <option value="percent">Percent</option>
 </select>
 <label><input on:change="{stackHandler}" checked="{reverseStacks}" type="checkbox"> Reverse stacks</label>
+<DataLabels />
 <Legend />
 <YAxis />
 <XAxis />
