@@ -15,7 +15,6 @@ options.plotOptions.pie.dataLabels.formatter = function () {
 };
 extendObj(options, ['plotOptions','pie','point','events','legendItemClick'], function(e){
     e.preventDefault();
-    console.log('click!');
     return false;
 });
 

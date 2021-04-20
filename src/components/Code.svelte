@@ -14,6 +14,7 @@
     let container;
     let showSuccess = false;
     let fadeSuccess = false;
+    let exportType;
     export let dialog;
     export let clickSave;
     s.ChartHasBeenSaved.subscribe(v => {
@@ -27,6 +28,9 @@
     });
     s.PictureIsMissingOrOld.subscribe(v => {
         pictureIsMissingOrOld = v;
+    });
+    s.ExportType.subscribe(v => {
+        exportType = v;
     });
     function changeHandler(){
         s.ExportType.set(this.value);
@@ -140,9 +144,9 @@
 it will replace the image with a dynamic Highcharts version if you have <em>dynamic</em> selected.</p>
 <form on:submit|preventDefault="{clickHandler}">
     <div class="selectors">
-        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked > Static</label>
-        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="dynamic" > Dynamic</label>
-        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="lazy" > Lazy</label>
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked="{exportType == 'static' || null}"> Static</label>
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="dynamic" checked="{exportType == 'dynamic' || null}"> Dynamic</label>
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="lazy" checked="{exportType == 'lazy' || null}"> Lazy</label>
     </div>
     <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" type="primary" /></div>
     {#if !chartDescription }
