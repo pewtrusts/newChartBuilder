@@ -59,5 +59,7 @@ import { get } from 'svelte/store';
         {/if}
     </div>
     {/each}
+    {#if colorByPoint ? maxPointCountArray.length > 1 : seriesArray.length > 1}
     <Button type="primary" title="Reverse" clickHandler="{reverseColors}" />
+    {/if}
 </div>
