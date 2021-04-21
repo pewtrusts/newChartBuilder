@@ -89,6 +89,7 @@ const GStores = [
     ['ChartSubtitle', ''],
     ['ColorIndeces', []],
     ['DescriptionProxy', 'chartDescription'],
+    ['LastLabelOnly', ''],
     ['NumberFormat', undefined],
     ['SelectedColorPalette', 'default'],
     ['MinHeight', 400],
@@ -225,7 +226,7 @@ function initDerived(){
         const rtn = `cc${hash(customColors.join(''))}`;
         return rtn;
     });
-    s.Classes = derived([s.ChartPaletteClassname, s.ChartProject], function(){
+    s.Classes = derived([s.ChartPaletteClassname, s.ChartProject, s.LastLabelOnly], function(){
         const rtn = arguments[0].map(d => slugger(d));
         s.ChartClassName.set('griffin ' + rtn.join(' '));
         return rtn;

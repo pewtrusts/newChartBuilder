@@ -40,7 +40,7 @@ extendObj(options, ['plotOptions','line','dataLabels','formatter'], function(){
                     that.point.dataLabel.element.classList.add('datapoint--downward');
                     that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
                 } else {
-                    that.point.dataLabel.element.classList.add('datapoint--upward');
+                 //   that.point.dataLabel.element.classList.add('datapoint--upward');
                 }
                 break;
             default:

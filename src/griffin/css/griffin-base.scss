@@ -167,3 +167,6 @@ picture.fullscreen {
 .highcharts-data-label text, text.highcharts-data-label {
   fill: inherit;
 }
+.last-label-only .highcharts-data-label:not(.last-datalabel){
+  display: none;
+}
