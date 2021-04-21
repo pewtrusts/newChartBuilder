@@ -34,6 +34,12 @@
                 "inactive": {
                     "enabled": false
                 }
+            },
+            "dataLabels": {
+                "crop": false,
+                "overflow": "allow",
+                "padding": 5,
+                "y": 0
             }
         }
     },

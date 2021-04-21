@@ -151,3 +151,19 @@ picture.fullscreen {
 }
 
 }
+.highcharts-container.griffin .highcharts-data-label {
+  font-size: 1rem;
+}
+
+.highcharts-data-label.datapoint--upward text {
+  text-anchor: middle;
+}
+.highcharts-data-label.datapoint--dip text {
+  transform: translate(0px, 2.1em)
+}
+.highcharts-data-label text {
+  text-shadow: 2px 2px 1px #fff, 2px -2px 1px #fff, -2px 2px 1px #fff, -2px -2px 1px #fff;
+}
+.highcharts-data-label text, text.highcharts-data-label {
+  fill: inherit;
+}
