@@ -1,13 +1,23 @@
 <script context="module">
     import tippy from 'tippy.js';
-    function initTippy(node, {content}){
-        tippy(node, {content});
-    }
+    
 </script>
 <script>
     export let notices;
     export let position;
-    
+    function initTippy(node, {content}){
+        var _tippy = tippy(node, {content});
+        return {
+            update(){
+                _tippy.destroy();
+                //content is not updating
+                _tippy = tippy(node, {content});
+            },
+            destroy(){
+                _tippy.destroy();
+            }
+        };
+    }
 </script>
 <style>
 /*    .container {
@@ -53,7 +63,7 @@
 <div class="container">
     <p class="visually-hidden">Notices</p>
     <dl class:left="{position == 'left'}">
-        {#each [...notices] as notice}
+        {#each [...notices] as notice, i}
     <dt class:isActive="{!!notice.onclick}" on:click="{!!notice.onclick ? notice.onclick : null}" use:initTippy={{content: notice.description}} class="{notice.type}">{notice.label}</dt>
         <dd class="visually-hidden">{notice.description}</dd>
         {/each}
