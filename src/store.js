@@ -67,6 +67,7 @@ export const HCStores = [
     ['StartOfWeek', 1, 'xAxis.startOfWeek'],
     ['TooltipFormatter', returnPointFormatter({ numberFormat: undefined, seriesLength: 2 }), 'tooltip.pointFormatter'],
     ['PlotBands', [], 'xAxis.plotBands'],
+    ['PlotLines', [], 'xAxis.plotLines'],
     ['XAxisCategories', null, 'xAxis.categories'],
     ['XAxisTitle', '', 'xAxis.title.text'],
     ['XAxisReversedStacks', false, 'xAxis.reversedStacks'],

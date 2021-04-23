@@ -1,6 +1,7 @@
 <script>
     import { s } from './../store';
     import PlotBands from './PlotBands.svelte';
+    import PlotLines from './PlotLines.svelte';
     let y;
    
     function xAxisSubmit(){
@@ -25,3 +26,4 @@
     <input class="button button--primary" type="submit">
 </form>
 <PlotBands />
+<PlotLines />
