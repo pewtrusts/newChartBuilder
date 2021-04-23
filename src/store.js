@@ -52,7 +52,6 @@ s.ChartConfig = writable({});
 export const HCStores = [
     ['ChartHeight', '56.25%', 'chart.height'],
     ['ChartClassName', '', 'chart.className'],
-    ['SpacingRight', 20, 'chart.spacingRight'],
     ['ChartSeries', [], 'series'],
     ['ChartType', 'line', 'chart.type'],
     ['DataLabels', false, 'plotOptions.series.dataLabels.enabled'],
@@ -62,6 +61,8 @@ export const HCStores = [
     ['LegendVerticalAlign', 'bottom', 'legend.verticalAlign'],
     ['LegendReversed', false, 'legend.reversed'],
     ['LegendFormatter', undefined, 'legend.labelFormatter'],
+    ['SpacingRight', 20, 'chart.spacingRight'],
+    ['SpacingTop', 10, 'chart.spacingTop'],
     ['Stacking', undefined, 'plotOptions.series.stacking'],
     ['StartOfWeek', 1, 'xAxis.startOfWeek'],
     ['TooltipFormatter', returnPointFormatter({ numberFormat: undefined, seriesLength: 2 }), 'tooltip.pointFormatter'],

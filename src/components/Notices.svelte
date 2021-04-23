@@ -1,23 +1,11 @@
 <script context="module">
-    import tippy from 'tippy.js';
+    import DefinitionItem from './DefinitionItem.svelte';
     
 </script>
 <script>
     export let notices;
     export let position;
-    function initTippy(node, {content}){
-        var _tippy = tippy(node, {content});
-        return {
-            update(){
-                _tippy.destroy();
-                //content is not updating
-                _tippy = tippy(node, {content});
-            },
-            destroy(){
-                _tippy.destroy();
-            }
-        };
-    }
+    
 </script>
 <style>
 /*    .container {
@@ -34,38 +22,13 @@
     dl.left {
         justify-content: start;
     }
-    dt {
-        font-size: 0.75rem;
-        padding: 0.07em 0.25em 0.1em;
-        border-radius: 0.25em;
-        display: inline-block;
-        border: 1px solid gray;
-        margin-right: 2px;
-        margin-bottom: 2px;
-    }
-    .info {
-        color: var(--info, #767676);
-        border-color: var(--info, #767676);
-    }
-    .warning {
-        color: var(--warning, orange);
-        border-color: var(--warning, orange);
-    }
-    .error {
-        color: #fff;
-        background-color: var(--error, red);
-        border-color: var(--error, red);
-    }
-    .isActive {
-        cursor: pointer;
-    }
+   
 </style>
 <div class="container">
     <p class="visually-hidden">Notices</p>
     <dl class:left="{position == 'left'}">
-        {#each [...notices] as notice, i}
-    <dt class:isActive="{!!notice.onclick}" on:click="{!!notice.onclick ? notice.onclick : null}" use:initTippy={{content: notice.description}} class="{notice.type}">{notice.label}</dt>
-        <dd class="visually-hidden">{notice.description}</dd>
+        {#each [...notices] as notice}
+        <DefinitionItem {notice} />
         {/each}
     </dl>
 </div>

@@ -7,8 +7,17 @@
     let xAxisCategories;
     let xAxisType;
     let plotBands;
+    let spacingTop;
+    s.SpacingTop.subscribe(v => {
+        spacingTop = v;
+    })
     s.PlotBands.subscribe(v => {
         plotBands = v || [];
+        if ( spacingTop < 20 && plotBands.some(d => d.label.text !== '') ){
+            s.SpacingTop.set(20);
+        } else {
+            s.SpacingTop.set(10);
+        }
     })
     let categoricalNotice = {
         label: 'Categorical axis',
@@ -48,13 +57,21 @@
             let index = parseInt(name);
             let property = name.split('-')[1];
             plotBands[index] = plotBands[index] || {};
-            plotBands[index][property] = property == 'label' ? {text: value} : xAxisType == 'datetime' && isNaN(+value) ? toDate(value).getTime() : isNaN(+value) ? value : +value;
+            plotBands[index][property] = property == 'label' ? {text: value, y: -5} : xAxisType == 'datetime' && isNaN(+value) ? toDate(value).getTime() : isNaN(+value) ? value : +value;
         }
         console.log(plotBands);
         s.PlotBands.set(plotBands);
     }
     function inputByIndexHandler(){
         inputByIndex[this.dataset.index] = this.checked;
+    }
+    function checkValidity(){
+        if (this.   value === '' || (isNaN(+this.value) && toDate(this.value, true).toString() != 'Invalid Date' ) || (!isNaN(this.value) && this.value % 1 === 0)){
+            this.setCustomValidity('');
+        } else {
+            this.setCustomValidity('Invalid input. Datetime values need to be expressed in milliseconds or as human-readable dates that can be converted.');
+        }
+        this.reportValidity();
     }
 </script>
 <style>
@@ -82,25 +99,29 @@
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>From:
                 {#if xAxisCategories && !inputByIndex[i]}
-                    <select bind:value="{plotBand.from}" name="{i}-from" id="">
+                    <select required bind:value="{plotBand.from}" name="{i}-from" id="">
                         {#each xAxisCategories as category, j}
                         <option value="{j}">{category}</option>
                         {/each}
                     </select>
+                {:else if xAxisType == 'datetime'}
+                <input type="text" on:change="{checkValidity}" required bind:value="{plotBand.from}" name="{i}-from">
                 {:else}
-                <input bind:value="{plotBand.from}" name="{i}-from" type="text">
+                <input type="number" required bind:value="{plotBand.from}" name="{i}-from">
                 {/if}
             </label>
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>To:
                 {#if xAxisCategories && !inputByIndex[i]}
-                    <select bind:value="{plotBand.to}" name="{i}-to" id="">
+                    <select required bind:value="{plotBand.to}" name="{i}-to" id="">
                         {#each xAxisCategories as category, j}
                         <option value="{j}">{category}</option>
                         {/each}
                     </select>
+                {:else if xAxisType == 'datetime'}
+                <input type="text" on:change="{checkValidity}" required bind:value="{plotBand.to}" name="{i}-to">
                 {:else}
-                <input bind:value="{plotBand.to}" name="{i}-to" type="text">
+                <input type="number" required bind:value="{plotBand.to}" name="{i}-to">
                 {/if}
             </label>
             <label>Label: <input value="{plotBand.label.text}" name="{i}-label" type="text"></label>
