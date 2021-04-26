@@ -1,0 +1,66 @@
+/* This file is generated.  DO NOT EDIT. */ 
+@media print {
+  .print-hidden {
+    display: none; }
+  .page-toolbar__wrapper {
+    display: none; }
+  .global-footer {
+    display: none; }
+  .breadcrumbs {
+    display: none; }
+  .newsletter-signup--promo {
+    display: none; }
+  .flexible-promo {
+    display: none; }
+  .multi-promo {
+    display: none; }
+  .video-block {
+    display: none; }
+  .audio-block {
+    display: none; }
+  .image-gallery {
+    display: none; }
+  .explore-module {
+    display: none; }
+  .third-party-embed {
+    display: none; }
+  .downloads-callout {
+    display: none; }
+  .dynamic-content-listing {
+    display: none; }
+  .more-from-pew {
+    display: none; }
+  .action-alert-promo {
+    display: none; }
+  .global-header {
+    display: none; }
+  .js-dynamic-items {
+    display: none; }
+  .dynamic-content-listing__header-container {
+    display: none; }
+  .container--70-30 .container__col {
+    margin-bottom: 40px; }
+  .container--70-30 .container__col:first-child {
+    width: 100%; }
+  .container--70-30 .container__col:last-child {
+    width: 100%;
+    margin-bottom: 0; }
+  .container--30-70 .container__col {
+    margin-bottom: 40px; }
+  .container--30-70 .container__col:first-child {
+    width: 100%;
+    margin-bottom: 0; }
+  .container--30-70 .container__col:last-child {
+    width: 100%; }
+  .related-resources__people-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+  .related-resources__expert-wrapper {
+    width: 50%;
+    float: left;
+    min-height: 84px;
+    margin-bottom: 12px; } }
+
+/*# sourceMappingURL=print-generated.css.map */
