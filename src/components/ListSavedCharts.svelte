@@ -10,7 +10,7 @@
     }
 </script>
 <script>
-    import sec from './../secrets.json';
+    /* global GOOGLE_SHEET_KEY, GOOGLE_ID */
     import LoadChart from './LoadChart.svelte';
     export let resolveSaved;
     export let savedCharts;
@@ -25,8 +25,6 @@
     let typeFilter = 'any';
     let creatorFilter = 'any';
     let isWorking = false;
-    const CLIENT_ID = sec.GoogleSheets.ID
-    const API_KEY = sec.GoogleSheets.key;
 
     // Array of API discovery doc URLs for APIs used by the quickstart
     const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -55,8 +53,8 @@
     function initClient() {
         s.IsWorking.set(true);
         gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
+            apiKey: GOOGLE_SHEET_KEY,
+            clientId: GOOGLE_ID,
             discoveryDocs: DISCOVERY_DOCS,
             scope: SCOPES
         }).then(function (v) {

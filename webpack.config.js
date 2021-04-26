@@ -8,14 +8,16 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 const path = require('path');
-const outputFolder = process.env.NODE_ENV === 'production' ? 'docs/' : process.env.NODE_ENV === 'localpreview' ? 'preview/' : 'dist/';
+const outputFolder = process.env.NODE_ENV === 'localpreview' ? 'preview/' : 'dist/';
 const isDev = mode === 'development';
 const repoName = 'newChartBuilder';
 const publicPath = process.env.NODE_ENV === 'production' ? '/' + repoName + '/' : '/';
-const title = 'Griffin Chart Builder 1.0.0'
+const title = 'Griffin Chart Builder 1.0.0';
+const secrets = process.env.NODE_ENV === 'production' ? null : require('./secrets.json');
 
 
 const plugins = [
+    new CleanWebpackPlugin(),
     new CopyWebpackPlugin([{
         from: 'assets/',
         context: 'src',
@@ -64,6 +66,9 @@ const plugins = [
     }),
     new webpack.DefinePlugin({
         'PUBLICPATH': '"' + publicPath + '"', // from https://webpack.js.org/plugins/define-plugin/: Note that because the plugin does a direct text replacement, the value given to it must include actual quotes inside of the string itself. Typically, this is done either with alternate quotes, such as '"production"', or by using JSON.stringify('production').
+        'GOOGLE_SHEET_ID': secrets ? '"' + secrets.GoogleSheets.sheetId + '"' : '"' + process.env.GOOGLE_SHEET_ID + '"',
+        'GOOGLE_SHEET_KEY': secrets ? '"' + secrets.GoogleSheets.key + '"' : '"' + process.env.GOOGLE_SHEET_KEY + '"',
+        'GOOGLE_ID': secrets ? '"' + secrets.GoogleSheets.ID + '"' : '"' + process.env.GOOGLE_ID + '"'
     }),
 ];
 

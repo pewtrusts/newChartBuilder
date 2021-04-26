@@ -1,6 +1,4 @@
-/* global gapi */
-//import { s } from './../store';
-import sec from './../secrets.json';
+/* global gapi GOOGLE_SHEET_ID */
 
 let resolveSaved;
 export default function _init(props){
@@ -9,7 +7,7 @@ export default function _init(props){
 export function getSavedCharts() {
     //s.IsWorking.set(true);
     return gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: sec.GoogleSheets.sheetId,
+        spreadsheetId: GOOGLE_SHEET_ID,
         range: 'Sheet1',
     }).then(function (response) {
         const googleSheetHeaders = response.result.values[0];
