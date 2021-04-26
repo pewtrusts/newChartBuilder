@@ -3,6 +3,7 @@
     import initGetSavedCharts from './../scripts/get-saved-charts';
     import { returnProjects } from './SaveChart.svelte';
     import Login from './Login.svelte';
+    import Button from './Button.svelte';
     import { s } from './../store';
     export function loginHandler(){
         gapi.auth2.getAuthInstance().signIn();
@@ -44,6 +45,12 @@
     async function setHeaders(){
         const sheetsData = await savedCharts;
         googleSheetHeaders = sheetsData.googleSheetHeaders;
+    }
+    function logout(){
+        instance.signOut().then(() => {
+            location.reload();
+        });
+        
     }
     function initClient() {
         s.IsWorking.set(true);
@@ -173,6 +180,12 @@
         padding-top: 1em;
         z-index: 1;
     }
+    .user-info {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding-top: 1em;
+    }
 
 </style>
 <svelte:head>
@@ -209,6 +222,7 @@
                 <option value="{creator}">{creator}</option>
                 {/each}
             </select>
+            <div class="user-info">{userName} ({userEmail}) <Button type="secondary" title="Logout" clickHandler="{logout}" /></div>
         </header>
         {#if currentUserCharts.length > 0 }
         <h3>Your charts</h3>
