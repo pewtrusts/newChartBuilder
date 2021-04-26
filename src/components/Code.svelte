@@ -15,6 +15,7 @@
     let showSuccess = false;
     let fadeSuccess = false;
     let exportType;
+    let showCode = false;
     export let dialog;
     export let clickSave;
     s.ChartHasBeenSaved.subscribe(v => {
@@ -32,6 +33,10 @@
     s.ExportType.subscribe(v => {
         exportType = v;
     });
+    function toggleShowCode(e){
+        e.preventDefault()
+        showCode = !showCode;
+    }
     function changeHandler(){
         s.ExportType.set(this.value);
     }
@@ -92,10 +97,14 @@
 </script>
 <style>
     .code-export {
+        display: none;
         width: 100%;
         font-family: var(--mono, monospace);
         font-size: 1rem;
         height: calc(100% - 40px);
+    }
+    .code-export.showCode {
+        display: block;
     }
     .container {
         display: inline-block;
@@ -120,28 +129,48 @@
         display: block;
         margin-bottom: 1em;
     }
-    .form-wrapper {
-        margin-top: 1em;
-    }
+    
     .form-wrapper label {
         font-weight: 900;
         margin: 0 0 0.5rem;
     }
     .form-wrapper textarea {
-        display: block;
         width: 100%;
         font-size: 0.85rem;
         line-height: 1.5;
+        margin-top: 0.2em;
     }
     .form-wrapper textarea::placeholder {
         color: #767676;
         font-style: italic;
     }
+    form.chart-description {
+        background-color: var(--light-gray, #f0f0f0);
+        padding: 0.5em;
+    }
 </style>
 <!-- to do: remove spacing to minimize output -->
 <!--<textarea value="{JSON.stringify(codeExport, null, 2)}"></textarea>-->
-<p>Copy the code needed to include the chart on the website. The website will render the chart as a static image if you have <em>static</em> selected;
-it will replace the image with a dynamic Highcharts version if you have <em>dynamic</em> selected.</p>
+
+<form class="chart-description">
+    {#if !chartDescription }
+        <div class="form-wrapper">
+            <label>Description:<textarea
+                required
+                name="chartDescription"
+                id="chartDescription-missing"
+                placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season."
+                ></textarea>
+            </label>
+        </div>
+        <p style="margin-bottom: 0;margin-top:0;">The chart is missing a description, which is required for screen readers and search engines.
+            Please enter a description above or go the <a on:click|preventDefault="{() => s.ActiveSection.set({method:'click', value: 'text'})}" href="?">the text section</a>
+            to select another field to serve as the description</p>
+    {/if}
+</form>
+<p>Copy the code needed to include the chart on the website. The website will render the chart as a static image if you have <strong><em>static</em></strong> selected;
+it will replace the image with a dynamic Highcharts version if you have <strong><em>dynamic</em></strong> selected. If you select <strong><em>lazy</em></strong>, the dynamic chart will trigger
+when it is scrolled into view.</p>
 <form on:submit|preventDefault="{clickHandler}">
     <div class="selectors">
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked="{exportType == 'static' || null}"> Static</label>
@@ -149,19 +178,7 @@ it will replace the image with a dynamic Highcharts version if you have <em>dyna
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="lazy" checked="{exportType == 'lazy' || null}"> Lazy</label>
     </div>
     <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" type="primary" /></div>
-    {#if !chartDescription }
-    <div class="form-wrapper">
-        <label>Description:<textarea 
-            required
-            name="chartDescription" 
-            id="chartDescription-missing" 
-            placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season."
-            ></textarea>
-        </label>
-    </div>
-    <p>The chart is missing a description, which is required for screen readers and search engines.
-        Please enter a description above or go the <a on:click|preventDefault="{() => s.ActiveSection.set({method:'click', value: 'text'})}" href="?">the text section</a>
-        to select another field to serv as the description</p>
-    {/if}
+    <Button title="{showCode ? 'Hide' : 'Show'} code" type="secondary" clickHandler="{toggleShowCode}" />
+    
 </form>
-<textarea class="code-export" value="{codeExport}"></textarea>
+<textarea class:showCode class="code-export" value="{codeExport}"></textarea>
