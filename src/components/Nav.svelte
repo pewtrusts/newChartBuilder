@@ -15,25 +15,39 @@
             icon: 'spreadsheet'
         },
         {
-            name: 'Settings',
-            icon: 'cog',
-        },
-        {
             name: 'Text',
             icon: 'text',
             style: 'bottom: 2px;'
         },
         {
+            name: 'X Axis',
+            icon: 'x-axis',
+            style: 'bottom: 2px;'
+        },
+        {
+            name: 'Y Axis',
+            icon: 'y-axis',
+            style: 'bottom: 2px;'
+        },
+        {
+            name: 'Legend',
+            icon: 'question-mark'
+        },
+        {
             name: 'Colors',
             icon: 'droplet',
             style: 'bottom: 2px;'
-
+            
         },
         {
             name: 'Mobile',
             icon: 'phone',
             style: 'bottom: 2px;'
-
+            
+        },
+        {
+            name: 'Other',
+            icon: 'cog',
         },
         {
             name: 'Code',

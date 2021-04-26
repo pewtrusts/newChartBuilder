@@ -1,8 +1,5 @@
 <script context="module">
-    import Login from './Login.svelte'
-    import YAxis from './YAxis.svelte';
-    import XAxis from './XAxis.svelte';
-    import Legend from './Legend.svelte';
+    
     import Notices from './Notices.svelte';
     import DataLabels from './DataLabels.svelte';
     import { s } from './../store';
@@ -14,8 +11,6 @@
 </script>
 <script>
 
-    export let savedCharts;
-    let project;
     let stacking;
     let reverseStacks;
     let notices = new Set();
@@ -27,9 +22,7 @@
         'You may go to the data section and reverse the series there. You may also want to reverse the legend.',
         type: 'warning'
     };
-    s.ChartProject.subscribe(v => {
-        project = v;
-    });
+    
     s.Stacking.subscribe(v => {
         stacking = v;
         requestIdleCallback(checkMessage, {timeout: 500});
@@ -54,9 +47,6 @@
         notices[stacking !== 'none' && reverseStacks ? 'add' : 'delete'](stackingNotice);
         notices = notices;
     }
-    function changeHandler(){
-        s.ChartProject.set(this.value);
-    }
     function stackHandler(){
         s.XAxisReversedStacks.set(this.checked);
     }
@@ -67,23 +57,6 @@
         display: block;
     }
 </style>
-{#await savedCharts}
-<Login reason="to load previous projects" />
-{:then _}
-<label for="project-list--settings">Project name (select existing or add a new one):</label>
-<input
-    value={project}
-    class="datalist-input"
-    id="project-list--settings"
-    name="project"
-    list="saved-projects"
-    type="text"
-    on:change="{changeHandler}"
-/>
-<p>
-    The project name is necessary if you are designing a chart for project with custom styles. Otherwise, the project name is optional.
-    Saved charts will have the project name saved with them for easier retrieval later.</p>
-{/await}
 <Notices {notices} position="left" />
 <label>Spacing top: <input name="top" on:change="{spacingTopHandler}" type="number" bind:value="{spacingTop}"></label>
 <label>Spacing right: <input name="right" on:change="{spacingRightHandler}" type="number" bind:value="{spacingRight}"></label>
@@ -96,6 +69,3 @@
 </select>
 <label><input on:change="{stackHandler}" checked="{reverseStacks}" type="checkbox"> Reverse stacks</label>
 <DataLabels />
-<Legend />
-<YAxis />
-<XAxis />

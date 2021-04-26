@@ -1,5 +1,5 @@
 <script>
-    
+    import Login from './Login.svelte'
     import sanitizeHtml from 'sanitize-html';
     import 'quill/dist/quill.core.css';
     import 'quill/dist/quill.snow.css';
@@ -9,6 +9,8 @@
     import Sprite from './Sprite.svelte';
     import Notices from './Notices.svelte';
     export let checkHeight;
+    export let savedCharts;
+    let project;
     let quills = {};
     let descRadio;
     let notesRadio;
@@ -59,6 +61,9 @@
         'chartSources': '',
         'chartSubtitle': ''
     };
+    function changeHandler(){
+        s.ChartProject.set(this.value);
+    }
     function resolveDummy(){
         dummyResolve(true);
     }
@@ -148,6 +153,9 @@
         
         quills[this.name].focus();
     }
+    s.ChartProject.subscribe(v => {
+        project = v;
+    });
     s.DescriptionProxy.subscribe(v => {
         descProxy = v;
     });
@@ -279,8 +287,32 @@
         border-left-color: transparent;
         border-right-color: transparent;
     }
+    form.name {
+        padding: 0.5em;
+        background-color: var(--light-gray, #f0f0f0);
+        margin-bottom: 1em;
+    }
 </style>
 <Notices {notices} />
+{#await savedCharts}
+<Login reason="to load previous projects" />
+{:then _}
+<form class="name">
+    <label for="project-list--settings">Project name (select existing or add a new one):</label>
+    <input
+        value={project}
+        class="datalist-input"
+        id="project-list--settings"
+        name="project"
+        list="saved-projects"
+        type="text"
+        on:change="{changeHandler}"
+    />
+    <p style="margin:0;">
+        The project name is not displayed but is necessary if you are designing a chart for project with custom styles. Otherwise, the project name is optional.
+        Saved charts will have the project name saved with them for easier retrieval later.</p>
+</form>
+{/await}
 <form class:isDirty class:isSubmitting on:input="{inputHandler}" on:submit|preventDefault="{submitHandler}">
     <label>{brandOptions.chartLabelName}:<br /><input bind:value="{localValues.chartLabel}" placeholder="e.g., Figure 1" name="chartLabel" type="text"></label>
     <label>{brandOptions.chartTitleName}:<br /><input required="{descProxy == 'chartTitle' ? 'required' : null}" bind:value="{localValues.chartTitle}" placeholder="e.g., Most Apple Are Harvested in the Fall" name="chartTitle" type="text"></label>

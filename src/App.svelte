@@ -27,6 +27,9 @@
     import Print from '@Component/Print.svelte';
     import PrintChart from '@Component/PrintChart.svelte';
     import Colors from '@Component/Colors.svelte';
+    import XAxis from '@Component/XAxis.svelte';
+    import YAxis from '@Component/YAxis.svelte';
+    import Legend from '@Component/Legend.svelte';
 
 
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
@@ -220,13 +223,22 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 {/if}
             </section>
             <section use:pushSection>
-                <SectionHead text="Settings" />
-                <Settings {savedCharts}/> 
-            </section> 
-            <section use:pushSection>
                 <SectionHead text="Text" />
-                <Text {checkHeight} />
+                <Text {checkHeight} {savedCharts} />
             </section>
+            <section use:pushSection>
+                <SectionHead text="X Axis" />
+                <XAxis />
+            </section>
+            <section use:pushSection>
+                <SectionHead text="Y Axis" />
+                <YAxis />
+            </section>
+            <section use:pushSection>
+                <SectionHead text="Legend" />
+                <Legend />
+            </section>
+            
             <section use:pushSection>
                 <SectionHead text="Colors" />
                 <Colors />
@@ -235,6 +247,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 <SectionHead text="Mobile" />
                 <Responsive />
             </section>
+            <section use:pushSection>
+                <SectionHead text="Other" />
+                <Settings /> 
+            </section> 
             <section use:pushSection>
                 <SectionHead text="Code" />
                 <Code {pictureIsMissingOrOldNotice} bind:dialog {clickSave} />

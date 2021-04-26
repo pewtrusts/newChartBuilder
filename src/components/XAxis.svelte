@@ -19,7 +19,6 @@
         display: block;
     }
 </style>
-<h3>X Axis</h3>
 <form on:submit|preventDefault={xAxisSubmit}>
     <label>Label Y position: <input bind:value="{y}" type="number" name="XAxisLabelsY"></label>
     <input class="button button--primary" type="submit">

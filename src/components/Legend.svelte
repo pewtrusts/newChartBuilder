@@ -32,9 +32,11 @@
     
 </script>
 <style>
-   
+   label {
+       display: block;
+       margin-bottom: 0.2em;
+   }
 </style>
-<h3>Legend</h3>
 <label>
     <input 
         on:change="{enableChangeHandler}"

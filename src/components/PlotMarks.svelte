@@ -107,10 +107,13 @@
     label {
         display: inline-block;
     }
+    fieldset {
+        margin-bottom: 0.2em;
+    }
 </style>
 <div class="wrapper">
     <Notices {notices} />
-    <h4>{dict[type].header}</h4>
+    <h3>{dict[type].header}</h3>
     <form on:submit|preventDefault={submit}>
         {#if xAxisType == 'datetime'}
         <p>Existing date values are expressed in milliseconds since or before midnight on January 1, 1970.
@@ -164,7 +167,9 @@
             {/if}
         </fieldset>
         {/each}
+        {#if collection.length > 0}
         <input class="button button--primary" type="submit">
+        {/if}
         <Button title="Add another" type="secondary" clickHandler="{e => {
             e.preventDefault();
             collection.push(type == 'PlotBands' ? {to:'',from:'',label:{text:''}} : {value:'',label:{text:''}});

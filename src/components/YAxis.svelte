@@ -32,7 +32,6 @@
         display: block;
     }
 </style>
-<h3>Y Ax{yAxes.length == 1 ? 'i' : 'e'}s</h3>
 <form on:submit|preventDefault={yAxisSubmit}>
     {#each yAxes as _, i}
         {#if yAxes.length > 1 }
