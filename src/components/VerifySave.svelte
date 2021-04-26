@@ -6,10 +6,19 @@
 </script>
 
 <script>
+    import { s } from '../store';
     export let showVerify = false;
     export let loadedChart;
     export let verifyResolve;
     export let verifyReject;
+    let loadedChartUserId;
+    let userId;
+    s.LoadedChartUserId.subscribe(v => {
+        loadedChartUserId = v;
+    });
+    s.UserId.subscribe(v => {
+        userId = v;
+    });
     function keydownHandler(e){
         if ( e.keyCode == 27 ){ //ESC
             showVerify  = false;
@@ -87,8 +96,13 @@
                 <LoadChart disabled="{true}" data="{loadedChart}" />
             </div>
         {/if}
-        <p>You have edited an existing chart. Do you want to replace it with the new one or keep it?</p>
+        {#if userId == loadedChartUserId}
+        <p>You have edited one of your existing charts. Do you want to replace it with the new one or keep it?</p>
         <Button clickHandler="{submitHandler}" title="Replace it" type="primary" value="replace" />
         <Button clickHandler="{submitHandler}" title="Keep it" type="primary"  value="keep"/>
+        {:else}
+        <p>You have edited a team member's chart and cannot overwrite it. Continue to save yours as a separate chart.</p>
+        <Button clickHandler="{submitHandler}" title="Continue" type="primary"  value="keep"/>
+        {/if}
     </div>
 </div>

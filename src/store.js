@@ -115,10 +115,10 @@ const appStores = [
     ['Picture', ''],
     ['PictureIsMissingOrOld', true],
     ['Thumbnail', ''],
-    ['IsLoading', false]
-    
+    ['IsLoading', false],
+    ['LoadedChartUserId', undefined]
 ];
-
+s.UserId = writable(undefined);
 function initWritables(){
     /** WRITABLES */
 

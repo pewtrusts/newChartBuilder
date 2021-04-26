@@ -90,6 +90,7 @@
         userEmail = profile.getEmail();
         userId = profile.getId();
         userName = profile.getGivenName() + ' ' + profile.getFamilyName();
+        s.UserId.set(userId);
     }
     function loadHandler(){
         gapi.load('client:auth2', initClient);
