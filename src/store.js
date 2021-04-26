@@ -172,6 +172,7 @@ function initWritables(){
 
 
 function initDerived(){
+    s.PlotMarks = derived([s.PlotBands, s.PlotLines], ([bands, lines]) => [...bands, ...lines]);
     s.AllResponsiveRules = derived([s.MinHeight, s.OtherResponsive], ([minHeight, otherResponsive]) => {
         return [{
             chartOptions: {

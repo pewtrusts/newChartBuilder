@@ -3,22 +3,53 @@
     import Notices from './Notices.svelte';
     import Button from './Button.svelte';
     import toDate from './../scripts/coerce-to-date';
+    export let type;
     let notices = new Set();
     let xAxisCategories;
     let xAxisType;
-    let plotBands;
+    let collection = [];
     let spacingTop;
+    let inputByIndex;
+    let dict = {
+        PlotBands: {
+            header: 'Plot bands'
+        },
+        PlotLines: {
+            header: 'Plot lines'
+        },
+    }
     s.SpacingTop.subscribe(v => {
         spacingTop = v;
-    })
-    s.PlotBands.subscribe(v => {
-        plotBands = v || [];
-        if ( spacingTop < 20 && plotBands.some(d => d.label.text !== '') ){
+    });
+    s.PlotMarks.subscribe(v => { // plotmarks is derived concat of PlotBands and PlotLines
+        const hasLabels = v.some(d => d.label.text !== '');
+        if ( spacingTop < 20 && hasLabels ){
             s.SpacingTop.set(20);
-        } else {
+        } else if (!hasLabels) {
             s.SpacingTop.set(10);
         }
-    })
+    });
+    s[type].subscribe(v => {
+        collection = v || [];
+        checkInputByIndex();
+    });
+    function checkInputByIndex(){
+        inputByIndex = collection.map(plotMark => {
+            switch (type){
+                case 'PlotBands':
+                    if (xAxisCategories && ((plotMark.from !== '' && plotMark.from % 1 !== 0) || (plotMark.to !== '' && plotMark.to % 1 !== 0))){
+                        return true;
+                    }
+                    return false;
+                case 'PlotLines':
+                    if (xAxisCategories && (plotMark.value !== '' && plotMark.value % 1 !== 0) ){
+                        return true;
+                    }
+                    return false;
+            }
+        }); 
+    }
+
     let categoricalNotice = {
         label: 'Categorical axis',
         description: `The chart has a categorical x-axis, usually used for categories with no numeric relationship to one another,
@@ -35,38 +66,33 @@
             enter dates as you would normally (such as 'April 17, 2018'). The values will change to milliseconds after they are submitted.`,
         type: 'info'
     };
-    $:inputByIndex = plotBands.map(plotBand => {
-        if (xAxisCategories && ((plotBand.from !== '' && plotBand.from % 1 !== 0) || (plotBand.to !== '' && plotBand.to % 1 !== 0))){
-            return true;
-        }
-        return false;
-    }); 
+    
     s.XAxisCategories.subscribe(v => {
         xAxisCategories = v;
         notices[v ? 'add' : 'delete'](categoricalNotice);
         notices = notices;
+        checkInputByIndex();
     });
     s.XAxisType.subscribe(v => {
         xAxisType = v;
         notices[v == 'datetime' ? 'add' : 'delete'](datetimeNotice);
     });
     function submit(){
-        const plotBands = [];
+        const collection = [];
         const data =  new FormData(this);
-         for (let [name,value] of data ){
+        for (let [name,value] of data ){
             let index = parseInt(name);
             let property = name.split('-')[1];
-            plotBands[index] = plotBands[index] || {};
-            plotBands[index][property] = property == 'label' ? {text: value, y: -5} : xAxisType == 'datetime' && isNaN(+value) ? toDate(value).getTime() : isNaN(+value) ? value : +value;
+            collection[index] = collection[index] || {};
+            collection[index][property] = property == 'label' ? type == 'PlotBands' ? {text: value, y: -5} : {text: value, y: -5, x: 0, rotation: 0} : xAxisType == 'datetime' && isNaN(+value) ? toDate(value).getTime() : isNaN(+value) ? value : +value;
         }
-        console.log(plotBands);
-        s.PlotBands.set(plotBands);
+        s[type].set(collection);
     }
     function inputByIndexHandler(){
         inputByIndex[this.dataset.index] = this.checked;
     }
     function checkValidity(){
-        if (this.   value === '' || (isNaN(+this.value) && toDate(this.value, true).toString() != 'Invalid Date' ) || (!isNaN(this.value) && this.value % 1 === 0)){
+        if (this.value === '' || (isNaN(+this.value) && toDate(this.value, true).toString() != 'Invalid Date' ) || (!isNaN(this.value) && this.value % 1 === 0)){
             this.setCustomValidity('');
         } else {
             this.setCustomValidity('Invalid input. Datetime values need to be expressed in milliseconds or as human-readable dates that can be converted.');
@@ -84,7 +110,7 @@
 </style>
 <div class="wrapper">
     <Notices {notices} />
-    <h4>Plot bands</h4>
+    <h4>{dict[type].header}</h4>
     <form on:submit|preventDefault={submit}>
         {#if xAxisType == 'datetime'}
         <p>Existing date values are expressed in milliseconds since or before midnight on January 1, 1970.
@@ -93,45 +119,47 @@
             to milliseconds when the form is submitted.
         </p>
         {/if}
-        {#each plotBands as plotBand, i}
+        {#each collection as item, i}
         <fieldset>
-            <legend>Plot band {i + 1}</legend>
+            <legend>{dict[type].header.replace(/s$/,'')} {i + 1}</legend>
             <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>From:
+            <label>{type == 'PlotBands' ? 'From' : 'Value' }:
                 {#if xAxisCategories && !inputByIndex[i]}
-                    <select required bind:value="{plotBand.from}" name="{i}-from" id="">
+                    <select required value="{type == 'PlotBands' ? item.from : item.value}" name="{i}-{type == 'PlotBands' ? 'from': 'value'}" id="">
                         {#each xAxisCategories as category, j}
                         <option value="{j}">{category}</option>
                         {/each}
                     </select>
                 {:else if xAxisType == 'datetime'}
-                <input type="text" on:change="{checkValidity}" required bind:value="{plotBand.from}" name="{i}-from">
+                <input type="text" on:change="{checkValidity}" required bind:value="{item.from}" name="{i}-{type == 'PlotBands' ? 'from': 'value'}">
                 {:else}
-                <input type="number" required bind:value="{plotBand.from}" name="{i}-from">
+                <input type="number" step="any" required bind:value="{item.from}" name="{i}-{type == 'PlotBands' ? 'from': 'value'}">
                 {/if}
             </label>
+            {#if type == 'PlotBands'}
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>To:
                 {#if xAxisCategories && !inputByIndex[i]}
-                    <select required bind:value="{plotBand.to}" name="{i}-to" id="">
+                    <select required bind:value="{item.to}" name="{i}-to" id="">
                         {#each xAxisCategories as category, j}
                         <option value="{j}">{category}</option>
                         {/each}
                     </select>
                 {:else if xAxisType == 'datetime'}
-                <input type="text" on:change="{checkValidity}" required bind:value="{plotBand.to}" name="{i}-to">
+                <input type="text" on:change="{checkValidity}" required bind:value="{item.to}" name="{i}-to">
                 {:else}
-                <input type="number" required bind:value="{plotBand.to}" name="{i}-to">
+                <input type="number" step="any" required bind:value="{item.to}" name="{i}-to">
                 {/if}
             </label>
-            <label>Label: <input value="{plotBand.label.text}" name="{i}-label" type="text"></label>
+            {/if}
+            <label>Label: <input value="{item.label.text}" name="{i}-label" type="text"></label>
             {#if xAxisCategories }
             <label><input data-index="{i}" on:change="{inputByIndexHandler}" checked="{inputByIndex[i]}" type="checkbox"> Input by index</label>
             {/if}
-            {#if i == plotBands.length - 1}
+            {#if i == collection.length - 1}
             <Button title="Remove" type="secondary" clickHandler="{() => {
-                plotBands.pop();
-                plotBands = plotBands;
+                collection.pop();
+                collection = collection;
             }}" />
             {/if}
         </fieldset>
@@ -139,8 +167,8 @@
         <input class="button button--primary" type="submit">
         <Button title="Add another" type="secondary" clickHandler="{e => {
             e.preventDefault();
-            plotBands.push({to:'',from:'',label:{text:''}});
-            plotBands = plotBands;
+            collection.push(type == 'PlotBands' ? {to:'',from:'',label:{text:''}} : {value:'',label:{text:''}});
+            collection = collection;
         }}" />
     </form>
 </div>

@@ -1,7 +1,6 @@
 <script>
     import { s } from './../store';
-    import PlotBands from './PlotBands.svelte';
-    import PlotLines from './PlotLines.svelte';
+    import PlotMarks from './PlotMarks.svelte';
     let y;
    
     function xAxisSubmit(){
@@ -25,5 +24,6 @@
     <label>Label Y position: <input bind:value="{y}" type="number" name="XAxisLabelsY"></label>
     <input class="button button--primary" type="submit">
 </form>
-<PlotBands />
-<PlotLines />
+<PlotMarks type="PlotBands" />
+<PlotMarks type="PlotLines" />
+
