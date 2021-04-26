@@ -121,8 +121,8 @@ function getImage(e){
     a.setAttribute("download", 'chart.png');
     a.click();
     var dataLayer = window.dataLayer || null;
-    if (dataLayer) {
-        dataLayer.push({ 'event': 'Interactive Click', 'eventData': 'Download Griffin Image | SOTC Digital 2021 | ' + chartTitleText });
+    if (dataLayer && window.griffinGTMDownloadFn ) {
+        window.griffinGTMDownloadFn(chartTitleText); // set the Fn elsewhere
     }
 }
 function setObserver(anchor, container, config, pictureContainer){
