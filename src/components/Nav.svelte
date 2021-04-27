@@ -50,6 +50,10 @@
             icon: 'cog',
         },
         {
+            name: 'Custom',
+            icon: 'cogs',
+        },
+        {
             name: 'Code',
             icon: 'code',
 

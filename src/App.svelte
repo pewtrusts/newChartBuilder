@@ -31,6 +31,7 @@
     import XAxis from '@Component/XAxis.svelte';
     import YAxis from '@Component/YAxis.svelte';
     import Legend from '@Component/Legend.svelte';
+    import Custom from '@Component/Custom.svelte';
 
 
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
@@ -48,6 +49,11 @@
         type: 'warning',
         onclick: picClickHandler
     }
+    export const customSettingsNotice = {
+        label: 'Custom settings applied',
+        description: 'This chart has custom settings applied that may override options set elsewhere. Navigate to the custom section to review or edit them.',
+        type: 'warning'
+    };
     const seriesCountMismatchNotice = {
         label: 'Unused series',
         description: 'The selected chart type can only render one series, but the data supplied has more than one. Only the first series will be rendered.',
@@ -252,6 +258,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
             <section use:pushSection>
                 <SectionHead text="Other" />
                 <Settings /> 
+            </section> 
+            <section use:pushSection>
+                <SectionHead text="Custom" />
+                <Custom /> 
             </section> 
             <section use:pushSection>
                 <SectionHead text="Code" />

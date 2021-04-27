@@ -6,6 +6,7 @@
     import { get } from "svelte/store";
     import { afterUpdate } from "svelte";
     import Notices from "./Notices.svelte";
+    import { customSettingsNotice } from './../App.svelte';
     import options from './../griffin/options.json';
     import cloneDeep from 'lodash.clonedeep';
     import { initSingleGriffin } from './../griffin/griffin';
@@ -61,6 +62,10 @@
     let minHeight;
     let redrawTimeout;
     let node;
+    s.HasCustomSettings.subscribe(v => {
+        notices[v ? 'add' : 'delete'](customSettingsNotice);
+        notices = notices;
+    });
     s.ChartHeight.subscribe((v) => {
         chartHeight = v;
     });
@@ -213,6 +218,7 @@
         data-size={size}
         class="wrapper js-figure-wrapper"
     >
+        <p class="size-tag">[{size}]</p>
         <figure
             use:init
             style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
@@ -280,10 +286,5 @@
     .wrapper {
         position: relative;
     }
-    .wrapper::before {
-        content: "[" attr(data-size) "]";
-        position: absolute;
-        top: -35px;
-        color: #767676;
-    }
+    
 </style>

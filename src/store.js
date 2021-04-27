@@ -7,6 +7,9 @@ import { extendObj } from './griffin/griffin';
 import returnPointFormatter from './griffin/scripts/return-point-formatter';
 import returnNumberFormatter from './griffin/scripts/return-number-formatter';
 import returnLegendFormatter from './griffin/scripts/return-legend-formatter';
+import defaultsDeep from 'lodash.defaultsdeep';
+import cloneDeep from 'lodash.clonedeep';
+const _ = { cloneDeep, defaultsDeep };
 
 export const s = {};
 export const hMap = {};
@@ -98,7 +101,8 @@ const GStores = [
     ['MinHeight', 400],
     ['OtherResponsive', []],
     ['LockHeight', true],
-    ['YAxisDecimals', undefined]
+    ['YAxisDecimals', undefined],
+    ['CustomSettings', {}]
 ];
 const appStores = [
     ['PrintWidth', convert.inchesToPixels(convert.picaToInches('39p0'))],
@@ -116,7 +120,8 @@ const appStores = [
     ['PictureIsMissingOrOld', true],
     ['Thumbnail', ''],
     ['IsLoading', false],
-    ['LoadedChartUserId', undefined]
+    ['LoadedChartUserId', undefined],
+    ['HasCustomSettings', false]
 ];
 s.UserId = writable(undefined);
 function initWritables(){
@@ -161,7 +166,18 @@ function initWritables(){
             s.ColorByPoint.set([false]);
         }
         s.LegendFormatter.set(returnLegendFormatter(v));
-    })
+    });
+    s.CustomSettings.subscribe(v => {
+        if ( v && typeof v == 'object' && Object.keys(v).length > 0 ){
+            s.HasCustomSettings.set(true);
+        } else {
+            s.HasCustomSettings.set(false);
+        }
+        const _config = get(s.ChartConfig);
+        const _v = _.cloneDeep(v);
+        const combined = _.defaultsDeep(_v, _config);
+        s.ChartConfig.set(combined);
+    });
 } // end initWritables
 
 /**

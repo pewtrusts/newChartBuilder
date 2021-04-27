@@ -4,6 +4,7 @@
     import { afterUpdate } from 'svelte';
     import cloneDeep from 'lodash.clonedeep';
     import Notices from './Notices.svelte';
+    import {customSettingsNotice} from './../App.svelte';
     const _={cloneDeep};
     let printWidth;
     let printHeight;
@@ -33,6 +34,10 @@
     });
     s.ChartConfig.subscribe(v => {
         config = v;
+    });
+    s.HasCustomSettings.subscribe(v => {
+        notices[v ? 'add' : 'delete'](customSettingsNotice);
+        notices = notices;
     });
     afterUpdate(() => {
         const _config = _.cloneDeep(config);
