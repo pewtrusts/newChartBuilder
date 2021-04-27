@@ -7,7 +7,7 @@
 <style>
     .section-anchor {
         position: absolute;
-        top: -80px;
+        top: -10px;
     }
     .observer {
         display: block;
