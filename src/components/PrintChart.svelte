@@ -5,6 +5,8 @@
     import cloneDeep from 'lodash.clonedeep';
     import Notices from './Notices.svelte';
     import {customSettingsNotice} from './../App.svelte';
+    import {extendObj} from './../griffin/griffin';
+    import returnLegendFormatter from './../griffin/scripts/return-legend-formatter';
     const _={cloneDeep};
     let printWidth;
     let printHeight;
@@ -44,6 +46,7 @@
         _config.chart.height = printHeight;
         _config.chart.className = 'griffin griffin--for-print';
         _config.responsive.rules = appliedRules;
+        extendObj(_config, ['legend', 'labelFormatter'], returnLegendFormatter(_config.chart.type));
         window.PrintChart = window.Highcharts.chart(chartContainer, _config);
     });
     function changeHandler(){
