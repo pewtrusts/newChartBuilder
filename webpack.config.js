@@ -124,6 +124,7 @@ module.exports = (env) => {
                         }
                     }
                 },
+                
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
