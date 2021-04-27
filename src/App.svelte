@@ -1,4 +1,5 @@
 <script context="module">
+    /* global GOOGLE_SHEET_ID GOOGLE_SHEET_KEY GOOGLE_ID*/
     import { onMount } from 'svelte';
     import cloneDeep from 'lodash.clonedeep';
     const _= {cloneDeep};
@@ -63,6 +64,7 @@
 </script> 
 
 <script>
+    console.log({gsi: GOOGLE_SHEET_ID, gsk: GOOGLE_SHEET_KEY, GI: GOOGLE_ID});
 import { resetColorIndeces } from './components/ColorPalette.svelte';
 
 
