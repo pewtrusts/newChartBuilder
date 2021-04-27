@@ -309,8 +309,7 @@
         on:change="{changeHandler}"
     />
     <p style="margin:0;">
-        The project name is not displayed but is necessary if you are designing a chart for project with custom styles. Otherwise, the project name is optional.
-        Saved charts will have the project name saved with them for easier retrieval later.</p>
+        The project name is not displayed but is necessary if you are designing a chart for project with custom styles. It is also required for the chart to be saved.</p>
 </form>
 {/await}
 <form class:isDirty class:isSubmitting on:input="{inputHandler}" on:submit|preventDefault="{submitHandler}">
