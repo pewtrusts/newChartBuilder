@@ -28,12 +28,13 @@ jobs:
     - run: git submodule update
 
     - run: npm install
-
     
     - run: npm run build
       env:
         CI: true
-    
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+        GOOGLE_SHEET_KEY: ${{ secrets.GOOGLE_SHEET_KEY}}
+        GOOGLE_ID: ${{secrets.GOOGLE_ID}}
    
     - name: Deploy to prod branch
       uses: JamesIves/github-pages-deploy-action@3.7.1
