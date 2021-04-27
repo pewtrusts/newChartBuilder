@@ -101,6 +101,7 @@ picture.fullscreen {
     .highcharts-markers {
       display: none;
     }
+    
     .highcharts-markers path {
       fill: #fff;
       stroke-width: 3px
@@ -171,3 +172,6 @@ picture.fullscreen {
 .last-label-only .highcharts-data-label:not(.last-datalabel){
   display: none;
 }
+.scatter .highcharts-container.griffin .highcharts-markers {
+      display: inline;
+  }
