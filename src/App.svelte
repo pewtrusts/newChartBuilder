@@ -161,12 +161,13 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
         padding-left: calc(55px + 1rem);
+        padding-top: 1rem;
+        min-width: 450px;
         max-width: 37%;
     }
     .right-column {
         position: relative;
         flex-grow: 1;
-        min-width: 1000px;
         height: calc(100vh - var(--banner-height, 75px));
         overflow-y: auto;
         border-left: 1px solid var(--medium-gray, gray);
@@ -223,7 +224,6 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
         <div bind:this="{leftColumn}"
             class="left-column ctn--inner flex flex-column flex-ac"
             style="flex-grow: 1;">
-            <h1>Griffin Chart Builder</h1>
             <section use:pushSection>
                 <SectionHead text="Start" />
                 <Start {Chart} {checkHeight} bind:data />

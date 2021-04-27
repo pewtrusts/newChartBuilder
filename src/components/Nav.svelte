@@ -126,7 +126,7 @@
         width: 55px;
         background-color: var(--dark-background, #000);
         height: 100%;
-        padding-top: 80px;
+        
     }
 </style>
 <div class="navigation-section">
