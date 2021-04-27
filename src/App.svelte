@@ -191,6 +191,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
        padding: 1em;
        padding-top: 0;
    }
+   .flex-section {
+       display: flex;
+       flex-direction: column;
+   }
 </style>
 
 <svelte:head>
@@ -263,7 +267,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 <SectionHead text="Custom" />
                 <Custom /> 
             </section> 
-            <section use:pushSection>
+            <section class="flex-section" use:pushSection>
                 <SectionHead text="Code" />
                 <Code {pictureIsMissingOrOldNotice} bind:dialog {clickSave} />
             </section> 
