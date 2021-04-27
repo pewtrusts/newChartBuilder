@@ -25,6 +25,7 @@ picture.fullscreen {
 
 .hc-container {
   overflow-y: hidden;
+  margin-top: 1rem;
 }
 .highcharts-container.griffin {
   font-family: lato;
@@ -131,7 +132,7 @@ picture.fullscreen {
     border-width: 0;
     background: none;
     color: #296ec3;
-    padding: 0;
+    padding: 0 0 0 0.2em;
     margin: 0;
     &::before {
       content: ' | ';
