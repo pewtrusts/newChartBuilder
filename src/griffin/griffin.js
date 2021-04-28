@@ -17,47 +17,48 @@ extendObj(options, ['plotOptions','pie','point','events','legendItemClick'], fun
     e.preventDefault();
     return false;
 });
-extendObj(options, ['plotOptions','line','dataLabels','format'], undefined);
-
-extendObj(options, ['plotOptions','line','dataLabels','formatter'], function(){
+extendObj(options, ['plotOptions','series','dataLabels','format'], undefined);
+extendObj(options, ['plotOptions','series','dataLabels','formatter'], function(){
     var that = this;
-    setTimeout(function(){
-        var index = that.point.index;
-        console.log(that.point.dataLabel);
-        switch (index) {
-            case 0:
-                that.point.dataLabel.element.classList.add('first-datalabel');
-                if (that.point.series.data[index + 1] && that.point.series.data[index + 1].y > that.point.y){
-                    that.point.dataLabel.element.classList.add('datapoint--upward');
-                } else {
-                    that.point.dataLabel.element.classList.add('datapoint--tip');
-                    //that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
-                }
-                break;
-            case that.point.series.data.length - 1:
-                that.point.dataLabel.element.classList.add('last-datalabel');
-                if (that.point.series.data[index - 1].y > that.point.y){
-                    that.point.dataLabel.element.classList.add('datapoint--downward');
-                    that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
-                } else {
-                 //   that.point.dataLabel.element.classList.add('datapoint--upward');
-                }
-                break;
-            default:
-                if (that.point.series.data[index - 1].y <= that.point.y && that.point.series.data[index + 1].y >= that.point.y) {
-                    that.point.dataLabel.element.classList.add('datapoint--upward');
-                } else if (that.point.series.data[index - 1].y >= that.point.y && that.point.series.data[index + 1].y <= that.point.y) {
-                    that.point.dataLabel.element.classList.add('datapoint--downward');
-                    that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
-                } else if (that.point.series.data[index - 1].y <= that.point.y){
-                    that.point.dataLabel.element.classList.add('datapoint--tip');
-                } else {
-                    if (that.point.series.chart.plotHeight - that.point.dataLabel.y > 50){
-                        that.point.dataLabel.element.classList.add('datapoint--dip');
+    if (this.series.userOptions.type == 'line' || (this.series.userOptions.type == undefined && this.series.chart.options.chart.type == 'line')){
+        setTimeout(function(){
+            var index = that.point.index;
+            console.log(that.point.dataLabel);
+            switch (index) {
+                case 0:
+                    that.point.dataLabel.element.classList.add('first-datalabel');
+                    if (that.point.series.data[index + 1] && that.point.series.data[index + 1].y > that.point.y){
+                        that.point.dataLabel.element.classList.add('datapoint--upward');
+                    } else {
+                        that.point.dataLabel.element.classList.add('datapoint--tip');
+                        //that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
                     }
-                }
-        }
-    });
+                    break;
+                case that.point.series.data.length - 1:
+                    that.point.dataLabel.element.classList.add('last-datalabel');
+                    if (that.point.series.data[index - 1].y > that.point.y){
+                        that.point.dataLabel.element.classList.add('datapoint--downward');
+                        that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
+                    } else {
+                     //   that.point.dataLabel.element.classList.add('datapoint--upward');
+                    }
+                    break;
+                default:
+                    if (that.point.series.data[index - 1].y <= that.point.y && that.point.series.data[index + 1].y >= that.point.y) {
+                        that.point.dataLabel.element.classList.add('datapoint--upward');
+                    } else if (that.point.series.data[index - 1].y >= that.point.y && that.point.series.data[index + 1].y <= that.point.y) {
+                        that.point.dataLabel.element.classList.add('datapoint--downward');
+                        that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
+                    } else if (that.point.series.data[index - 1].y <= that.point.y){
+                        that.point.dataLabel.element.classList.add('datapoint--tip');
+                    } else {
+                        if (that.point.series.chart.plotHeight - that.point.dataLabel.y > 50){
+                            that.point.dataLabel.element.classList.add('datapoint--dip');
+                        }
+                    }
+            }
+        });
+    }
     return this.series.chart.userOptions.dataLabelNumberFormatter.call(this);
 });
 
