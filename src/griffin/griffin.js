@@ -10,59 +10,65 @@ import returnFormatter from './scripts/return-number-formatter';
 import returnPointFormatter from './scripts/return-point-formatter';
 import returnLegendFormatter from './scripts/return-legend-formatter';
 import hash from './scripts/hash';
-options.plotOptions.pie.dataLabels.formatter = function () {
-    return this.point.x;
-};
-extendObj(options, ['plotOptions','pie','point','events','legendItemClick'], function(e){
-    e.preventDefault();
-    return false;
-});
-extendObj(options, ['plotOptions','series','dataLabels','format'], undefined);
-extendObj(options, ['plotOptions','series','dataLabels','formatter'], function(){
-    var that = this;
-    if (this.series.userOptions.type == 'line' || (this.series.userOptions.type == undefined && this.series.chart.options.chart.type == 'line')){
-        setTimeout(function(){
-            var index = that.point.index;
-            console.log(that.point.dataLabel);
-            switch (index) {
-                case 0:
-                    that.point.dataLabel.element.classList.add('first-datalabel');
-                    if (that.point.series.data[index + 1] && that.point.series.data[index + 1].y > that.point.y){
-                        that.point.dataLabel.element.classList.add('datapoint--upward');
-                    } else {
-                        that.point.dataLabel.element.classList.add('datapoint--tip');
-                        //that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
-                    }
-                    break;
-                case that.point.series.data.length - 1:
-                    that.point.dataLabel.element.classList.add('last-datalabel');
-                    if (that.point.series.data[index - 1].y > that.point.y){
-                        that.point.dataLabel.element.classList.add('datapoint--downward');
-                        that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
-                    } else {
-                     //   that.point.dataLabel.element.classList.add('datapoint--upward');
-                    }
-                    break;
-                default:
-                    if (that.point.series.data[index - 1].y <= that.point.y && that.point.series.data[index + 1].y >= that.point.y) {
-                        that.point.dataLabel.element.classList.add('datapoint--upward');
-                    } else if (that.point.series.data[index - 1].y >= that.point.y && that.point.series.data[index + 1].y <= that.point.y) {
-                        that.point.dataLabel.element.classList.add('datapoint--downward');
-                        that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
-                    } else if (that.point.series.data[index - 1].y <= that.point.y){
-                        that.point.dataLabel.element.classList.add('datapoint--tip');
-                    } else {
-                        if (that.point.series.chart.plotHeight - that.point.dataLabel.y > 50){
-                            that.point.dataLabel.element.classList.add('datapoint--dip');
+export function beforeRenderExtensions(options){
+    extendObj(options, ['plotOptions', 'pie', 'dataLabels', 'formatter'], function () {
+        return this.point.x;
+    })
+   /* options.plotOptions.pie.dataLabels.formatter = function () {
+        return this.point.x;
+    };*/
+    extendObj(options, ['plotOptions','pie','point','events','legendItemClick'], function(e){
+        e.preventDefault();
+        return false;
+    });
+    extendObj(options, ['plotOptions','series','dataLabels','format'], undefined);
+    extendObj(options, ['plotOptions','series','dataLabels','formatter'], function(){
+        var that = this;
+        if (this.series.userOptions.type == 'line' || (this.series.userOptions.type == undefined && this.series.chart.options.chart.type == 'line')){
+            setTimeout(function(){
+                var index = that.point.index;
+                console.log(that.point.dataLabel);
+                switch (index) {
+                    case 0:
+                        that.point.dataLabel.element.classList.add('first-datalabel');
+                        if (that.point.series.data[index + 1] && that.point.series.data[index + 1].y > that.point.y){
+                            that.point.dataLabel.element.classList.add('datapoint--upward');
+                        } else {
+                            that.point.dataLabel.element.classList.add('datapoint--tip');
+                            //that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
                         }
-                    }
-            }
-        });
-    }
-    return this.series.chart.userOptions.dataLabelNumberFormatter.call(this);
-});
-
-Highcharts.setOptions(options);
+                        break;
+                    case that.point.series.data.length - 1:
+                        that.point.dataLabel.element.classList.add('last-datalabel');
+                        if (that.point.series.data[index - 1].y > that.point.y){
+                            that.point.dataLabel.element.classList.add('datapoint--downward');
+                            that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
+                        } else {
+                         //   that.point.dataLabel.element.classList.add('datapoint--upward');
+                        }
+                        break;
+                    default:
+                        if (that.point.series.data[index - 1].y <= that.point.y && that.point.series.data[index + 1].y >= that.point.y) {
+                            that.point.dataLabel.element.classList.add('datapoint--upward');
+                        } else if (that.point.series.data[index - 1].y >= that.point.y && that.point.series.data[index + 1].y <= that.point.y) {
+                            that.point.dataLabel.element.classList.add('datapoint--downward');
+                            that.point.dataLabel.text.element.setAttribute('dx', that.point.dataLabel.width / 2);
+                        } else if (that.point.series.data[index - 1].y <= that.point.y){
+                            that.point.dataLabel.element.classList.add('datapoint--tip');
+                        } else {
+                            if (that.point.series.chart.plotHeight - that.point.dataLabel.y > 50){
+                                that.point.dataLabel.element.classList.add('datapoint--dip');
+                            }
+                        }
+                }
+            });
+        }
+        return this.series.chart.userOptions.dataLabelNumberFormatter.call(this);
+    });
+    
+    Highcharts.setOptions(options);
+}
+beforeRenderExtensions(options);
 Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     var currentClassName = replace ? '' : (this.attr('class') || '');
     // Trim the string and remove duplicates

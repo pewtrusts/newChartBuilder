@@ -3,11 +3,14 @@
     import convert from './../scripts/unit-conversions';
     import { afterUpdate } from 'svelte';
     import cloneDeep from 'lodash.clonedeep';
+    import defaultsDeep from 'lodash.defaultsdeep';
     import Notices from './Notices.svelte';
     import {customSettingsNotice} from './../App.svelte';
-    import {extendObj} from './../griffin/griffin';
+    import {extendObj, beforeRenderExtensions} from './../griffin/griffin';
+
     import returnLegendFormatter from './../griffin/scripts/return-legend-formatter';
-    const _={cloneDeep};
+    export let Chart;
+    const _={cloneDeep, defaultsDeep};
     let printWidth;
     let printHeight;
     let chartContainer;
@@ -41,12 +44,20 @@
         notices[v ? 'add' : 'delete'](customSettingsNotice);
         notices = notices;
     });
-    afterUpdate(() => {
+    
+    afterUpdate(async () => {
+        const chart = await Chart;
         const _config = _.cloneDeep(config);
         _config.chart.height = printHeight;
         _config.chart.className = 'griffin griffin--for-print';
         _config.responsive.rules = appliedRules;
         extendObj(_config, ['legend', 'labelFormatter'], returnLegendFormatter(_config.chart.type));
+        /**
+         * some of the settings from the origin preview chart were being lost.
+         * befor render extensions and defaults deep here to make up for that
+        */
+        beforeRenderExtensions(_config);
+        _.defaultsDeep(_config, chart.userOptions);
         window.PrintChart = window.Highcharts.chart(chartContainer, _config);
     });
     function changeHandler(){

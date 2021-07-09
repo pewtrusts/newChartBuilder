@@ -317,7 +317,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 />
             </div>
             {#if enablePrint && activeSection == 'print'}
-                <PrintChart />
+                <PrintChart {Chart} />
             {/if}
         </div>
     </div>
