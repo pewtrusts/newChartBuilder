@@ -179,13 +179,19 @@ label {
 
 .highcharts-container.griffin--for-print {
 	font-family: 'lato';
-  font-size: 15.99px; /* scales to 9pt in print */
+	font-size: 17.778px; /* scales to 10pt in print */
+
 }
-.highcharts-container.griffin--for-print .highcharts-axis-labels {
+.highcharts-container.griffin--for-print .highcharts-axis-labels  {
 	font-size: inherit;
+	fill:#333;
+}
+.highcharts-container.griffin--for-print .highcharts-axis-title {
+	font-size: inherit;
+	fill: #808285;
 }
 .highcharts-container.griffin--for-print .highcharts-legend text {
     font-weight: normal;
-    fill: #808285;
-    font-size: 14.2222px; /* ie 8 pt in print */
+    font-size: inherit;
+	fill: #333;
 }

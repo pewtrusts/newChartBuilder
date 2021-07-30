@@ -50,6 +50,7 @@
         const _config = _.cloneDeep(config);
         _config.chart.height = printHeight;
         _config.chart.className = 'griffin griffin--for-print';
+        _config.legend.align = 'left';
         _config.responsive.rules = appliedRules;
         extendObj(_config, ['legend', 'labelFormatter'], returnLegendFormatter(_config.chart.type));
         /**

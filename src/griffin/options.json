@@ -44,6 +44,7 @@
         }
     },
     "legend": {
+        "margin": 27,
         "itemMarginBottom": 10,
         "symbolHeight": 16,
         "symbolRadius": 0,
