@@ -137,7 +137,7 @@
     });
     function exportSVG(e){
         e.stopImmediatePropagation();
-        const Chart = window.Charts[+this.dataset.index];
+        const Chart = window.Charts[window.Charts.length - 2];
          const exportingOptions = {
             filename: 'chart',
             scale: 1,
