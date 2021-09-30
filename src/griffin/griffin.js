@@ -2,6 +2,7 @@ import 'highcharts/css/highcharts.css';
 import './css/griffin-styles.scss';
 import '@Submodule/shared-css/styles.css';
 import Highcharts from 'highcharts/highcharts.src.js';
+import HSAnnotations from 'highcharts/modules/annotations';
 /* TO DO: for production, bundle HG or use CDN? */
 import options from './options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
@@ -10,6 +11,7 @@ import returnFormatter from './scripts/return-number-formatter';
 import returnPointFormatter from './scripts/return-point-formatter';
 import returnLegendFormatter from './scripts/return-legend-formatter';
 import hash from './scripts/hash';
+HSAnnotations(Highcharts);
 export function beforeRenderExtensions(options){
     extendObj(options, ['plotOptions', 'pie', 'dataLabels', 'formatter'], function () {
         return this.point.x;
