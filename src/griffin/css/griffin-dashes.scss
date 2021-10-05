@@ -1,0 +1,11 @@
+.highcharts-container.griffin {
+    .dashed {
+        stroke-dasharray: 6;
+    }
+    .dotted {
+        stroke-dasharray: 0.5 8;
+    }
+    .nostroke {
+        stroke: none;
+    }
+}
