@@ -186,6 +186,8 @@
     s.ChartTitle.subscribe(v => {
         localValues.chartTitle = v;
         localValues = localValues;
+        if (!quills.chartTitle) return;
+        quills.chartTitle.clipboard.dangerouslyPasteHTML(sanitizeHtml(v));
     });
     s.ChartSources.subscribe(v => {
         localValues.chartSources = v;
@@ -196,6 +198,8 @@
     s.ChartSubtitle.subscribe(v => {
         localValues.chartSubtitle = v;
         localValues = localValues;
+        if (!quills.chartSubtitle) return;
+        quills.chartSubtitle.clipboard.dangerouslyPasteHTML(sanitizeHtml(v));
     });
 </script>
 <style>
@@ -211,6 +215,9 @@
     
     input[type="text"]:not([name="chart-label"]) {
         width: 100%;
+    }
+    textarea {
+        margin-bottom: 0;
     }
     textarea::placeholder, input::placeholder, :global(.ql-editor.ql-blank::before) {
         color: #767676;
@@ -230,11 +237,15 @@
         width: 100%;
         margin-bottom: 0.5rem;
     }
+    .quill-container--title, .quill-container--subtitle {
+        height: 50px;
+        margin-bottom: 14px;
+    }
     textarea {
         width: 100%;
         min-height: 70px;
     }
-    textarea[name="chartNotes"], textarea[name="chartSources"]{
+    textarea[name="chartNotes"], textarea[name="chartSources"], textarea[name="chartCaption"], textarea[name="chartTitle"], textarea[name="chartSubtitle"]{
         position: absolute;
         z-index: -1;
         /*visibility: hidden;*/
@@ -314,9 +325,17 @@
 {/await}
 <form class:isDirty class:isSubmitting on:input="{inputHandler}" on:submit|preventDefault="{submitHandler}">
     <label>{brandOptions.chartLabelName}:<br /><input bind:value="{localValues.chartLabel}" placeholder="e.g., Figure 1" name="chartLabel" type="text"></label>
-    <label>{brandOptions.chartTitleName}:<br /><input required="{descProxy == 'chartTitle' ? 'required' : null}" bind:value="{localValues.chartTitle}" placeholder="e.g., Most Apple Are Harvested in the Fall" name="chartTitle" type="text"></label>
+    <p class="label">{brandOptions.chartTitleName}:</p>
+    <textarea required="{descProxy == 'chartTitle' ? 'required' : null}" bind:value="{localValues.chartTitle}" placeholder="e.g., Most Apples Are Harvested in the Fall" name="chartTitle" type="text"></textarea>
+    <div class="quill-wrapper" class:required="{descProxy == 'chartTitle'}" class:invalid="{invalidQuill == 'chartTitle'}">
+        <div class="quill-container quill-container--title" use:initQuill="{{controls: 'chartTitle',placeholder: 'e.g., Most Apples Are Harvested in the Fall'}}"></div>
+    </div>
     <label class="desc-proxy"><input checked="{descProxy == 'chartTitle' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartTitle"> use as description</label>
-    <label>{brandOptions.chartSubtitleName}:<br /><input required="{descProxy == 'chartSubtitle' ? 'required' : null}" bind:value="{localValues.chartSubtitle}" placeholder="e.g., Mix of fruit harvest by season" name="chartSubtitle" type="text"></label>
+    <p class="label">{brandOptions.chartSubtitleName}:</p>
+    <textarea required="{descProxy == 'chartSubtitle' ? 'required' : null}" bind:value="{localValues.chartSubtitle}" placeholder="e.g., Mix of fruit harvest by season" name="chartSubtitle" type="text"></textarea>
+    <div class="quill-wrapper" class:required="{descProxy == 'chartSubtitle'}" class:invalid="{invalidQuill == 'chartSubtitle'}">
+        <div class="quill-container quill-container--subtitle" use:initQuill="{{controls: 'chartSubtitle',placeholder: 'e.g., Mix of fruit harvest by season'}}"></div>
+    </div>
     <label class="desc-proxy"><input checked="{descProxy == 'chartSubtitle' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartSubtitle"> use as description</label>
     <label class:proxied="{descProxy !== 'chartDescription'}">Description:<br /><textarea disabled="{descProxy !== 'chartDescription' ? 'disabled' : null}" required="{descProxy == 'chartDescription' ? 'required' : null}" bind:value="{localValues.chartDescription}" placeholder="REQUIRED for screen readers and search engines: e.g., Chart showing the number of apples, oranges, and peaches harvested in each season. If other fields are descriptive enough you may choose them instead." name="chartDescription" type="text"></textarea></label>
     <label bind:this="{descRadio}" style="margin-top:-0.4rem;" class="desc-proxy"><input checked="{descProxy == 'chartDescription' ? 'checked' : null}" on:change="{proxyChange}" type="radio" name="desc-proxy" value="chartDescription"> use as description</label>

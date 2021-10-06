@@ -231,10 +231,10 @@
                         <span class="figure-label">{chartLabel}</span>
                     {/if}
                     {#if chartTitle}
-                        <h1>{chartTitle}</h1>
+                        <h1>{@html chartTitle}</h1>
                     {/if}
                     {#if chartSubtitle}
-                        <p class="figure-dek">{chartSubtitle}</p>
+                        <p class="figure-dek">{@html chartSubtitle}</p>
                     {/if}
                 </header>
             {/if}
