@@ -67,7 +67,10 @@ picture.fullscreen {
         font-weight: normal;
     }
     .highcharts-annotation-label text {
-        fill: #333;
+        fill: #666;
+    }
+    .highcharts-annotation-label-box {
+      stroke: #666;
     }
 
     .highcharts-plot-line {

@@ -1,11 +1,14 @@
-.highcharts-container.griffin {
-    .dashed {
+.highcharts-container.griffin :not(.highcharts-legend-item) {
+    &.dashed {
         stroke-dasharray: 6;
     }
-    .dotted {
+    &.dotted {
         stroke-dasharray: 0.5 8;
     }
-    .nostroke {
+    &.nostroke {
         stroke: none;
+    }
+    &.thin .highcharts-graph {
+        stroke-width: calc(var(--stroke-width) / 4);
     }
 }
