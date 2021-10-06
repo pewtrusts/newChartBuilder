@@ -150,7 +150,7 @@ function setObserver(anchor, container, config, pictureContainer){
 }
 export function initSingleGriffin(griffin, i){
     var chart;
-    var config = JSON.parse(griffin.querySelector('.js-griffin-config').innerHTML);
+    var config = JSON.parse(griffin.querySelector('.js-griffin-config').textContent);
     var container = griffin.querySelector('.js-hc-container');
     var sourceNote = griffin.querySelector('.js-griffin-credit');
     var pictureContainer = griffin.querySelector('.js-picture-container');
