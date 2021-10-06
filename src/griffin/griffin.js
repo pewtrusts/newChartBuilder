@@ -150,13 +150,14 @@ function setObserver(anchor, container, config, pictureContainer){
 }
 export function initSingleGriffin(griffin, i){
     var chart;
-    var config = JSON.parse(griffin.querySelector('.js-griffin-config').textContent);
+    var isChartBuilder = griffin.classList.contains('js-griffin--chart-builder');
+    var inner = isChartBuilder ? griffin.querySelector('.js-griffin-config').textContent : griffin.querySelector('.js-griffin-config').innerHTML;
+    var config = JSON.parse(inner);
     var container = griffin.querySelector('.js-hc-container');
     var sourceNote = griffin.querySelector('.js-griffin-credit');
     var pictureContainer = griffin.querySelector('.js-picture-container');
     var anchor = griffin.querySelector('.js-griffin-anchor');
     var isLazy = griffin.classList.contains('js-griffin--lazy');
-    var isChartBuilder = griffin.classList.contains('js-griffin--chart-builder');
     var btn;
     if ( pictureContainer ){
         pictureContainer.style.display = 'none';
