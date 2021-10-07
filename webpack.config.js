@@ -59,6 +59,7 @@ const plugins = [
         chunks: ['griffin'],
         filename: './tester/index.html',
         inject: true,
+        scriptLoading: 'defer',
         publicPath: publicPath + 'tester/'
     }),
     new MiniCssExtractPlugin({
