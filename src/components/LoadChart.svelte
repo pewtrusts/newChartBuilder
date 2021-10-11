@@ -72,7 +72,7 @@
                 }
             )}
         </time>
-        <h1 class="hed">{data.hed}</h1>
+        <h1 class="hed">{@html data.hed}</h1>
     </div>
     <figure>
         <img src="{data.thumbnail}" alt="chart thumbnail" />
