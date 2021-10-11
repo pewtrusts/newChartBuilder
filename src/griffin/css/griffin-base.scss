@@ -66,8 +66,13 @@ picture.fullscreen {
         fill: #666;
         font-weight: normal;
     }
-    .highcharts-annotation-label text {
-        fill: #666;
+    .highcharts-annotation-label  {
+        &:not(.highcharts-color){
+          fill: #666;
+        }
+        text {
+          fill: inherit;
+        }
     }
     .highcharts-annotation-label-box {
       stroke: #666;
