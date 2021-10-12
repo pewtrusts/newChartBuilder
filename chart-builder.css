@@ -950,6 +950,18 @@ text.highcharts-drilldown-data-label,
   stroke-width: 1px;
 }
 
+@font-face{
+	font-family:'Lato';
+	src:url("https://www.pewtrusts.org/assets/Pew/fonts/Lato-Heavy.woff2") format("woff2"),url("https://www.pewtrusts.org/assets/Pew/fonts/Lato-Heavy.woff") format("woff");
+	font-weight:900;
+	font-style:normal
+}
+@font-face{
+	font-family:'Lato';
+	src:url("https://www.pewtrusts.org/assets/Pew/fonts/Lato-HeavyItalic.woff2") format("woff2"),url("https://www.pewtrusts.org/assets/Pew/fonts/Lato-HeavyItalic.woff") format("woff");
+	font-weight:900;
+	font-style:italic
+}
 /* default branded colors go here. define as many as wanted. number of colors
  * can be set as a config property passed to Highcharts and in chartBulder.*/
 :root {
