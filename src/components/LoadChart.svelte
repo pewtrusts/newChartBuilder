@@ -28,8 +28,15 @@
         } else {
             numberLoaded++;
             let existing = get(s.LoadedMultipleCharts);
+            if (existing.length == 0){
+                loadedChart = data;
+                loadChart(data);
+            }
             existing.push(data);
             s.LoadedMultipleCharts.set(existing);
+            requestIdleCallback(() => {
+                s.ActiveSection.set({method: 'click', value: 'multiple'});
+            }, {timeout: 200});
         }
 
     }
