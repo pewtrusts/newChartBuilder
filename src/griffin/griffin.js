@@ -148,21 +148,22 @@ function setObserver(anchor, container, config, pictureContainer){
     });
     observer.observe(anchor);
 }
-export function initSingleGriffin(griffin, i){
+export function initSingleGriffin(griffin, i, _parent){
+    var parent = _parent || griffin;
     var chart;
-    var isChartBuilder = griffin.classList.contains('js-griffin--chart-builder');
+    var isChartBuilder = parent.classList.contains('js-griffin--chart-builder');
     var inner = isChartBuilder ? griffin.querySelector('.js-griffin-config').textContent : griffin.querySelector('.js-griffin-config').innerHTML;
     var config = JSON.parse(inner);
     var container = griffin.querySelector('.js-hc-container');
-    var sourceNote = griffin.querySelector('.js-griffin-credit');
-    var pictureContainer = griffin.querySelector('.js-picture-container');
-    var anchor = griffin.querySelector('.js-griffin-anchor');
-    var isLazy = griffin.classList.contains('js-griffin--lazy');
+    var sourceNote = parent.querySelector('.js-griffin-credit');
+    var pictureContainer = parent.querySelector('.js-picture-container');
+    var anchor = parent.querySelector('.js-griffin-anchor');
+    var isLazy = parent.classList.contains('js-griffin--lazy');
     var btn;
     if ( pictureContainer ){
         pictureContainer.style.display = 'none';
     }
-    if (!griffin.hasDownload) {
+    if (!parent.hasDownload) {
         btn = document.createElement('button');
         btn.textContent = 'Download image';
         btn.className = 'griffin-download-btn';
@@ -170,7 +171,7 @@ export function initSingleGriffin(griffin, i){
         btn.setAttribute('role', 'button');
         btn.addEventListener('click', getImage);
         sourceNote.insertAdjacentElement('beforeend', btn);
-        griffin.hasDownload = true;
+        parent.hasDownload = true;
 
     }
 
@@ -217,7 +218,14 @@ export function init(){
     const griffins = document.querySelectorAll('.js-griffin');
     if (window.CSS && CSS.supports('color', 'var(--primary)')) {
         for (var i = 0; i < griffins.length; i++){
-            initSingleGriffin(griffins[i],i);
+            const singletons = griffins[i].querySelectorAll('.js-griffin-container');
+            if (singletons.length > 0){
+                for (var j = 0; j < singletons.length; j++){
+                    initSingleGriffin(singletons[j],i, griffins[i]);
+                }
+            } else {
+                initSingleGriffin(griffins[i],i);
+            }
         }
     }
 }

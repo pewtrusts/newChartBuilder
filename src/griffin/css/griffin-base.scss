@@ -151,6 +151,18 @@ picture.fullscreen {
       display: none;
     }
   }
+  .griffin-container + .griffin-container {
+    margin-top: 1rem;
+  }
+  .griffin-outer-container--2-up {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+    gap: 20px;
+    padding-top: 20px;
+    .griffin-container + .griffin-container {
+      margin-top: 0;
+    }
+  }
 
 .pie {
   .highcharts-legend-series-active g.highcharts-series:not(.highcharts-series-hover),

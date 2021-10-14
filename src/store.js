@@ -121,7 +121,8 @@ const appStores = [
     ['Thumbnail', ''],
     ['IsLoading', false],
     ['LoadedChartUserId', undefined],
-    ['HasCustomSettings', false]
+    ['HasCustomSettings', false],
+    ['LoadedMultipleCharts',[]]
 ];
 s.UserId = writable(undefined);
 function initWritables(){

@@ -66,6 +66,11 @@
             name: 'Print',
             icon: 'document',
             style: 'left: 2px;bottom: 2px;'
+        },
+        {
+            name: 'Multiple',
+            icon: 'grid-two-up',
+            style: 'bottom: 2px;'
         }
     ];
     s.ActiveSection.subscribe(({value}) => {

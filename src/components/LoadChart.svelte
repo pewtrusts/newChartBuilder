@@ -1,6 +1,9 @@
-<script>
+<script context="module">
     import loadChart from '../scripts/load-chart';
     import { s } from './../store';
+    import { get } from 'svelte/store';
+</script>
+<script>
     export let data;
     export let loadedChart;
     export let disabled = false;
@@ -8,14 +11,32 @@
     export let typeFilter;
     export let creatorFilter;
     let date = new Date(+data.timestamp);
+    let enableMultiple;
+    export let numberLoaded = 0;
+    $: buttonText = enableMultiple ? `Load as chart ${numberLoaded + 1}` : 'Load';
+    s.ActiveSection.subscribe(v => {
+        enableMultiple = (v.value == 'multiple');
+    });
+    s.LoadedMultipleCharts.subscribe(v => {
+        console.log(v);
+    });
     function clickHandler(){
-        loadedChart = data;
-        loadChart(data);
-        s.ActiveSection.set({method: 'click', value: 'data'});
+        if (!enableMultiple){
+            loadedChart = data;
+            loadChart(data);
+            s.ActiveSection.set({method: 'click', value: 'data'});
+        } else {
+            numberLoaded++;
+            let existing = get(s.LoadedMultipleCharts);
+            existing.push(data);
+            s.LoadedMultipleCharts.set(existing);
+        }
+
     }
 </script>
 <style>
     aside {
+        color: var(--text-color, #000);
         background-color: #fff;
         border: 1px solid var(--light-gray, #767676);
         padding: 0.5rem;
@@ -56,6 +77,7 @@
         object-fit: contain;
         height: 100%;
     }
+    
 </style>
 {#if disabled || 
      ((projectFilter == 'any' || projectFilter == data.project) &&
@@ -85,7 +107,16 @@
             <dd>{data.name}</dd>
         </dl>
         {#if !disabled }
-        <div style="margin-top: 0.5em"><button on:click="{clickHandler}" class="button button--secondary">Load</button></div>
+        <div style="margin-top: 0.5em">
+            <button 
+                on:click="{clickHandler}"
+                class="button" 
+                class:button--secondary="{!enableMultiple}" 
+                class:button--primary="{enableMultiple}"
+            >
+                {buttonText}
+            </button>
+        </div>
         {/if}
     </div>
 </aside>
