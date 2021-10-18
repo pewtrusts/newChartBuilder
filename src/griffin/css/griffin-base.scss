@@ -154,14 +154,28 @@ picture.fullscreen {
   .griffin-container + .griffin-container {
     margin-top: 1rem;
   }
-  .griffin-outer-container--2-up {
+  .griffin-outer-container--grid {
     display: grid;
-    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
     gap: 20px;
     padding-top: 20px;
     .griffin-container + .griffin-container {
       margin-top: 0;
     }
+  }
+  .griffin-outer-container--2-up {
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  }
+  .griffin-outer-container--3-up {
+    grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+  }
+  .griffin-outer-container--4-up {
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  }
+  .griffin-outer-container--5-up {
+    grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+  }
+  .griffin-outer-container--6-up {
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
   }
 
 .pie {

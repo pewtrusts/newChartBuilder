@@ -64,6 +64,7 @@
     let node;
     let loadedMultipleCharts = [];
     let subsDivs = [];
+    let multiLayout = 1;
     s.HasCustomSettings.subscribe(v => {
         notices[v ? 'add' : 'delete'](customSettingsNotice);
         notices = notices;
@@ -87,6 +88,12 @@
     s.LoadedMultipleCharts.subscribe(v => {
         loadedMultipleCharts = v;
     });
+     s.MultiLayout.subscribe(v => {
+        multiLayout = v;
+        requestIdleCallback(() => {
+             _initGriffin(subsDivs, node);
+        },{timeout:500});
+    })
     /*s.MinHeight.subscribe((v) => {
         minHeight = v;
     });*/
@@ -260,36 +267,39 @@
                     {/if}
                 </header>
                 {/if}
-            {#if chartSubtitle}
-                <p class="figure-dek">{@html chartSubtitle}</p>
-            {/if}
-            <div class="griffin-outer-container">
-                <div bind:this="{subsDivs[0]}" class="js-griffin-container griffin-container">
-                    <pre class="js-griffin-config" style="display: none;">
-                        {JSON.stringify({
-                            highchartsConfig: chartConfig,
-                            griffinConfig 
-                        })}
-                    </pre>
-                    <div bind:this="{chartContainer}" 
-                        class="hc-container js-hc-container {chartType}"
-                    />
-                </div>
-                {#if loadedMultipleCharts.slice(1).length}
-                <div use:initSubs>
-                    {#each loadedMultipleCharts.slice(1) as subsequent, i }
-                    <div bind:this="{subsDivs[i+1]}" class="js-griffin-container griffin-container">
+                <div class="griffin-outer-container griffin-outer-container--{multiLayout}-up" class:griffin-outer-container--grid="{multiLayout > 1}">
+                    <div bind:this="{subsDivs[0]}" class="js-griffin-container griffin-container">
+                        {#if chartSubtitle}
+                        <p class="figure-dek">{@html chartSubtitle}</p>
+                        {/if}
                         <pre class="js-griffin-config" style="display: none;">
-                            {stringifySubs(subsequent)}
+                            {JSON.stringify({
+                                highchartsConfig: chartConfig,
+                                griffinConfig 
+                            })}
                         </pre>
-                        <div bind:this="{chartContainer}"
+                        <div bind:this="{chartContainer}" 
                             class="hc-container js-hc-container {chartType}"
                         />
                     </div>
-                    {/each}
+                    {#if loadedMultipleCharts.slice(1).length}
+                        {#each loadedMultipleCharts.slice(1) as subsequent, i }
+                        <div use:initSubs bind:this="{subsDivs[i+1]}" class="js-griffin-container griffin-container">
+                            {#each [JSON.parse(subsequent.config).griffinConfig.ChartSubtitle] as dek}
+                                {#if dek}
+                                    <p class="figure-dek">{@html dek}</p>
+                                {/if}
+                            {/each}
+                            <pre class="js-griffin-config" style="display: none;">
+                                {subsequent.config}
+                            </pre>
+                            <div bind:this="{chartContainer}"
+                                class="hc-container js-hc-container {chartType}"
+                            />
+                        </div>
+                        {/each}
+                    {/if}
                 </div>
-                {/if}
-            </div>
             <figcaption>
                 {#if chartCaption}
                     <p class="figure-caption">
