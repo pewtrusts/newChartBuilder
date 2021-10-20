@@ -17,7 +17,8 @@
         PlotLines: {
             header: 'Plot lines'
         },
-    }
+    };
+    let itemHasBeenRemoved = false;
     s.SpacingTop.subscribe(v => {
         spacingTop = v;
     });
@@ -87,6 +88,7 @@
             collection[index][property] = property == 'label' ? type == 'PlotBands' ? {text: value, y: -5} : {text: value, y: -5, x: 0, rotation: 0} : xAxisType == 'datetime' && isNaN(+value) ? toDate(value).getTime() : isNaN(+value) ? value : +value;
         }
         s[type].set(collection);
+        itemHasBeenRemoved = false;
     }
     function inputByIndexHandler(){
         inputByIndex[this.dataset.index] = this.checked;
@@ -98,6 +100,9 @@
             this.setCustomValidity('Invalid input. Datetime values need to be expressed in milliseconds or as human-readable dates that can be converted.');
         }
         this.reportValidity();
+    }
+    function returnCollection(c){
+        return c;
     }
 </script>
 <style>
@@ -122,7 +127,7 @@
             to milliseconds when the form is submitted.
         </p>
         {/if}
-        {#each collection as item, i}
+        {#each returnCollection(collection) as item, i}
         <fieldset>
             <legend>{dict[type].header.replace(/s$/,'')} {i + 1}</legend>
             <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -134,9 +139,17 @@
                         {/each}
                     </select>
                 {:else if xAxisType == 'datetime'}
-                <input type="text" on:change="{checkValidity}" required bind:value="{item.from}" name="{i}-{type == 'PlotBands' ? 'from': 'value'}">
+                    {#if type == 'PlotBands'}
+                    <input type="text" on:change="{checkValidity}" required bind:value="{item.from}" name="{i}-from">
+                    {:else}
+                    <input type="text" on:change="{checkValidity}" required bind:value="{item.value}" name="{i}-value">
+                    {/if}
                 {:else}
-                <input type="number" step="any" required bind:value="{item.from}" name="{i}-{type == 'PlotBands' ? 'from': 'value'}">
+                    {#if type == 'PlotBands'}
+                    <input type="number" step="any" required bind:value="{item.from}" name="{i}-from">
+                    {:else}
+                    <input type="number" step="any" required bind:value="{item.value}" name="{i}-value">
+                    {/if}
                 {/if}
             </label>
             {#if type == 'PlotBands'}
@@ -163,11 +176,12 @@
             <Button title="Remove" type="secondary" clickHandler="{() => {
                 collection.pop();
                 collection = collection;
+                itemHasBeenRemoved = true;
             }}" />
             {/if}
         </fieldset>
         {/each}
-        {#if collection.length > 0}
+        {#if collection.length > 0 || itemHasBeenRemoved}
         <input class="button button--primary" type="submit">
         {/if}
         <Button title="Add another" type="secondary" clickHandler="{e => {
