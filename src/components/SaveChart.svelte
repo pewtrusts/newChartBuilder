@@ -27,6 +27,7 @@
     export let userEmail;
     export let userName;
     export let clickSave;
+    let buildMode;
     clickSave = function(){
         const click = new MouseEvent("click", {
             "view": window,
@@ -59,6 +60,9 @@
         
         project = v;
     });
+    s.BuildMode.subscribe(v => {
+        buildMode = v;
+    })
     function _saveChart(props){
         if ( pictureIsMissingOrOld ){
             s.IsWorking.set(true);
@@ -89,7 +93,7 @@
         const formData = new FormData(this);
         project = formData.get('project');
         
-        if (loadedChart) {
+        if (loadedChart && loadedChart.buildMode == buildMode) {
             showVerify = true;
             verifyPromise = new Promise(function (resolve, reject) {
                 verifyResolve = resolve;

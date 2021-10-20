@@ -255,15 +255,16 @@ function initDerived(){
         return rtn;
     });
     //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
-    s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail]) => {
+    s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail, s.BuildMode, s.LoadedMultipleCharts], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail, buildMode, loadedMultipleCharts]) => {
         const obj = {
             type: chartType,
             hed: chartTitle,
-            config: JSON.stringify({
+            config: buildMode == 'single' ? JSON.stringify({
                 highchartsConfig: chartConfig,
                 griffinConfig
-            }),
-            thumbnail
+            }) : JSON.stringify(loadedMultipleCharts.map(chart => JSON.parse(chart.config))),
+            thumbnail,
+            buildMode
         };
         return obj;
     });
