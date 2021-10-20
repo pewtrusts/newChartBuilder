@@ -15,6 +15,9 @@
     function layoutHandler(){
         s.MultiLayout.set(+this.value);
     }
+    function createMultiple(){
+        s.BuildMode.set('multiple');
+    }
 </script>
 <p>
 Build a single figure with multiple charts. Create and save each chart separately first and then combine them. The first chart you select will
@@ -40,7 +43,7 @@ for the group.</li>
 {/each}
 {#if multipleCharts.length}
     <p></p>
-    <button disabled="{multipleCharts.length < 2}" class="button button--primary">
-        Save it
+    <button on:click|preventDefault="{createMultiple}" disabled="{multipleCharts.length < 2}" class="button button--primary">
+        Create it
     </button>
 {/if}

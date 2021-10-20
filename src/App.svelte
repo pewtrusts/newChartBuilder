@@ -37,7 +37,7 @@
 
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
   //  import getImageData from './scripts/get-image-data';
-
+    const buildModeMultipleEnabled = ['Start','Code','Save','Print','Multiple'];
 
   function picClickHandler(){
         s.IsWorking.set(true);
@@ -103,7 +103,11 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
     let checkHeight = null;
     let numberLoaded;
     let selectMultipleEnabled = false;
+    let buildMode = 'single';
     resetColorIndeces(data.length - 1);
+    s.BuildMode.subscribe(v => {
+        buildMode = v;
+    });
     s.IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -217,7 +221,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
 
 <SpriteDefs />
 <Banner />
-<Nav />
+<Nav {buildModeMultipleEnabled}/>
 {#if dialog}
     <Dialog bind:dialog />
 {/if}
@@ -308,7 +312,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
             
         </div>
         <div class="right-column">
-            <div class:isHidden="{['start','multiple'].includes(activeSection) || (enablePrint && activeSection == 'print')}">
+            <div class:isHidden="{activeSection == 'start' || (activeSection == 'multiple' && buildMode == 'single')  || (enablePrint && activeSection == 'print')}">
                 <div style="padding: 1em;">
                     <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
                     <ChartSizeSelector bind:checkHeight {Chart}/>
@@ -318,7 +322,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                     <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
                 </div>
             </div>
-            <div class="saved-charts" class:selectMultipleEnabled class:isHidden="{!['start','multiple'].includes(activeSection) || (enablePrint && activeSection == 'print')}">
+            <div class="saved-charts" class:selectMultipleEnabled class:isHidden="{
+                !['start','multiple'].includes(activeSection) ||
+                buildMode == 'multiple' || 
+                (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 
                     bind:resolveSaved
                     bind:savedCharts 
