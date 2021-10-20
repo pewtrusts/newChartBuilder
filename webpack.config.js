@@ -55,7 +55,7 @@ const plugins = [
     }),
     new HtmlWebpackPlugin({
         title: 'Griffin Tester',
-        template: './src/griffin/index-70-30.html',
+        template: './src/griffin/index-100.html',
         chunks: ['griffin'],
         filename: './tester/index.html',
         inject: true,

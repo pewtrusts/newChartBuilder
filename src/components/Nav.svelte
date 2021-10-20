@@ -4,6 +4,7 @@
 <script>
     import slugger from 'slugger';
     import Sprite from './Sprite.svelte';
+    export let buildModeMultipleEnabled;
     let activeSection;
     let sections = [
         {
@@ -66,12 +67,24 @@
             name: 'Print',
             icon: 'document',
             style: 'left: 2px;bottom: 2px;'
+        },
+        {
+            name: 'Multiple',
+            icon: 'grid-two-up',
+            style: 'bottom: 2px;'
         }
     ];
+    let buildMode;
     s.ActiveSection.subscribe(({value}) => {
         activeSection = value;
     });
+    s.BuildMode.subscribe(v => {
+        buildMode = v;
+    });
     function clickHandler(){
+        if (this.getAttribute('disabled') == 'true'){
+            return;
+        }
         s.ActiveSection.set({method: 'click', value: slugger(this.title)});
     }
 </script>
@@ -119,6 +132,9 @@
         color: var(--medium-gray, #bbb);
         font-size: 0.75rem;
     }
+    a[disabled='true']{
+        cursor: not-allowed;
+    }
     .navigation-section {
         position: absolute;
         top: 0;
@@ -128,13 +144,16 @@
         height: 100%;
         
     }
+    .disabled {
+        opacity: 0.25;
+    }
 </style>
 <div class="navigation-section">
     <nav>
         <ul>
             {#each sections as section}
-            <li class:isActive="{slugger(section.name) == activeSection}">
-                <a on:click|preventDefault="{clickHandler}" title="{section.name}" href="#{slugger(section.name)}">
+            <li class:isActive="{slugger(section.name) == activeSection}" class:disabled="{!buildModeMultipleEnabled.includes(section.name) && buildMode == 'multiple'}">
+                <a on:click|preventDefault="{clickHandler}" title="{section.name}" href="#{slugger(section.name)}" disabled="{!buildModeMultipleEnabled.includes(section.name) && buildMode == 'multiple'}">
                     <Sprite width="25" id="{section.icon}" gray="{true}" white="{slugger(section.name) == activeSection}" style="{section.style}" />
                     <div>{section.name}</div>
                 </a>

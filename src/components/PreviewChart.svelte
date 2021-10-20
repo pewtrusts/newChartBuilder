@@ -62,6 +62,9 @@
     let minHeight;
     let redrawTimeout;
     let node;
+    let loadedMultipleCharts = [];
+    let subsDivs = [];
+    let multiLayout = 1;
     s.HasCustomSettings.subscribe(v => {
         notices[v ? 'add' : 'delete'](customSettingsNotice);
         notices = notices;
@@ -76,37 +79,63 @@
         chartConfig = v;
         window.cancelIdleCallback(redrawTimeout);
         redrawTimeout = window.requestIdleCallback(() => {
-           _initGriffin();
+           _initGriffin(node);
         },{timeout: 1000});
     });
     s.Classes.subscribe(v => {
         classes = v;
     });
+    s.LoadedMultipleCharts.subscribe(v => {
+        loadedMultipleCharts = v;
+    });
+     s.MultiLayout.subscribe(v => {
+        multiLayout = v;
+        requestIdleCallback(() => {
+             _initGriffin(subsDivs, node);
+        },{timeout:500});
+    })
     /*s.MinHeight.subscribe((v) => {
         minHeight = v;
     });*/
-    function _initGriffin(){
-        requestIdleCallback(() => {
-            if ( size == 'fullscreen' ){
-                Chart = new Promise(function(resolve){
-                    chartResolve = resolve;
-                });
-            }
-            const chart = initSingleGriffin(node, size == 'fullscreen' ? 0 : 1);
-            if ( size == 'fullscreen' ){
-                chartResolve(chart);
-            }
+    function _initGriffin(node, parent = node){
+        const nodelist = Array.isArray(node) ? node : [node];
+        nodelist.forEach((_node, i) => {
             requestIdleCallback(() => {
-                node.querySelector('.griffin-download-btn').addEventListener('click', exportSVG);
-            });
-            console.log(Chart);
-        }, {timeout: 1000});
+                if ( size == 'fullscreen' ){
+                    Chart = new Promise(function(resolve){
+                        chartResolve = resolve;
+                    });
+                }
+                //const chart = initSingleGriffin(_node, size == 'fullscreen' ? 0 : 1);
+                const chart = initSingleGriffin(_node, i, parent);
+                if ( size == 'fullscreen' ){
+                    chartResolve(chart);
+                }
+                requestIdleCallback(() => {
+                    parent.querySelector('.griffin-download-btn').addEventListener('click', exportSVG);
+                });
+                console.log(Chart);
+            }, {timeout: 1000});
+        });
+    }
+    function initSubs(){
+        setTimeout(() => {
+           _initGriffin(subsDivs, node);
+        },1000);
+        return {
+            update(){
+                setTimeout(() => {
+                    _initGriffin(subsDivs, node);
+                },1000);   
+            }
+        }
     }
     function init(_node){
         node = _node;
         setTimeout(() => {
-           _initGriffin();
+           _initGriffin(node);
         },1000);
+        
          /**
           *  using cloneDeep here to avoid passing reference to the ChartConfig store to Highcharts
           *  because Highcharts can mutate it, especially when the chart's responsive options are in
@@ -119,6 +148,9 @@
                 _Chart.isFullscreen = true;
                 chartResolve(_Chart);
             }*/
+    }
+    function stringifySubs(sub){
+        return sub.config;
     }
     afterUpdate(async () => {
        /* window.cancelIdleCallback(redrawTimeout);
@@ -220,12 +252,12 @@
     >
         <p class="size-tag">[{size}]</p>
         <figure
-            use:init
+            use:init="{loadedMultipleCharts}"
             style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
             class="{classes.join(' ')} ai2html-griffin-figure griffin-figure js-griffin js-{size} griffin-chart-builder--{size} js-griffin--chart-builder {classes.join(' ')}"
         >
             <meta name="format-detection" content="telephone=no" />
-            {#if chartLabel || chartTitle || chartSubtitle}
+            {#if chartLabel || chartTitle }
                 <header>
                     {#if chartLabel}
                         <span class="figure-label">{chartLabel}</span>
@@ -233,20 +265,41 @@
                     {#if chartTitle}
                         <h1>{@html chartTitle}</h1>
                     {/if}
-                    {#if chartSubtitle}
-                        <p class="figure-dek">{@html chartSubtitle}</p>
-                    {/if}
                 </header>
-            {/if}
-            <pre class="js-griffin-config" style="display: none;">
-            {JSON.stringify({
-                highchartsConfig: chartConfig,
-                griffinConfig 
-            })}
-        </pre>
-            <div bind:this="{chartContainer}" 
-                class="hc-container js-hc-container {chartType}"
-            />
+                {/if}
+                <div class="griffin-outer-container griffin-outer-container--{multiLayout}-up" class:griffin-outer-container--grid="{multiLayout > 1}">
+                    <div bind:this="{subsDivs[0]}" class="js-griffin-container griffin-container">
+                        {#if chartSubtitle}
+                        <p class="figure-dek">{@html chartSubtitle}</p>
+                        {/if}
+                        <pre class="js-griffin-config" style="display: none;">
+                            {JSON.stringify({
+                                highchartsConfig: chartConfig,
+                                griffinConfig 
+                            })}
+                        </pre>
+                        <div bind:this="{chartContainer}" 
+                            class="hc-container js-hc-container {chartType}"
+                        />
+                    </div>
+                    {#if loadedMultipleCharts.slice(1).length}
+                        {#each loadedMultipleCharts.slice(1) as subsequent, i }
+                        <div use:initSubs bind:this="{subsDivs[i+1]}" class="js-griffin-container griffin-container">
+                            {#each [JSON.parse(subsequent.config).griffinConfig.ChartSubtitle] as dek}
+                                {#if dek}
+                                    <p class="figure-dek">{@html dek}</p>
+                                {/if}
+                            {/each}
+                            <pre class="js-griffin-config" style="display: none;">
+                                {subsequent.config}
+                            </pre>
+                            <div bind:this="{chartContainer}"
+                                class="hc-container js-hc-container {chartType}"
+                            />
+                        </div>
+                        {/each}
+                    {/if}
+                </div>
             <figcaption>
                 {#if chartCaption}
                     <p class="figure-caption">

@@ -121,7 +121,10 @@ const appStores = [
     ['Thumbnail', ''],
     ['IsLoading', false],
     ['LoadedChartUserId', undefined],
-    ['HasCustomSettings', false]
+    ['HasCustomSettings', false],
+    ['LoadedMultipleCharts',[]],
+    ['MultiLayout', 1],
+    ['BuildMode', 'single']
 ];
 s.UserId = writable(undefined);
 function initWritables(){
@@ -252,15 +255,16 @@ function initDerived(){
         return rtn;
     });
     //project	type	hed	timestamp	config	user_email	user_id	name	user_id	thumbnail
-    s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail]) => {
+    s.SavingChartData = derived([s.ChartType, s.ChartTitle, s.ChartConfig, s.GriffinConfig, s.Thumbnail, s.BuildMode, s.LoadedMultipleCharts], ([chartType, chartTitle, chartConfig, griffinConfig, thumbnail, buildMode, loadedMultipleCharts]) => {
         const obj = {
             type: chartType,
             hed: chartTitle,
-            config: JSON.stringify({
+            config: buildMode == 'single' ? JSON.stringify({
                 highchartsConfig: chartConfig,
                 griffinConfig
-            }),
-            thumbnail
+            }) : JSON.stringify(loadedMultipleCharts.map(chart => JSON.parse(chart.config))),
+            thumbnail,
+            buildMode
         };
         return obj;
     });
@@ -274,7 +278,10 @@ function initDerived(){
         s.Classes, 
         s.GriffinConfig,
         s.ExportType,
-        s.DescriptionProxy
+        s.DescriptionProxy,
+        s.MultiLayout,
+        s.ChartType,
+        s.LoadedMultipleCharts
     ], ([
         chartConfig,
         chartDescription,
@@ -285,35 +292,54 @@ function initDerived(){
         classes,
         griffinConfig,
         exportType,
-        descriptionProxy
+        descriptionProxy,
+        multiLayout,
+        chartType,
+        loadedMultipleCharts
     ]) => {
+        function returnAdditionalCharts(){
+            console.log(loadedMultipleCharts);
+            return loadedMultipleCharts.slice(1).map(chart => {
+                const config = JSON.parse(chart.config);
+                const subtitle = config.griffinConfig.ChartSubtitle || null;
+                const chartType = config.highchartsConfig.chart.type || null;
+                return `<div class="js-griffin-container griffin-container">${subtitle ? `
+                    <p class="figure-dek">${subtitle}</p>` : ''}
+                    <pre class="js-griffin-config" style="display: none;">
+                        ${chart.config}
+                    </pre>
+                    <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
+                    </div>
+                </div>
+                `
+            });
+        }
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
         return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
         <a class="griffin-anchor js-griffin-anchor"></a>
         <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
         <header>${chartLabel ? `
             <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
-            <h1 id="chartTitle-${hashId}">${chartTitle}</h1>` : ''}${chartSubtitle ? `
-            <p id="chartSubtitle-${hashId}" class="figure-dek">${chartSubtitle}</p>` : ''}
+            <h1 id="chartTitle-${hashId}">${chartTitle}</h1>` : ''}
         </header>` : ''}${chartDescription && descriptionProxy == 'chartDescription' ? `
         <p id="chartDescription-${hashId}" class="visually-hidden">${chartDescription}</p>` : ''}
-        <pre class="js-griffin-config" style="display: none;">
-        ${JSON.stringify({
-            highchartsConfig: chartConfig,
-            griffinConfig 
-        })}
-        </pre>`;
-    });
-    s.CodeExport2 = derived([
-        s.ChartType
-    ], ([
-        chartType
-    ]) => {
-        return `
-        <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
+        <div class="griffin-outer-container griffin-outer-container--${multiLayout}-up${multiLayout > 1 ? ' griffin-outer-container--grid' : ''}">
+            <div class="js-griffin-container griffin-container">${chartSubtitle ? `
+                     <p class="figure-dek">${chartSubtitle}</p>` : ''}
+                       <pre class="js-griffin-config" style="display: none;">
+                    ${JSON.stringify({
+                        highchartsConfig: chartConfig,
+                        griffinConfig 
+                    })}
+              </pre>
+              <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
+                    </div>
+                </div>
+                ${returnAdditionalCharts()}
         </div>`;
     });
-    s.CodeExport3 = derived([
+    
+    s.CodeExport2 = derived([
         s.ChartCredit,
         s.ChartDescription,
         s.ChartLabel,
@@ -356,7 +382,7 @@ function initDerived(){
         </figcaption>` : ''}
     </figure>`;
     });
-    s.CodeExport = derived([s.CodeExport1, s.CodeExport2, s.CodeExport3], ([a,b,c]) => a + b + c);
+    s.CodeExport = derived([s.CodeExport1, s.CodeExport2], ([a,b]) => a + b);
 } // end initDerived
 
 initWritables();

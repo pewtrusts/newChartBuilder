@@ -32,11 +32,12 @@
     import YAxis from '@Component/YAxis.svelte';
     import Legend from '@Component/Legend.svelte';
     import Custom from '@Component/Custom.svelte';
+    import Multiple from '@Component/Multiple.svelte';
 
 
  //   import {ActiveSection, IsWorking, ChartWidth} from './store';
   //  import getImageData from './scripts/get-image-data';
-
+    const buildModeMultipleEnabled = ['Start','Code','Save','Print','Multiple'];
 
   function picClickHandler(){
         s.IsWorking.set(true);
@@ -100,7 +101,13 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
     let clickSave = () => {};
     let chartWidth = 650;
     let checkHeight = null;
+    let numberLoaded;
+    let selectMultipleEnabled = false;
+    let buildMode = 'single';
     resetColorIndeces(data.length - 1);
+    s.BuildMode.subscribe(v => {
+        buildMode = v;
+    });
     s.IsWorking.subscribe(v => {
         document.body.classList[v ? 'add' : 'remove']('isWorking');
     });
@@ -114,6 +121,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
             let anchor = leftColumn.querySelector(`a#${v.value}`);
             anchor.scrollIntoView();
         }
+        selectMultipleEnabled = v.value == 'multiple';
     });
     s.ChartWidth.subscribe(v => {
         chartWidth = v;
@@ -196,6 +204,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
        display: flex;
        flex-direction: column;
    }
+   .selectMultipleEnabled {
+        background-color: var(--dark-background, #000);
+        color: #fff;
+    }
 </style>
 
 <svelte:head>
@@ -209,7 +221,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
 
 <SpriteDefs />
 <Banner />
-<Nav />
+<Nav {buildModeMultipleEnabled}/>
 {#if dialog}
     <Dialog bind:dialog />
 {/if}
@@ -293,18 +305,27 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                 <SectionHead text="Print" />
                 <Print bind:enablePrint/>
             </section>
+            <section use:pushSection>
+                <SectionHead text="Multiple" />
+                <Multiple {numberLoaded} />
+            </section>
             
         </div>
         <div class="right-column">
-            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" style="padding: 1em;">
-                <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
-                <ChartSizeSelector bind:checkHeight {Chart}/>
+            <div class:isHidden="{activeSection == 'start' || (activeSection == 'multiple' && buildMode == 'single')  || (enablePrint && activeSection == 'print')}">
+                <div style="padding: 1em;">
+                    <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
+                    <ChartSizeSelector bind:checkHeight {Chart}/>
+                </div>
+                <div class="chart-container">
+                    <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
+                    <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
+                </div>
             </div>
-            <div class:isHidden="{activeSection == 'start' || (enablePrint && activeSection == 'print')}" class="chart-container">
-                <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
-                <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
-            </div>
-            <div class="saved-charts" class:isHidden="{activeSection !== 'start' || (enablePrint && activeSection == 'print')}">
+            <div class="saved-charts" class:selectMultipleEnabled class:isHidden="{
+                !['start','multiple'].includes(activeSection) ||
+                buildMode == 'multiple' || 
+                (enablePrint && activeSection == 'print')}">
                 <ListSavedCharts 
                     bind:resolveSaved
                     bind:savedCharts 
@@ -314,6 +335,7 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
                     bind:userEmail
                     bind:userName
                     bind:getSavedCharts
+                    bind:numberLoaded
                 />
             </div>
             {#if enablePrint && activeSection == 'print'}

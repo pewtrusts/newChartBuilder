@@ -19,13 +19,13 @@
     export let userEmail;
     export let userId;
     export let userName;
+    export let numberLoaded;
     let currentUserCharts = [];
     let otherUserCharts = [];
     let projectFilter = 'any';
     let typeFilter = 'any';
     let creatorFilter = 'any';
-    let isWorking = false;
-
+    let selectMultipleEnabled = false;
     // Array of API discovery doc URLs for APIs used by the quickstart
     const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
@@ -33,6 +33,9 @@
     // included, separated by spaces.
     const SCOPES = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email"; 
     let instance;
+    s.ActiveSection.subscribe(v => {
+        selectMultipleEnabled = v.value == 'multiple';
+    });
     function sortCharts(charts){
         return charts.sort((a,b) => b.timestamp - a.timestamp);
     }
@@ -119,7 +122,7 @@
         currentUserCharts = charts.filter(d => d.user_id == userId);
         otherUserCharts = charts.filter(d => d.user_id != userId);
     }
-
+    
     initGetSavedCharts({resolveSaved});
     setHeaders();
     
@@ -178,6 +181,10 @@
         padding-top: 1em;
         z-index: 1;
     }
+    :global(.selectMultipleEnabled) header {
+        background-color: var(--dark-background, #000);
+        color: #fff;
+    }
     .user-info {
         position: absolute;
         top: 0;
@@ -195,7 +202,7 @@
     {:then value}
     <div use:divideCharts="{value.data}">
         <header>
-            <h2>Saved charts</h2>
+            <h2>Saved charts{selectMultipleEnabled ? '—select multiple to make a composite figure' : ''}</h2>
             <label for="project-filter">Filter by project:</label>
             <!-- svelte-ignore a11y-no-onchange -->
             <select on:change="{projectFilterHandler}" name="project-filter" id="project-filter">
@@ -226,7 +233,7 @@
         <h3>Your charts</h3>
         <section class="chart-list" use:listMounted>
             {#each sortCharts(currentUserCharts) as data}
-            <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
+            <LoadChart {data} bind:numberLoaded bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
             {/each}
         </section>
         {/if}
@@ -234,7 +241,7 @@
         <h3>Your team&rsquo;s charts</h3>
         <section class="chart-list" use:listMounted>
             {#each sortCharts(otherUserCharts) as data}
-            <LoadChart {data} bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
+            <LoadChart {data} bind:numberLoaded bind:loadedChart {projectFilter} {typeFilter} {creatorFilter} />
             {/each}
         </section>
         {/if}
