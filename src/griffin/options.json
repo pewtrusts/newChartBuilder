@@ -25,7 +25,9 @@
             "innerSize": "56%",
             "dataLabels": {
                 "enabled": false,
-                "connectorShape": "straight"
+                "connectorShape": "straight",
+                "crop": false,
+                "overflow": "allow"
             },
             "showInLegend": true
         },
