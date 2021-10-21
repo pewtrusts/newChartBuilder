@@ -16,7 +16,7 @@ HCAnnotations(Highcharts);
 HCMore(Highcharts);
 export function beforeRenderExtensions(options){
     extendObj(options, ['plotOptions', 'pie', 'dataLabels', 'formatter'], function () {
-        return this.point.x;
+        return this.point.name + '<br>' + returnFormatter('percentage').call({ value: this.percentage / 100 });
     })
    /* options.plotOptions.pie.dataLabels.formatter = function () {
         return this.point.x;
@@ -26,9 +26,8 @@ export function beforeRenderExtensions(options){
         return false;
     });
     extendObj(options, ['plotOptions','series','dataLabels','format'], undefined);
-    extendObj(options, ['plotOptions','series','dataLabels','formatter'], function(){
+    extendObj(options, ['plotOptions','line','dataLabels','formatter'], function(){
         var that = this;
-        if (this.series.userOptions.type == 'line' || (this.series.userOptions.type == undefined && this.series.chart.options.chart.type == 'line')){
             setTimeout(function(){
                 var index = that.point.index;
                 console.log(that.point.dataLabel);
@@ -66,7 +65,6 @@ export function beforeRenderExtensions(options){
                         }
                 }
             });
-        }
         return this.series.chart.userOptions.dataLabelNumberFormatter.call(this);
     });
     

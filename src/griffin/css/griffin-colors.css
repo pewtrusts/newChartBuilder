@@ -2,7 +2,7 @@
 .swatch.highcharts-color-0 {
   background-color: var(--color-0, #7cb5ec);
 }
-.highcharts-color-0 {
+.highcharts-color-0, .highcharts-data-label-color-0 {
   fill: var(--color-0, #7cb5ec);
   stroke: var(--color-0, #7cb5ec);
 }
@@ -10,7 +10,7 @@
 .swatch.highcharts-color-1 {
   background-color: var(--color-1, #434348);
 }
-.highcharts-color-1 {
+.highcharts-color-1, .highcharts-data-label-color-1 {
   fill: var(--color-1, #434348);
   stroke: var(--color-1, #434348);
 }
@@ -18,7 +18,7 @@
 .swatch.highcharts-color-2 {
   background-color: var(--color-2, #90ed7d);
 }
-.highcharts-color-2 {
+.highcharts-color-2, .highcharts-data-label-color-2 {
   fill: var(--color-2, #90ed7d);
   stroke: var(--color-2, #90ed7d);
 }
@@ -26,7 +26,7 @@
 .swatch.highcharts-color-3 {
   background-color: var(--color-3, #f7a35c);
 }
-.highcharts-color-3 {
+.highcharts-color-3, .highcharts-data-label-color-3 {
   fill: var(--color-3, #f7a35c);
   stroke: var(--color-3, #f7a35c);
 }
@@ -34,7 +34,7 @@
 .swatch.highcharts-color-4 {
   background-color: var(--color-4, #8085e9);
 }
-.highcharts-color-4 {
+.highcharts-color-4, .highcharts-data-label-color-4 {
   fill: var(--color-4, #8085e9);
   stroke: var(--color-4, #8085e9);
 }
@@ -42,7 +42,7 @@
 .swatch.highcharts-color-5 {
   background-color: var(--color-5, #f15c80);
 }
-.highcharts-color-5 {
+.highcharts-color-5, .highcharts-data-label-color-5 {
   fill: var(--color-5, #f15c80);
   stroke: var(--color-5, #f15c80);
 }
@@ -50,7 +50,7 @@
 .swatch.highcharts-color-6 {
   background-color: var(--color-6, #e4d354);
 }
-.highcharts-color-6 {
+.highcharts-color-6, .highcharts-data-label-color-6 {
   fill: var(--color-6, #e4d354);
   stroke: var(--color-6, #e4d354);
 }
@@ -58,7 +58,7 @@
 .swatch.highcharts-color-7 {
   background-color: var(--color-7, #2b908f);
 }
-.highcharts-color-7 {
+.highcharts-color-7, .highcharts-data-label-color-7 {
   fill: var(--color-7, #2b908f);
   stroke: var(--color-7, #2b908f);
 }
@@ -66,7 +66,7 @@
 .swatch.highcharts-color-8 {
   background-color: var(--color-8, #f45b5b);
 }
-.highcharts-color-8 {
+.highcharts-color-8, .highcharts-data-label-color-8 {
   fill: var(--color-8, #f45b5b);
   stroke: var(--color-8, #f45b5b);
 }
@@ -74,28 +74,28 @@
 .swatch.highcharts-color-9 {
   background-color: var(--color-9, #91e8e1);
 }
-.highcharts-color-9 {
+.highcharts-color-9, .highcharts-data-label-color-9 {
   fill: var(--color-9, #91e8e1);
   stroke: var(--color-9, #91e8e1);
 }
 .swatch.highcharts-color-10 {
   background-color: var(--color-10, #91e8e1);
 }
-.highcharts-color-10 {
+.highcharts-color-10, .highcharts-data-label-color-10 {
   fill: var(--color-10, #91e8e1);
   stroke: var(--color-10, #91e8e1);
 }
 .swatch.highcharts-color-11 {
   background-color: var(--color-11, #91e8e1);
 }
-.highcharts-color-11 {
+.highcharts-color-11, .highcharts-data-label-color-11 {
   fill: var(--color-11, #91e8e1);
   stroke: var(--color-11, #91e8e1);
 }
 .swatch.highcharts-color-12 {
   background-color: var(--color-12, #91e8e1);
 }
-.highcharts-color-12 {
+.highcharts-color-12, .highcharts-data-label-color-12 {
   fill: var(--color-12, #91e8e1);
   stroke: var(--color-12, #91e8e1);
 }
