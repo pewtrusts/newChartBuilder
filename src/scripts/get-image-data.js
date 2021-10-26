@@ -79,7 +79,7 @@ export default function _getImageData(){
             <img style="${mbMargins}" width="100%" src="${mobile1.toDataURL("image/png", 0)}">
         </picture>
         `);
-        s.Thumbnail.set(thumbnail.toDataURL("image/png", 0));
+        s.Thumbnail.set(thumbnail.toDataURL("image/webp"));
         s.IsWorking.set(false);
         s.PictureIsMissingOrOld.set(false);
     });
