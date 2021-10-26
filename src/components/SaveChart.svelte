@@ -63,16 +63,23 @@
     s.BuildMode.subscribe(v => {
         buildMode = v;
     })
-    function _saveChart(props){
+    async function _saveChart(props){
         if ( pictureIsMissingOrOld ){
             s.IsWorking.set(true);
+            let promiseResolve;
+            let promise = new Promise(function(resolve){
+                promiseResolve = resolve;
+            });
             requestIdleCallback(function(){
                 getImageData().then(() => {
-                    saveChart(props).then(reloadCharts);
+                    saveChart(props).then(v => {
+                        promiseResolve(v);
+                    });
                 });
             }, {timeout: 2000});
+            return await promise;
         } else {
-            saveChart(props).then(reloadCharts);
+            return saveChart(props).then(reloadCharts);
         }
     }
     function reloadCharts(savedChart){
@@ -87,7 +94,7 @@
         });
     }
     function __saveChart(project){
-        _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+        return _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
     }
     function submitHandler() {
         const formData = new FormData(this);
@@ -102,11 +109,11 @@
             verifyPromise.then((v) => {
                 if (v == "replace") {
                     s.IsWorking.set(true);
-                    deletePrevious(loadedChart).then(() => {
-                        __saveChart(project);
+                    __saveChart(project).then(() => {
+                        deletePrevious(loadedChart).then(reloadCharts);
                     });
                 } else {
-                    __saveChart(project);
+                    __saveChart(project).then(reloadCharts);
                 }
             }, () => {
                 return;
