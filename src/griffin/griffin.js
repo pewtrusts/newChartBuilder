@@ -4,6 +4,7 @@ import '@Submodule/shared-css/styles.css';
 import Highcharts from 'highcharts/highcharts.src.js';
 import HCAnnotations from 'highcharts/modules/annotations';
 import HCMore from 'highcharts/highcharts-more';
+import HCRegression from '@Submodule/highcharts-regression';
 /* TO DO: for production, bundle HG or use CDN? */
 import options from './options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
@@ -14,6 +15,7 @@ import returnLegendFormatter from './scripts/return-legend-formatter';
 import hash from './scripts/hash';
 HCAnnotations(Highcharts);
 HCMore(Highcharts);
+HCRegression(Highcharts);
 export function beforeRenderExtensions(options){
     extendObj(options, ['plotOptions', 'pie', 'dataLabels', 'formatter'], function () {
         return this.point.name + '<br>' + returnFormatter('percentage').call({ value: this.percentage / 100 });
