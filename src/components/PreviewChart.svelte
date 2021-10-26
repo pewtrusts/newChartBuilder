@@ -287,7 +287,7 @@
                         <div use:initSubs bind:this="{subsDivs[i+1]}" class="js-griffin-container griffin-container">
                             {#each [JSON.parse(subsequent.config).griffinConfig.ChartSubtitle] as dek}
                                 {#if dek}
-                                    <p class="figure-dek">{@html dek}</p>
+                                    <p class="figure-dek">{@html dek.replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</p>
                                 {/if}
                             {/each}
                             <pre class="js-griffin-config" style="display: none;">
