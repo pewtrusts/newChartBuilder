@@ -3,4 +3,4 @@
 	url = https://github.com/pewtrusts/shared-css.git
 [submodule "submodules/highcharts-regression"]
 	path = submodules/highcharts-regression
-	url = git@github.com:jostermanAtPEW/highcharts-regression.git
+	url = https://github.com/jostermanAtPEW/highcharts-regression.git
