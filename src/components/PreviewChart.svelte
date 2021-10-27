@@ -1,4 +1,5 @@
 <script context="module">
+    import hash from './../griffin/scripts/hash';
     import HCExporting from "highcharts/modules/exporting";
     import HCOfflineExporting from "highcharts/modules/offline-exporting";
     import "@Submodule/shared-css/styles.css";
@@ -65,6 +66,11 @@
     let loadedMultipleCharts = [];
     let subsDivs = [];
     let multiLayout = 1;
+    let patternColors = [];
+    let chartDescription = ''
+    s.PatternColors.subscribe(v => {
+        patternColors = v;
+    })
     s.HasCustomSettings.subscribe(v => {
         notices[v ? 'add' : 'delete'](customSettingsNotice);
         notices = notices;
@@ -212,9 +218,13 @@
     s.ChartCaption.subscribe((v) => {
         chartCaption = v;
     });
+    s.ChartDescription.subscribe((v) => {
+        chartDescription = v;
+    });
     s.ChartType.subscribe((v) => {
         chartType = v;
     });
+    $:hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
     /*s.Stacking.subscribe(v => {
         if (Chart){
             updateChartConfig(Chart, {plotOptions: {series: {stacking: v}}});
@@ -239,6 +249,13 @@
         });
        s.ChartSeries.set(series);
     });
+    function returnHashId(configString){
+        const {ChartLabel, ChartTitle, ChartSubtitle, ChartDescription, ChartNotes} = JSON.parse(configString).griffinConfig;
+        return hash(ChartLabel + ChartTitle + ChartSubtitle + ChartDescription + ChartNotes);
+    }
+    function returnPatternColors(configString){
+        return JSON.parse(configString).griffinConfig.PatternColors;
+    }
 </script>
 
 <Notices {notices} />
@@ -254,7 +271,7 @@
         <figure
             use:init="{loadedMultipleCharts}"
             style="min-width:{chartWidth}px;max-width:{chartWidth}px;"
-            class="{classes.join(' ')} ai2html-griffin-figure griffin-figure js-griffin js-{size} griffin-chart-builder--{size} js-griffin--chart-builder {classes.join(' ')}"
+            class="ai2html-griffin-figure griffin-figure js-griffin js-{size} griffin-chart-builder--{size} js-griffin--chart-builder {classes.join(' ')}"
         >
             <meta name="format-detection" content="telephone=no" />
             {#if chartLabel || chartTitle }
@@ -268,7 +285,17 @@
                 </header>
                 {/if}
                 <div class="griffin-outer-container griffin-outer-container--{multiLayout}-up" class:griffin-outer-container--grid="{multiLayout > 1}">
-                    <div bind:this="{subsDivs[0]}" class="js-griffin-container griffin-container">
+                    <div bind:this="{subsDivs[0]}" class="js-griffin-container griffin-container cp-{hash(patternColors.flat().join(''))}">
+                        {#each patternColors as pattern, i}
+                            {#if pattern && pattern.length > 1}
+                            <svg width=0 height=0>
+                                <pattern id="pattern-{hash(patternColors.flat().join(''))}-{i}" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                                    <rect x="0" y="0" width="10" height="10" style="fill:{pattern[0]}" />
+                                    <line x1="0" y1="0" x2="0" y2="10" style="stroke:{pattern[1]}; stroke-width:8" />
+                                </pattern>
+                            </svg>
+                            {/if}
+                        {/each}
                         {#if chartSubtitle}
                         <p class="figure-dek">{@html chartSubtitle}</p>
                         {/if}
@@ -287,7 +314,17 @@
                     </div>
                     {#if loadedMultipleCharts.slice(1).length}
                         {#each loadedMultipleCharts.slice(1) as subsequent, i }
-                        <div use:initSubs bind:this="{subsDivs[i+1]}" class="js-griffin-container griffin-container">
+                        <div use:initSubs bind:this="{subsDivs[i+1]}" class="js-griffin-container griffin-container hash-{returnHashId(subsequent)}">
+                            {#each returnPatternColors(subsequent) as pattern, i}
+                                {#if pattern && pattern.length > 1}
+                                <svg width=0 height=0>
+                                    <pattern id="pattern-{i}" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                                        <rect x="0" y="0" width="10" height="10" style="fill:{pattern[0]}" />
+                                        <line x1="0" y1="0" x2="0" y2="10" style="stroke:{pattern[1]}; stroke-width:8" />
+                                    </pattern>
+                                </svg>
+                                {/if}
+                            {/each}
                             {#each [JSON.parse(subsequent.config).griffinConfig.ChartSubtitle] as dek}
                                 {#if dek}
                                     <p class="figure-dek">{@html dek.replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</p>

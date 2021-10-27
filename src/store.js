@@ -103,6 +103,7 @@ const GStores = [
     ['SelectedColorPalette', 'default'],
     ['MinHeight', 400],
     ['OtherResponsive', []],
+    ['PatternColors', []],
     ['LockHeight', true],
     ['YAxisDecimals', undefined],
     ['CustomSettings', {}]

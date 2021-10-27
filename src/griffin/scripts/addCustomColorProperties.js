@@ -16,3 +16,18 @@ export default function _addCustomColorProperties(obj){
     document.head.appendChild(customColorStylesheet); // appending first seems to work in IE11. doesn't otherwise
     customColorStylesheet.innerText = '.cc' + hash + '{' + customProps + '}';
 }
+
+export function addCustomPatterns(obj){
+    const { patterns, hash } = obj;
+    removeStylesheet('customPatternStylesheet-' + hash);
+    const decs = patterns.reduce((acc,_,i) => {
+        return acc + `.cp-${hash} path.highcharts-color-${i} {
+            fill: url(#pattern-${hash}-${i});
+        }`
+    }, '');
+    const customPatternStylesheet = document.createElement('style');
+    customPatternStylesheet.id = 'customPatternStylesheet-' + hash;
+    document.head.appendChild(customPatternStylesheet); // appending first seems to work in IE11. doesn't otherwise
+    customPatternStylesheet.innerText = decs;
+
+}
