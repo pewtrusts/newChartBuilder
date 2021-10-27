@@ -284,7 +284,8 @@ function initDerived(){
         s.DescriptionProxy,
         s.MultiLayout,
         s.ChartType,
-        s.LoadedMultipleCharts
+        s.LoadedMultipleCharts,
+        s.ChartCaption,
     ], ([
         chartConfig,
         chartDescription,
@@ -298,13 +299,14 @@ function initDerived(){
         descriptionProxy,
         multiLayout,
         chartType,
-        loadedMultipleCharts
+        loadedMultipleCharts,
+        chartCaption
     ]) => {
         function returnAdditionalCharts(){
-            console.log(loadedMultipleCharts);
             return loadedMultipleCharts.slice(1).map(chart => {
                 const config = JSON.parse(chart.config);
                 const subtitle = config.griffinConfig.ChartSubtitle || null;
+                const caption = config.griffinConfig.ChartCaption || null;
                 const chartType = config.highchartsConfig.chart.type || null;
                 return `<div class="js-griffin-container griffin-container">${subtitle ? `
                     <p class="figure-dek">${subtitle}</p>` : ''}
@@ -312,10 +314,22 @@ function initDerived(){
                         ${chart.config}
                     </pre>
                     <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
-                    </div>
+                    </div>${caption ? `
+            <p id="chartCaption-${hashId}" class="figure-caption">
+                ${caption}
+            </p>` : ''}
                 </div>
                 `
             });
+        }
+        function returnDescription(){
+            if (loadedMultipleCharts.length < 2){
+                return chartDescription;
+            } else {
+                return loadedMultipleCharts.reduce((acc, cur, i) => {
+                    return acc + ` Chart ${i + 1} — ${JSON.parse(cur.config).griffinConfig.ChartDescription} `;
+                }, `${loadedMultipleCharts.length} charts: `);
+            }
         }
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
         return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
@@ -325,7 +339,7 @@ function initDerived(){
             <span class="figure-label">${chartLabel}</span>` : ''}${chartTitle ? `
             <h1 id="chartTitle-${hashId}">${chartTitle}</h1>` : ''}
         </header>` : ''}${chartDescription && descriptionProxy == 'chartDescription' ? `
-        <p id="chartDescription-${hashId}" class="visually-hidden">${chartDescription}</p>` : ''}
+        <p id="chartDescription-${hashId}" class="visually-hidden">${returnDescription()}</p>` : ''}
         <div class="griffin-outer-container griffin-outer-container--${multiLayout}-up${multiLayout > 1 ? ' griffin-outer-container--grid' : ''}">
             <div class="js-griffin-container griffin-container">${chartSubtitle ? `
                      <p class="figure-dek">${chartSubtitle}</p>` : ''}
@@ -336,8 +350,12 @@ function initDerived(){
                     })}
               </pre>
               <div aria-hidden="true" class="js-hc-container hc-container ${chartType}">
-                    </div>
+                    </div>${chartCaption ? `
+            <p id="chartCaption-${hashId}" class="figure-caption">
+                ${chartCaption}
+            </p>` : ''}
                 </div>
+
                 ${returnAdditionalCharts()}
         </div>`;
     });
@@ -350,8 +368,7 @@ function initDerived(){
         s.ChartTitle,
         s.ChartSources,
         s.ChartSubtitle,
-        s.Picture,
-        s.ChartCaption,
+        s.Picture
     ], ([
         chartCredit,
         chartDescription,
@@ -361,18 +378,14 @@ function initDerived(){
         chartSources,
         chartSubtitle,
         picture,
-        chartCaption
     ]) => {
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
         return `
         <div class="picture-container js-picture-container">
             ${picture}
         </div>
-        ${chartNotes || chartSources || chartCredit || chartCaption ? `
-        <figcaption>${chartCaption ? `
-            <p id="chartCaption-${hashId}" class="figure-caption">
-                ${chartCaption}
-            </p>` : ''}${chartNotes ? `
+        ${chartNotes || chartSources || chartCredit ? `
+        <figcaption>${chartNotes ? `
             <p id="chartNotes-${hashId}" class="figure-note">
                 ${chartNotes}
             </p>` : ''}${chartSources ? `

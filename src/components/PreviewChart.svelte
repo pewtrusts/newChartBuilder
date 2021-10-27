@@ -278,9 +278,12 @@
                                 griffinConfig 
                             })}
                         </pre>
-                        <div bind:this="{chartContainer}" 
-                            class="hc-container js-hc-container {chartType}"
-                        />
+                        <div bind:this="{chartContainer}" class="hc-container js-hc-container {chartType}"></div>
+                        {#if chartCaption}
+                        <p class="figure-caption">
+                            {@html chartCaption}
+                        </p>
+                        {/if}
                     </div>
                     {#if loadedMultipleCharts.slice(1).length}
                         {#each loadedMultipleCharts.slice(1) as subsequent, i }
@@ -296,16 +299,19 @@
                             <div bind:this="{chartContainer}"
                                 class="hc-container js-hc-container {chartType}"
                             />
+                            {#each [JSON.parse(subsequent.config).griffinConfig.ChartCaption] as caption}
+                                {#if caption}
+                                <p class="figure-caption">
+                                    {@html caption}
+                                </p>
+                                {/if}
+                            {/each}
                         </div>
                         {/each}
                     {/if}
                 </div>
             <figcaption>
-                {#if chartCaption}
-                    <p class="figure-caption">
-                        {@html chartCaption}
-                    </p>
-                {/if}
+                
                 {#if chartNotes}
                     <p class="figure-note">
                         {@html chartNotes}
