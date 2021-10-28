@@ -20,10 +20,13 @@ export default function _addCustomColorProperties(obj){
 export function addCustomPatterns(obj){
     const { patterns, hash } = obj;
     removeStylesheet('customPatternStylesheet-' + hash);
-    const decs = patterns.reduce((acc,_,i) => {
-        return acc + `.cp-${hash} path.highcharts-color-${i} {
-            fill: url(#pattern-${hash}-${i});
-        }`
+    const decs = patterns.reduce((acc,pattern,i) => {
+        if (pattern){
+            return acc + `.cp-${hash} path.highcharts-color-${i}, .cp-${hash} .highcharts-legend-item.highcharts-color-${i} {
+                fill: url(#pattern-${hash}-${i});
+            }`;
+        }
+        return acc;
     }, '');
     const customPatternStylesheet = document.createElement('style');
     customPatternStylesheet.id = 'customPatternStylesheet-' + hash;

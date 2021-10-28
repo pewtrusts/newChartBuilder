@@ -9,6 +9,7 @@ import HCRegression from '@Submodule/highcharts-regression';
 import options from './options.json';
 /* TO DO:  should these be part of Griffin or chartBuilder? */
 import addCustomColorProperties from './scripts/addCustomColorProperties';
+import {addCustomPatterns} from './scripts/addCustomColorProperties';
 import returnFormatter from './scripts/return-number-formatter';
 import returnPointFormatter from './scripts/return-point-formatter';
 import returnLegendFormatter from './scripts/return-legend-formatter';
@@ -193,6 +194,9 @@ export function initSingleGriffin(griffin, i, _parent){
             colors: config.griffinConfig.CustomColors,
             hash: hash(config.griffinConfig.CustomColors.join(''))
         });
+    }
+    if (config.griffinConfig.PatternColors.some(d => d)){
+        addCustomPatterns({ patterns: config.griffinConfig.PatternColors, hash: hash(config.griffinConfig.PatternColors.flat().join('')) });
     }
     /**
      * workaround for FF bug that seems sometimes include the first letter of a subsequent <tspan>

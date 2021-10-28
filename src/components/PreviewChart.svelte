@@ -288,7 +288,7 @@
                     <div bind:this="{subsDivs[0]}" class="js-griffin-container griffin-container cp-{hash(patternColors.flat().join(''))}">
                         {#each patternColors as pattern, i}
                             {#if pattern && pattern.length > 1}
-                            <svg width=0 height=0>
+                            <svg width=0 height=0 style="display:block;">
                                 <pattern id="pattern-{hash(patternColors.flat().join(''))}-{i}" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
                                     <rect x="0" y="0" width="10" height="10" style="fill:{pattern[0]}" />
                                     <line x1="0" y1="0" x2="0" y2="10" style="stroke:{pattern[1]}; stroke-width:8" />

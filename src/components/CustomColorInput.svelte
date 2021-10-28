@@ -50,6 +50,7 @@ function toggleMode(){
 {:else}
 <input use:changePatternHandler on:change="{changePatternHandler}" type="color" aria-label="First custom color {seriesIndex}" bind:value="{patternColors[0]}">
 <input use:changePatternHandler on:change="{changePatternHandler}" type="color" aria-label="Second custom color {seriesIndex}" bind:value="{patternColors[1]}">
-Select the foreground and background colors for the diagonal hatch fill
+Select the foreground and background colors for the diagonal hatch fill. If your chart has datalabels, select a solid color first and then a diagonal hatch.
+The datalabel will take the solid color.
 {/if}
 <Button type="tertiary" title="{isPatternMode ? 'or select solid color' : 'or create diagonal hatch'}" clickHandler="{toggleMode}" />

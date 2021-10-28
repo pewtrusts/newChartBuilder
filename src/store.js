@@ -287,6 +287,7 @@ function initDerived(){
         s.ChartType,
         s.LoadedMultipleCharts,
         s.ChartCaption,
+        s.PatternColors
     ], ([
         chartConfig,
         chartDescription,
@@ -301,7 +302,8 @@ function initDerived(){
         multiLayout,
         chartType,
         loadedMultipleCharts,
-        chartCaption
+        chartCaption,
+        patternColors
     ]) => {
         function returnAdditionalCharts(){
             return loadedMultipleCharts.slice(1).map(chart => {
@@ -332,6 +334,20 @@ function initDerived(){
                 }, `${loadedMultipleCharts.length} charts: `);
             }
         }
+        function returnPatterns(patterns){
+            return patterns.reduce((acc,pattern, i) => {
+                if (pattern && pattern.length > 1){
+                    return acc + `
+                        <pattern id="pattern-${hash(patterns.flat().join(''))}-${i}" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                            <rect x="0" y="0" width="10" height="10" style="fill:${pattern[0]}" />
+                            <line x1="0" y1="0" x2="0" y2="10" style="stroke:${pattern[1]}; stroke-width:8" />
+                        </pattern>
+                        `;
+                }
+                return acc;
+            }, `
+            <svg width=0 height=0 style="display:block;">`) + '</svg>';
+        }
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
         return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
         <a class="griffin-anchor js-griffin-anchor"></a>
@@ -342,7 +358,7 @@ function initDerived(){
         </header>` : ''}${chartDescription && descriptionProxy == 'chartDescription' ? `
         <p id="chartDescription-${hashId}" class="visually-hidden">${returnDescription()}</p>` : ''}
         <div class="griffin-outer-container griffin-outer-container--${multiLayout}-up${multiLayout > 1 ? ' griffin-outer-container--grid' : ''}">
-            <div class="js-griffin-container griffin-container">${chartSubtitle ? `
+            <div class="js-griffin-container griffin-container${patternColors.some(d => !!d && d.length > 1) ? ' cp-' + hash(patternColors.flat().join('')) : ''}">${patternColors.some(d => !!d && d.length > 1) ? returnPatterns(patternColors) : ''}${chartSubtitle ? `
                      <p class="figure-dek">${chartSubtitle}</p>` : ''}
                        <pre class="js-griffin-config" style="display: none;">
                     ${JSON.stringify({
