@@ -12,7 +12,7 @@ const outputFolder = process.env.NODE_ENV === 'localpreview' ? 'preview/' : 'dis
 const isDev = mode === 'development';
 const repoName = 'newChartBuilder';
 const publicPath = process.env.NODE_ENV === 'production' ? '/' + repoName + '/' : '/';
-const title = 'Griffin Chart Builder 1.0.0';
+const title = 'Griffin Chart Builder 1.2.0';
 const secrets = process.env.NODE_ENV === 'production' ? null : require('./secrets.json');
 
 
