@@ -9,23 +9,27 @@ CanvasPngCompression.replaceToDataURL();
 export default function _getImageData(){
     const fullscreenContainer = document.querySelector('.js-griffin.js-fullscreen');
     const fullscreenChart = document.querySelector('.js-griffin.js-fullscreen .js-griffin-container');
+    const fsDek = fullscreenChart.querySelector('.figure-dek');
     const mobileContainer = document.querySelector('.js-griffin.js-mobile');
     const mobileChart = document.querySelector('.js-griffin.js-mobile .js-griffin-container');
+    const mbDek = mobileChart.querySelector('.figure-dek');
 
     const fs = {
         contHeight: fullscreenContainer.offsetHeight,
         chartTop: fullscreenChart.offsetTop,
         chartHeight: fullscreenChart.offsetHeight,
-        chartWidth: fullscreenChart.offsetWidth
+        chartWidth: fullscreenChart.offsetWidth,
+        hedHeight: fsDek.offsetHeight
     };
     const mb = {
         contHeight: mobileContainer.offsetHeight,
         chartTop: mobileChart.offsetTop,
         chartHeight: mobileChart.offsetHeight,
-        chartWidth: mobileChart.offsetWidth
+        chartWidth: mobileChart.offsetWidth,
+        hedHeight: mbDek.offsetHeight
     }; 
-    const fsMargins = `margin-top: -${100 * (fs.chartTop / fs.chartWidth)}%;margin-bottom: -${100 * ((fs.contHeight - (fs.chartTop + fs.chartHeight)) / fs.chartWidth)}%;`;
-    const mbMargins = `margin-top: -${100 * (mb.chartTop / mb.chartWidth)}%;margin-bottom: -${100 * ((mb.contHeight - (mb.chartTop + mb.chartHeight)) / mb.chartWidth)}%;`;
+    const fsMargins = `margin-top: -${100 * (( fs.chartTop + fs.hedHeight ) / fs.chartWidth)}%;margin-bottom: -${100 * ((fs.contHeight - (fs.chartTop + fs.chartHeight)) / fs.chartWidth)}%;`;
+    const mbMargins = `margin-top: -${100 * (( mb.chartTop + mb.hedHeight ) / mb.chartWidth)}%;margin-bottom: -${100 * ((mb.contHeight - (mb.chartTop + mb.chartHeight)) / mb.chartWidth)}%;`;
     const promises = [
         htmlToImage.toCanvas(fullscreenContainer, {
             pixelRatio: 2,
