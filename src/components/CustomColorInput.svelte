@@ -33,7 +33,9 @@ function setPatternColors(type = 'add'){
     s.PatternColors.set(_patternColors);
 }
 function changePatternHandler(){
-    setPatternColors();
+   // requestIdleCallback(() => {
+        setPatternColors();
+    //}, {timeout: 500});
 }
 function toggleMode(){
     isPatternMode = !isPatternMode;
@@ -46,8 +48,8 @@ function toggleMode(){
 {#if !isPatternMode}
 <input use:changeHandler on:change="{changeHandler}" type="color" aria-label="Custom color {seriesIndex}" value="{color}">
 {:else}
-<input use:changePatternHandler on:change="{changePatternHandler}" type="color" aria-label="First custom color {seriesIndex}" value="{patternColors[0]}">
-<input use:changePatternHandler on:change="{changePatternHandler}" type="color" aria-label="Second custom color {seriesIndex}" value="{patternColors[1]}">
-Select the foreground and background colors or the diagonal pattern fill
+<input use:changePatternHandler on:change="{changePatternHandler}" type="color" aria-label="First custom color {seriesIndex}" bind:value="{patternColors[0]}">
+<input use:changePatternHandler on:change="{changePatternHandler}" type="color" aria-label="Second custom color {seriesIndex}" bind:value="{patternColors[1]}">
+Select the foreground and background colors for the diagonal hatch fill
 {/if}
-<Button type="tertiary" title="{isPatternMode ? 'or select solid fill' : 'or create pattern'}" clickHandler="{toggleMode}" />
+<Button type="tertiary" title="{isPatternMode ? 'or select solid color' : 'or create diagonal hatch'}" clickHandler="{toggleMode}" />
