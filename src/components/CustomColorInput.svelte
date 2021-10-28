@@ -5,6 +5,14 @@
     import {addCustomPatterns} from './../griffin/scripts/addCustomColorProperties';
     import hash from './../griffin/scripts/hash';
     import Button from './Button.svelte';
+    s.PatternColors.subscribe(v => {
+        if (v.some(d => !!d && d.length > 1)){
+            addCustomPatterns({patterns: v, hash: hash(v.flat().join(''))});
+        }
+    });
+    s.CustomColors.subscribe(v => {
+        addCustomColorProperties({colors: v, hash: hash(v.join(''))});
+    });
 </script>
 <script>
 
@@ -17,10 +25,12 @@ s.CustomColors.subscribe(v => {
         return;
     }
     color = v[seriesIndex] || color; // need to bind to subscribe for when saved charts are loaded.
-        addCustomColorProperties({colors: v, hash: hash(v.join(''))})
-    });
-    s.PatternColors.subscribe(v => {
-        addCustomPatterns({patterns: v, hash: hash(v.flat().join(''))})
+});
+s.PatternColors.subscribe(v => {
+    if (v[seriesIndex] && v[seriesIndex].length > 1){
+        patternColors = v[seriesIndex];
+        isPatternMode = true;
+    }
 });
 function changeHandler(){
     const customColors = get(s.CustomColors);
