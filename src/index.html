@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Griffin Chart Builder 1.0.0</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <% for (var css in htmlWebpackPlugin.files.css) { %>
     <link class="emitted-css" href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
     <% } %>
