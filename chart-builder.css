@@ -1175,7 +1175,7 @@ text.highcharts-drilldown-data-label,
   stroke: var(--color-12, #91e8e1);
 }
 
-.griffin-figure{position:relative}.griffin-anchor{position:absolute;width:1px;height:1px;top:66%;left:0}picture.fullscreen{display:none}@media screen and (min-width: 504px){picture.fullscreen{display:inline}picture.mobile{display:none}}.griffin-figure figcaption p:first-child{margin-top:0}.hc-container{overflow-y:hidden;margin-top:1rem}.highcharts-container.griffin{font-family:lato;font-size:13.3333px;line-height:1.2}.highcharts-container.griffin .highcharts-axis-labels{font-size:1em}.highcharts-container.griffin .highcharts-data-label-connector{fill:none}.highcharts-container.griffin .highcharts-plot-band-label,.highcharts-container.griffin .highcharts-plot-line-label{fill:#666;color:#666}.highcharts-container.griffin .highcharts-tracker-line{display:none}@media screen{.highcharts-container.griffin .highcharts-tracker-line{display:block}}.highcharts-container.griffin .highcharts-graph{stroke-width:var(--stroke-width)}.highcharts-container.griffin .highcharts-legend-item .highcharts-point{transform:translate(0, 1px);stroke:none}.highcharts-container.griffin .highcharts-legend-item.highcharts-line-series .highcharts-graph{stroke-width:16px;stroke-linecap:butt;transform:translate(0, -2px)}.highcharts-container.griffin .highcharts-legend-item text{fill:#666;font-weight:normal}.highcharts-container.griffin .highcharts-annotation-label:not(.highcharts-color){fill:#666}.highcharts-container.griffin .highcharts-annotation-label text{fill:inherit}.highcharts-container.griffin .highcharts-annotation-label-box{stroke:#666}.highcharts-container.griffin .highcharts-plot-line{stroke-dasharray:6;stroke:var(--color-1)}.highcharts-container.griffin span.highcharts-plot-line-label{width:265px;white-space:normal !important}.highcharts-container.griffin .highcharts-tooltip{filter:none}.highcharts-container.griffin .highcharts-tooltip text{transform:translateY(-2px)}.highcharts-container.griffin .highcharts-tooltip .highcharts-header{font-size:.75em;fill:#767676;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}.highcharts-container.griffin .highcharts-tooltip-box{fill:#fff;fill-opacity:1;stroke-width:2.5px;stroke-linecap:round}.highcharts-container.griffin .highcharts-markers{display:none}.highcharts-container.griffin .highcharts-markers path{fill:#fff;stroke-width:3px}.pie .highcharts-axis{display:none}.picture-container{overflow:hidden;position:relative}.lazy-load .picture-container::after{content:'';position:absolute;width:100%;height:100%;top:0;left:0;background-color:#f0f0f0}.griffin-download-btn{-webkit-appearance:none;-moz-appearance:none;appearance:none;border-width:0;background:none;color:#296ec3;padding:0 0 0 0.2em;margin:0}.griffin-download-btn::before{content:' | ';color:#767676}.image-export .griffin-download-btn{display:none}.griffin-container+.griffin-container{margin-top:1rem}.griffin-outer-container--grid{display:grid;gap:20px;padding-top:20px}.griffin-outer-container--grid .griffin-container+.griffin-container{margin-top:0}.griffin-outer-container--2-up{grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))}.griffin-outer-container--3-up{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr))}.griffin-outer-container--4-up{grid-template-columns:repeat(auto-fit, minmax(150px, 1fr))}.griffin-outer-container--5-up{grid-template-columns:repeat(auto-fit, minmax(120px, 1fr))}.griffin-outer-container--6-up{grid-template-columns:repeat(auto-fit, minmax(100px, 1fr))}.pie .highcharts-legend-series-active g.highcharts-series:not(.highcharts-series-hover),.pie .highcharts-legend-point-active .highcharts-point:not(.highcharts-point-hover),.pie .highcharts-legend-series-active .highcharts-markers:not(.highcharts-series-hover),.pie .highcharts-legend-series-active .highcharts-data-labels:not(.highcharts-series-hover){opacity:1}.highcharts-container.griffin .highcharts-data-label{font-size:1rem}.highcharts-data-label.datapoint--upward text{text-anchor:middle}.highcharts-data-label.datapoint--dip text{transform:translate(0px, 2.1em)}.highcharts-data-label text{text-shadow:4px 4px 1px #fff, 4px -4px 1px #fff, -4px 4px 1px #fff, -4px -4px 1px #fff}.highcharts-data-label text,text.highcharts-data-label{fill:inherit}.highcharts-grid-line{stroke:#000;stroke-opacity:35%}.last-label-only .highcharts-data-label:not(.last-datalabel){display:none}.scatter .highcharts-container.griffin .highcharts-markers{display:inline}.highcharts-container.griffin :not(.highcharts-legend-item).dashed{stroke-dasharray:6}.highcharts-container.griffin :not(.highcharts-legend-item).dotted{stroke-dasharray:0.5 8}.highcharts-container.griffin :not(.highcharts-legend-item).nostroke{stroke:none}.highcharts-container.griffin :not(.highcharts-legend-item).thin .highcharts-graph{stroke-width:calc(var(--stroke-width) / 4)}.highcharts-container.griffin.philly-dashboard .highcharts-graph{stroke-width:6px}.highcharts-container.griffin.philly-dashboard .highcharts-markers{display:inline}.highcharts-container.griffin.philly-dashboard .highcharts-axis-labels,.highcharts-container.griffin.philly-dashboard .highcharts-legend-item>text,.highcharts-container.griffin.philly-dashboard .highcharts-axis-title{font-size:1.2em;font-size:clamp(1rem, 1.939vw, 1.2rem)}@media screen and (max-width: 416px){.highcharts-container.griffin.philly-dashboard .highcharts-axis-labels,.highcharts-container.griffin.philly-dashboard .highcharts-legend-item>text,.highcharts-container.griffin.philly-dashboard .highcharts-axis-title{font-size:1rem;font-size:clamp(1rem, 1.939vw, 1.2rem)}}.highcharts-container.griffin.philly-dashboard .highcharts-legend-item.highcharts-line-series .highcharts-graph{stroke-width:16px}.philly-dashboard.ai2html-griffin-figure header h1{font-size:1.5rem;font-size:clamp(1.1rem, 2.424vw, 1.5rem)}@media screen and (max-width: 416px){.philly-dashboard.ai2html-griffin-figure header h1{font-size:1.1rem;font-size:clamp(1.1rem, 2.424vw, 1.5rem)}}.philly-dashboard.ai2html-griffin-figure .figure-dek{font-size:1.28rem;font-size:clamp(1.1rem, 2.069vw, 1.28rem)}@media screen and (max-width: 416px){.philly-dashboard.ai2html-griffin-figure .figure-dek{font-size:1.1rem;font-size:clamp(1.1rem, 2.069vw, 1.28rem)}}.philly-dashboard.ai2html-griffin-figure .figure-caption{font-weight:600;font-size:1.15rem;font-size:clamp(1rem, 2.332vw, 1.15rem)}@media screen and (max-width: 686px){.philly-dashboard.ai2html-griffin-figure .figure-caption{font-size:1rem;font-size:clamp(1rem, 2.332vw, 1.15rem)}}.philly-dashboard.ai2html-griffin-figure .figure-note{font-size:1rem;font-size:clamp(0.8rem, 1.616vw, 1rem)}@media screen and (max-width: 416px){.philly-dashboard.ai2html-griffin-figure .figure-note{font-size:0.8rem;font-size:clamp(0.8rem, 1.616vw, 1rem)}}.philly-dashboard.ai2html-griffin-figure .hc-container{margin-top:2rem}.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure header h1,.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .figure-dek{font-size:1.1rem}.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .figure-caption{font-size:1rem}.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .highcharts-container.griffin .highcharts-axis-labels,.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .highcharts-legend-item>text,.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .highcharts-axis-title{font-size:1rem}.highcharts-container.griffin.salmonella .highcharts-series-inactive{opacity:1}
+.griffin-figure{position:relative}.griffin-anchor{position:absolute;width:1px;height:1px;top:66%;left:0}picture.fullscreen{display:none}@media screen and (min-width: 504px){picture.fullscreen{display:inline}picture.mobile{display:none}}.griffin-figure figcaption p:first-child{margin-top:0}.hc-container{overflow-y:hidden;margin-top:1rem}.highcharts-container.griffin{font-family:lato;font-size:13.3333px;line-height:1.2}.highcharts-container.griffin .highcharts-axis-labels{font-size:1em}.highcharts-container.griffin .highcharts-data-label-connector{fill:none}.highcharts-container.griffin .highcharts-plot-band-label,.highcharts-container.griffin .highcharts-plot-line-label{fill:#666;color:#666}.highcharts-container.griffin .highcharts-tracker-line{display:none}@media screen{.highcharts-container.griffin .highcharts-tracker-line{display:block}}.highcharts-container.griffin .highcharts-graph{stroke-width:var(--stroke-width)}.highcharts-container.griffin .highcharts-legend-item .highcharts-point{transform:translate(0, 1px);stroke:none}.highcharts-container.griffin .highcharts-legend-item.highcharts-line-series .highcharts-graph{stroke-width:16px;stroke-linecap:butt;transform:translate(0, -2px)}.highcharts-container.griffin .highcharts-legend-item text{fill:#666;font-weight:normal}.highcharts-container.griffin .highcharts-annotation-label:not(.highcharts-color){fill:#666}.highcharts-container.griffin .highcharts-annotation-label text{fill:inherit}.highcharts-container.griffin .highcharts-annotation-label-box{stroke:#666}.highcharts-container.griffin .highcharts-plot-line{stroke-dasharray:6;stroke:var(--color-1)}.highcharts-container.griffin span.highcharts-plot-line-label{width:265px;white-space:normal !important}.highcharts-container.griffin .highcharts-tooltip{filter:none}.highcharts-container.griffin .highcharts-tooltip text{transform:translateY(-2px)}.highcharts-container.griffin .highcharts-tooltip .highcharts-header{font-size:.75em;fill:#767676;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}.highcharts-container.griffin .highcharts-tooltip-box{fill:#fff;fill-opacity:1;stroke-width:2.5px;stroke-linecap:round}.highcharts-container.griffin .highcharts-markers{display:none}.highcharts-container.griffin .highcharts-markers path{fill:#fff;stroke-width:3px}.pie .highcharts-axis{display:none}.picture-container{overflow:hidden;position:relative}.lazy-load .picture-container::after{content:'';position:absolute;width:100%;height:100%;top:0;left:0;background-color:#f0f0f0}.griffin-download-btn{-webkit-appearance:none;-moz-appearance:none;appearance:none;border-width:0;background:none;color:#296ec3;padding:0 0 0 0.2em;margin:0}.griffin-download-btn::before{content:' | ';color:#767676}.image-export .griffin-download-btn{display:none}.griffin-container+.griffin-container{margin-top:2rem}.griffin-outer-container--grid{display:grid;gap:20px;padding-top:20px}.griffin-outer-container--grid .griffin-container+.griffin-container{margin-top:0}.griffin-outer-container--2-up{grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))}.griffin-outer-container--3-up{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr))}.griffin-outer-container--4-up{grid-template-columns:repeat(auto-fit, minmax(150px, 1fr))}.griffin-outer-container--5-up{grid-template-columns:repeat(auto-fit, minmax(120px, 1fr))}.griffin-outer-container--6-up{grid-template-columns:repeat(auto-fit, minmax(100px, 1fr))}.pie .highcharts-legend-series-active g.highcharts-series:not(.highcharts-series-hover),.pie .highcharts-legend-point-active .highcharts-point:not(.highcharts-point-hover),.pie .highcharts-legend-series-active .highcharts-markers:not(.highcharts-series-hover),.pie .highcharts-legend-series-active .highcharts-data-labels:not(.highcharts-series-hover){opacity:1}.highcharts-container.griffin .highcharts-data-label{font-size:1rem}.highcharts-data-label.datapoint--upward text{text-anchor:middle}.highcharts-data-label.datapoint--dip text{transform:translate(0px, 2.1em)}.highcharts-data-label text{text-shadow:4px 4px 1px #fff, 4px -4px 1px #fff, -4px 4px 1px #fff, -4px -4px 1px #fff}.highcharts-data-label text,text.highcharts-data-label{fill:inherit}.highcharts-grid-line{stroke:#000;stroke-opacity:35%}.last-label-only .highcharts-data-label:not(.last-datalabel){display:none}.scatter .highcharts-container.griffin .highcharts-markers{display:inline}.highcharts-container.griffin :not(.highcharts-legend-item).dashed{stroke-dasharray:6}.highcharts-container.griffin :not(.highcharts-legend-item).dotted{stroke-dasharray:0.5 8}.highcharts-container.griffin :not(.highcharts-legend-item).nostroke{stroke:none}.highcharts-container.griffin :not(.highcharts-legend-item).thin .highcharts-graph{stroke-width:calc(var(--stroke-width) / 4)}.highcharts-container.griffin.philly-dashboard .highcharts-graph{stroke-width:6px}.highcharts-container.griffin.philly-dashboard .highcharts-markers{display:inline}.highcharts-container.griffin.philly-dashboard .highcharts-axis-labels,.highcharts-container.griffin.philly-dashboard .highcharts-legend-item>text,.highcharts-container.griffin.philly-dashboard .highcharts-axis-title{font-size:1.2em;font-size:clamp(1rem, 1.939vw, 1.2rem)}@media screen and (max-width: 416px){.highcharts-container.griffin.philly-dashboard .highcharts-axis-labels,.highcharts-container.griffin.philly-dashboard .highcharts-legend-item>text,.highcharts-container.griffin.philly-dashboard .highcharts-axis-title{font-size:1rem;font-size:clamp(1rem, 1.939vw, 1.2rem)}}.highcharts-container.griffin.philly-dashboard .highcharts-legend-item.highcharts-line-series .highcharts-graph{stroke-width:16px}.philly-dashboard.ai2html-griffin-figure header h1{font-size:1.5rem;font-size:clamp(1.1rem, 2.424vw, 1.5rem)}@media screen and (max-width: 416px){.philly-dashboard.ai2html-griffin-figure header h1{font-size:1.1rem;font-size:clamp(1.1rem, 2.424vw, 1.5rem)}}.philly-dashboard.ai2html-griffin-figure .figure-dek{font-size:1.28rem;font-size:clamp(1.1rem, 2.069vw, 1.28rem)}@media screen and (max-width: 416px){.philly-dashboard.ai2html-griffin-figure .figure-dek{font-size:1.1rem;font-size:clamp(1.1rem, 2.069vw, 1.28rem)}}.philly-dashboard.ai2html-griffin-figure .figure-caption{font-weight:600;font-size:1.15rem;font-size:clamp(1rem, 2.332vw, 1.15rem)}@media screen and (max-width: 686px){.philly-dashboard.ai2html-griffin-figure .figure-caption{font-size:1rem;font-size:clamp(1rem, 2.332vw, 1.15rem)}}.philly-dashboard.ai2html-griffin-figure .figure-note{font-size:1rem;font-size:clamp(0.8rem, 1.616vw, 1rem)}@media screen and (max-width: 416px){.philly-dashboard.ai2html-griffin-figure .figure-note{font-size:0.8rem;font-size:clamp(0.8rem, 1.616vw, 1rem)}}.philly-dashboard.ai2html-griffin-figure .hc-container{margin-top:2rem}.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure header h1,.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .figure-dek{font-size:1.1rem}.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .figure-caption{font-size:1rem}.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .highcharts-container.griffin .highcharts-axis-labels,.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .highcharts-legend-item>text,.griffin-chart-builder--mobile.philly-dashboard.ai2html-griffin-figure .highcharts-axis-title{font-size:1rem}.highcharts-container.griffin.salmonella .highcharts-series-inactive{opacity:1}
 
 :root {
     --background-shade: #f0f0f0;
@@ -1495,6 +1495,7 @@ label {
     margin-bottom: 2rem;
     line-height: 1.2;
 }
+
 .ai2html-griffin-figure p {
     line-height: 1.2;
 }
@@ -1510,20 +1511,22 @@ label {
     margin: 0 0 0.25em;
     line-height: 1.1;
 }
+
 .ai2html-griffin-figure .figure-label {
     display: block;
     font-size: 1rem;
     font-weight: 600;
     font-size: clamp(13px, 3.2vw, 1rem);
 }
+
 .ai2html-griffin-figure .subhead {
     font-size: 1rem;
     font-size: clamp(13px, 3.2vw, 1rem);
     font-weight: bold;
     margin-top: 9px;
     margin-bottom: 9px;
-
 }
+
 .ai2html-griffin-figure .figure-dek {
     opacity: .9;
     font-weight: 600;
@@ -1533,11 +1536,12 @@ label {
     line-height: 1.2;
     margin: 0 0 1.125rem;
 }
+
 .ai2html-griffin-figure figcaption {
     padding-top: 1rem;
 }
-.ai2html-griffin-figure .figure-note,
-.rich-text .ai2html-griffin-figure .figure-note {
+
+.ai2html-griffin-figure .figure-note, .rich-text .ai2html-griffin-figure .figure-note {
     font-size: 0.8rem;
     font-size: clamp(10px, 3.17vw, 0.8rem);
     line-height: 1.3;
@@ -1545,15 +1549,24 @@ label {
     margin-bottom: 9px;
 }
 
+.ai2html-griffin-figure .figure-caption, .rich-text .ai2html-griffin-figure .figure-caption {
+    font-size: 1rem;
+    font-size: clamp(0.9rem, 3.07vw, 1rem);
+}
+
 .ai2html-griffin-figure .figure-note--source {
     color: #767676;
 }
+
 @media screen and (max-width: 416px) {
-    .ai2html-griffin-figure .figure-note,
-    .rich-text .ai2html-griffin-figure .figure-note  {
+    .ai2html-griffin-figure .figure-note, .rich-text .ai2html-griffin-figure .figure-note {
         font-size: 10px;
         font-size: clamp(10px, 3vw, 0.8rem);
-    } 
+    }
+    .ai2html-griffin-figure .figure-caption, .rich-text .ai2html-griffin-figure .figure-caption {
+        font-size: 0.9rem;
+        font-size: clamp(0.9rem, 3.07vw, 1rem);
+    }
     .ai2html-griffin-figure .figure-dek {
         font-size: 0.85rem;
         font-size: clamp(1rem, 2.636vw, 1.13rem);
@@ -1567,25 +1580,35 @@ label {
         font-size: clamp(1.1rem, 3.06vw, 1.32rem);
     }
 }
+
 /* TO DO temp fix. builder should prob use an iframe so that proper css is applied */
-.griffin-chart-builder--mobile.ai2html-griffin-figure .figure-note,
-.rich-text .griffin-chart-builder--mobile.ai2html-griffin-figure .figure-note  {
+
+.griffin-chart-builder--mobile.ai2html-griffin-figure .figure-note, .rich-text .griffin-chart-builder--mobile.ai2html-griffin-figure .figure-note {
     font-size: 0.8rem;
-} 
+}
+.griffin-chart-builder--mobile.ai2html-griffin-figure .figure-caption, .rich-text .griffin-chart-builder--mobile.ai2html-griffin-figure .figure-caption {
+    font-size: 0.9rem;
+}
+
 .griffin-chart-builder--mobile.ai2html-griffin-figure .figure-dek {
     font-size: 1rem;
 }
+
 .griffin-chart-builder--mobile.ai2html-griffin-figure .figure-label, .griffin-chart-builder--mobile.ai2html-griffin-figure .subhead {
     font-size: 1rem;
 }
+
 .griffin-chart-builder--mobile.ai2html-griffin-figure header h1 {
     font-size: 1.1rem;
 }
+
 .visually-hidden {
     position: absolute !important;
-    height: 1px; width: 1px;
+    height: 1px;
+    width: 1px;
     overflow: hidden;
-    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
     clip: rect(1px, 1px, 1px, 1px);
 }
 header.svelte-8yznk6 .svelte-8yznk6{margin:0;font-size:1rem;line-height:inherit}
@@ -1595,7 +1618,7 @@ label.svelte-kmee8h{display:block}
 dt.svelte-ub9rav{font-size:0.75rem;padding:0.07em 0.25em 0.1em;border-radius:0.25em;display:inline-block;border:1px solid gray;margin-right:2px;margin-bottom:2px}.info.svelte-ub9rav{color:var(--info, #767676);border-color:var(--info, #767676)}.warning.svelte-ub9rav{color:var(--warning, orange);border-color:var(--warning, orange)}.error.svelte-ub9rav{color:#fff;background-color:var(--error, red);border-color:var(--error, red)}.isActive.svelte-ub9rav{cursor:pointer}
 dl.svelte-hxulsv{display:flex;justify-content:flex-end;margin:0;padding:0;min-height:21px}dl.left.svelte-hxulsv{justify-content:start}
 svg.svelte-1mbr2e{position:relative}.brandPrimary.svelte-1mbr2e{fill:var(--brand-primary, #fff)}.gray.svelte-1mbr2e{fill:var(--medium-gray, #bbb)}.white.svelte-1mbr2e{fill:#fff}
-.button-component.svelte-75tkqg{appearance:none;border:none;background:none;margin:0;padding:0.25rem 0.5rem;border:1px solid #fff}.primary.svelte-75tkqg{color:#fff;background-color:var(--brand-primary, #000)}.secondary.svelte-75tkqg{background-color:#fff;color:var(--brand-primary, #000);border:1px solid var(--brand-primary, #000)}.gray.svelte-75tkqg{background-color:var(--background-medium, lightgray)}.button-component[disabled].svelte-75tkqg{cursor:not-allowed}
+.button-component.svelte-1ib80pt{appearance:none;border:none;background:none;margin:0;padding:0.25rem 0.5rem;border:1px solid #fff}.primary.svelte-1ib80pt{color:#fff;background-color:var(--brand-primary, #000)}.secondary.svelte-1ib80pt{background-color:#fff;color:var(--brand-primary, #000);border:1px solid var(--brand-primary, #000)}.tertiary.svelte-1ib80pt{background-color:#fff;color:var(--brand-primary, #000);border-width:0}.gray.svelte-1ib80pt{background-color:var(--background-medium, lightgray)}.button-component[disabled].svelte-1ib80pt{cursor:not-allowed}
 .wrapper.svelte-1g7tdl9{position:relative}label.svelte-1g7tdl9{display:inline-block}fieldset.svelte-1g7tdl9{margin-bottom:0.2em}
 label.svelte-kmee8h{display:block}
 .selector.svelte-10trrkc.svelte-10trrkc{display:flex;align-items:flex-end;line-height:1;cursor:pointer;border:2px solid transparent}.swatch-container.svelte-10trrkc.svelte-10trrkc{position:relative;top:1px;line-height:1}.swatch.svelte-10trrkc.svelte-10trrkc{width:20px;height:20px;display:inline-block;margin-right:2px}.input.svelte-10trrkc.svelte-10trrkc{margin-right:3px;height:23px;cursor:pointer}label.svelte-10trrkc.svelte-10trrkc{line-height:1;cursor:pointer}.isSelected.svelte-10trrkc label.svelte-10trrkc{font-weight:900;color:#000}
