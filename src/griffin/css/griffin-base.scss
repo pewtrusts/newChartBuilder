@@ -198,7 +198,7 @@ picture.fullscreen {
   transform: translate(0px, 2.1em)
 }
 .highcharts-data-label text {
-  text-shadow: 4px 4px 1px #fff, 4px -4px 1px #fff, -4px 4px 1px #fff, -4px -4px 1px #fff;
+  text-shadow: 1px 1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff, -1px -1px 1px #fff;
 }
 .highcharts-data-label text, text.highcharts-data-label {
   fill: inherit;
