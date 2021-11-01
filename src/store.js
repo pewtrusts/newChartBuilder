@@ -106,7 +106,8 @@ const GStores = [
     ['PatternColors', []],
     ['LockHeight', true],
     ['YAxisDecimals', undefined],
-    ['CustomSettings', {}]
+    ['CustomSettings', {}],
+    ['LabelDecimals', undefined]
 ];
 const appStores = [
     ['PrintWidth', convert.inchesToPixels(convert.picaToInches('39p0'))],
@@ -159,8 +160,14 @@ function initWritables(){
     s.NumberFormat.subscribe(v => {
         const yAxisDecimals = get(s.YAxisDecimals)
         const seriesLength = get(s.ChartSeries).length;
+        const labelDecimals = get(s.LabelDecimals);
         s.YAxisLabelsFormatter.set(returnNumberFormatter(v, null, yAxisDecimals));
-        s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength}))
+        s.TooltipFormatter.set(returnPointFormatter({ numberFormat: v, seriesLength, decimals: labelDecimals}));
+    });
+    s.LabelDecimals.subscribe(v => {
+        const seriesLength = get(s.ChartSeries).length;
+        const numberFormat = get(s.NumberFormat);
+        s.TooltipFormatter.set(returnPointFormatter({ numberFormat, seriesLength, decimals: v }));
     });
     s.YAxisDecimals.subscribe(v => {
         const numberFormat = get(s.NumberFormat)

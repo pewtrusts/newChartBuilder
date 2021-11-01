@@ -1,4 +1,4 @@
-/* global Highcharts */
+/* global Highcharts  */
 function countDecimals(value) { //HT: https://stackoverflow.com/a/27082406
     const text = value.toString()
     // verify if number 0.000005 is represented as "5e-6"
@@ -15,7 +15,10 @@ function countDecimals(value) { //HT: https://stackoverflow.com/a/27082406
 }
 function returnMaxDecimals(){
     if (this.axis) {
-        return Math.max(...this.axis.paddedTicks.map(d => countDecimals(d)));
+            return Math.max(...this.axis.paddedTicks.map(d => countDecimals(d)));
+    }
+    if (this.series){
+        return Math.max(...this.series.data.map(d => countDecimals(d.y)));
     }
     return 0;
 }
@@ -26,7 +29,7 @@ export default function _returnFormatter(format, context, decimals){
                 var maxDecimals = returnMaxDecimals.call(this);
                 var value = this.value !== undefined ? this.value : this.y;
                 // TO DO  figure out decimals programmatically
-                var rtn = value === 0 ? '0%' : Highcharts.numberFormat(value * 100, (context == 'tooltip' ? 1 : decimals || Math.max(maxDecimals - 2, 0))) + '%';
+                var rtn = value === 0 ? '0%' : Highcharts.numberFormat(value * 100, decimals !== undefined ? decimals : Math.max(maxDecimals - 2, 0)) + '%';
                 return rtn;
             };
         case 'currency':
@@ -36,8 +39,9 @@ export default function _returnFormatter(format, context, decimals){
             };
         default:
             return function _default() {
+                var maxDecimals = returnMaxDecimals.call(this);
                 var value = this.value !== undefined ? this.value : this.y;
-                return Highcharts.numberFormat(value, decimals || -1);
+                return Highcharts.numberFormat(value, decimals !== undefined ? decimals : maxDecimals);
             };
     }
 }

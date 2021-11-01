@@ -17,9 +17,9 @@ import hash from './scripts/hash';
 HCAnnotations(Highcharts);
 HCMore(Highcharts);
 HCRegression(Highcharts);
-export function beforeRenderExtensions(options){
+export function beforeRenderExtensions(options, config){
     extendObj(options, ['plotOptions', 'pie', 'dataLabels', 'formatter'], function () {
-        return this.point.name + '<br>' + returnFormatter('percentage').call({ value: this.percentage / 100 });
+        return this.point.name + '<br>' + returnFormatter('percentage','tooltip',config.griffinConfig.LabelDecimals).call({ value: this.percentage / 100 });
     })
    /* options.plotOptions.pie.dataLabels.formatter = function () {
         return this.point.x;
@@ -73,7 +73,6 @@ export function beforeRenderExtensions(options){
     
     Highcharts.setOptions(options);
 }
-beforeRenderExtensions(options);
 Highcharts.SVGElement.prototype.addClass = function (className, replace) {
     var currentClassName = replace ? '' : (this.attr('class') || '');
     // Trim the string and remove duplicates
@@ -175,17 +174,18 @@ export function initSingleGriffin(griffin, i, _parent){
         parent.hasDownload = true;
 
     }
-
+    beforeRenderExtensions(options, config);
     extendObj(config.highchartsConfig, ['yAxis[0]', 'labels', 'formatter'], returnFormatter(config.griffinConfig.NumberFormat, null, config.griffinConfig.YAxisDecimals));
     extendObj(config.highchartsConfig,
         ['tooltip', 'pointFormatter'],
         returnPointFormatter({
             numberFormat: config.griffinConfig.NumberFormat,
-            seriesLength: config.highchartsConfig.series.length
+            seriesLength: config.highchartsConfig.series.length,
+            decimals: config.griffinConfig.LabelDecimals
         })
     );
     extendObj(config.highchartsConfig, ['legend', 'labelFormatter'], returnLegendFormatter(config.highchartsConfig.chart.type));
-    config.highchartsConfig.dataLabelNumberFormatter = returnFormatter(config.griffinConfig.NumberFormat, 'tooltip');
+    config.highchartsConfig.dataLabelNumberFormatter = returnFormatter(config.griffinConfig.NumberFormat, 'tooltip', config.griffinConfig.LabelDecimals);
     config.highchartsConfig.yAxis.forEach(function (axis) {
         axis.title.text = axis.title.text || null;
     });
