@@ -250,7 +250,7 @@
        s.ChartSeries.set(series);
     });
     function returnHashId(configString){
-        const {ChartLabel, ChartTitle, ChartSubtitle, ChartDescription, ChartNotes} = JSON.parse(configString).griffinConfig;
+        const {ChartLabel, ChartTitle, ChartSubtitle, ChartDescription, ChartNotes} = typeof configString == 'string' ? JSON.parse(configString).griffinConfig : JSON.parse(configString.config).griffinConfig;
         return hash(ChartLabel + ChartTitle + ChartSubtitle + ChartDescription + ChartNotes);
     }
     function returnPatternColors(configString){
