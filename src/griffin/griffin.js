@@ -195,7 +195,7 @@ export function initSingleGriffin(griffin, i, _parent){
             hash: hash(config.griffinConfig.CustomColors.join(''))
         });
     }
-    if (config.griffinConfig.PatternColors.some(d => d)){
+    if (config.griffinConfig.PatternColors && config.griffinConfig.PatternColors.some(d => d)){
         addCustomPatterns({ patterns: config.griffinConfig.PatternColors, hash: hash(config.griffinConfig.PatternColors.flat().join('')) });
     }
     /**

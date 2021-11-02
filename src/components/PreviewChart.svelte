@@ -253,12 +253,15 @@
         const {ChartLabel, ChartTitle, ChartSubtitle, ChartDescription, ChartNotes} = typeof configString == 'string' ? JSON.parse(configString).griffinConfig : JSON.parse(configString.config).griffinConfig;
         return hash(ChartLabel + ChartTitle + ChartSubtitle + ChartDescription + ChartNotes);
     }
+    function returnSubseq(s){
+        return [JSON.parse(s.config).griffinConfig.ChartSubtitle];
+    }
     function returnPatternColors(configString){
         if (typeof configString == 'string'){
-            return JSON.parse(configString).griffinConfig.PatternColors;
+            return JSON.parse(configString).griffinConfig.PatternColors || [];
 
         }
-        return JSON.parse(configString.config).griffinConfig.PatternColors;
+        return JSON.parse(configString.config).griffinConfig.PatternColors || [];
     }
 </script>
 
@@ -329,7 +332,7 @@
                                 </svg>
                                 {/if}
                             {/each}
-                            {#each [JSON.parse(subsequent.config).griffinConfig.ChartSubtitle] as dek}
+                            {#each returnSubseq(subsequent) as dek}
                                 {#if dek}
                                     <p class="figure-dek">{@html dek.replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</p>
                                 {/if}
