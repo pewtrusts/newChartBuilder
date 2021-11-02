@@ -254,7 +254,11 @@
         return hash(ChartLabel + ChartTitle + ChartSubtitle + ChartDescription + ChartNotes);
     }
     function returnPatternColors(configString){
-        return JSON.parse(configString).griffinConfig.PatternColors;
+        if (typeof configString == 'string'){
+            return JSON.parse(configString).griffinConfig.PatternColors;
+
+        }
+        return JSON.parse(configString.config).griffinConfig.PatternColors;
     }
 </script>
 

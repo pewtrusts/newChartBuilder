@@ -1,5 +1,6 @@
 /* global Highcharts  */
 function countDecimals(value) { //HT: https://stackoverflow.com/a/27082406
+    if (value == null) return 0;
     const text = value.toString()
     // verify if number 0.000005 is represented as "5e-6"
     if (text.indexOf('e-') > -1) {

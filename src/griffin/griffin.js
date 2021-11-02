@@ -233,5 +233,6 @@ export function init(){
         }
     }
 }
-
-init();
+if (!(!!window.MSInputMethodContext && !!document.documentMode) && !!Array.prototype.flat){
+    init();
+}
