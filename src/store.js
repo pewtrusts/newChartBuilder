@@ -294,7 +294,8 @@ function initDerived(){
         s.ChartType,
         s.LoadedMultipleCharts,
         s.ChartCaption,
-        s.PatternColors
+        s.PatternColors,
+        s.ChartWidth
     ], ([
         chartConfig,
         chartDescription,
@@ -310,7 +311,8 @@ function initDerived(){
         chartType,
         loadedMultipleCharts,
         chartCaption,
-        patternColors
+        patternColors,
+        chartWidth
     ]) => {
         function returnAdditionalCharts(){
             return loadedMultipleCharts.slice(1).map(chart => {
@@ -356,7 +358,7 @@ function initDerived(){
             <svg width=0 height=0 style="display:block;">`) + '</svg>';
         }
         const hashId = hash(chartLabel + chartTitle + chartSubtitle + chartDescription + chartNotes);
-        return `<figure${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
+        return `<figure style="max-width:${chartWidth}px;margin-left:auto;margin-right:auto;"${chartTitle ? ' aria-labelledby="chartTitle-' + hashId + '"' : ''} aria-describedby="${descriptionProxy}-${hashId}" class="${classes.join(' ')} ai2html-griffin-figure griffin-figure js-_griffin${exportType == 'dynamic' ? ' js-griffin' : exportType == 'lazy' ? ' js-griffin js-griffin--lazy' : '' }">
         <a class="griffin-anchor js-griffin-anchor"></a>
         <meta name="format-detection" content="telephone=no">${ chartLabel || chartTitle || chartSubtitle ? `
         <header>${chartLabel ? `
