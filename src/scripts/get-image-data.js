@@ -34,19 +34,43 @@ export default function _getImageData(){
     const promises = [
         htmlToImage.toCanvas(fullscreenContainer, {
             pixelRatio: 2,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            filter(node){
+                if (node.classList){
+                    return !node.classList.contains('griffin-download-btn');
+                }
+                return true;
+            }
         }),
         htmlToImage.toCanvas(fullscreenContainer, {
             pixelRatio: 1,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            filter(node){
+                if (node.classList){
+                    return !node.classList.contains('griffin-download-btn');
+                }
+                return true;
+            }
         }),
         htmlToImage.toCanvas(mobileContainer, {
             pixelRatio: 2,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            filter(node){
+                if (node.classList){
+                    return !node.classList.contains('griffin-download-btn');
+                }
+                return true;
+            }
         }),
         htmlToImage.toCanvas(mobileContainer, {
             pixelRatio: 1,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            filter(node){
+                if (node.classList){
+                    return !node.classList.contains('griffin-download-btn');
+                }
+                return true;
+            }
         }),
         htmlToImage.toCanvas(fullscreenChart, {
             pixelRatio: 1,
