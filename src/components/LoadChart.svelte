@@ -102,6 +102,9 @@
             )}
         </time>
         <h1 class="hed">{@html data.hed}</h1>
+        {#if !data.hed && data.dek}
+        <p>{@html data.dek}</p>
+        {/if}
     </div>
     <figure>
         <img src="{data.thumbnail}" alt="chart thumbnail" />

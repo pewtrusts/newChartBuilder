@@ -28,6 +28,7 @@
     export let userName;
     export let clickSave;
     let buildMode;
+    let dek;
     clickSave = function(){
         const click = new MouseEvent("click", {
             "view": window,
@@ -42,6 +43,9 @@
     let pictureIsMissingOrOld;
     s.PictureIsMissingOrOld.subscribe(v => {
         pictureIsMissingOrOld = v;
+    });
+    s.ChartSubtitle.subscribe(v => {
+        dek = v;
     });
     $: project = (function(){
         var rtn;
@@ -94,7 +98,7 @@
         });
     }
     function __saveChart(project){
-        return _saveChart({googleSheetHeaders, userId, userEmail, userName, project});
+        return _saveChart({googleSheetHeaders, userId, userEmail, userName, project, dek});
     }
     function submitHandler() {
         const formData = new FormData(this);

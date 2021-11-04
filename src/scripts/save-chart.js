@@ -2,7 +2,7 @@
 import { s } from './../store';
 import { get } from 'svelte/store';
 
-export function saveChart({ googleSheetHeaders, userId, userEmail, userName, project }) {
+export function saveChart({ googleSheetHeaders, userId, userEmail, userName, project, dek }) {
     s.IsWorking.set(true);
     const _savingChartData = get(s.SavingChartData);
     _savingChartData.timestamp = new Date().getTime();
@@ -10,6 +10,7 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
     _savingChartData.user_id = userId;
     _savingChartData.name = userName;
     _savingChartData.project = project;
+    _savingChartData.dek = dek;
 
     return gapi.client.sheets.spreadsheets.values
         .append({
