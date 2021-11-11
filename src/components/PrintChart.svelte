@@ -6,9 +6,9 @@
     import defaultsDeep from 'lodash.defaultsdeep';
     import Notices from './Notices.svelte';
     import {customSettingsNotice} from './../App.svelte';
-    import {extendObj, beforeRenderExtensions} from './../griffin/griffin';
+    import {extendObj, beforeRenderExtensions} from '@Submodule/newgriffin/src/index.js';
 
-    import returnLegendFormatter from './../griffin/scripts/return-legend-formatter';
+    import returnLegendFormatter from '@Submodule/newgriffin/src/scripts/return-legend-formatter';
     export let Chart;
     const _={cloneDeep, defaultsDeep};
     let printWidth;

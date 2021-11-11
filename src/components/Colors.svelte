@@ -2,7 +2,7 @@
     import ColorPalette from './ColorPalette.svelte';
     import SeriesColorSelectors from './SeriesColorSelectors.svelte';
     import brandOptions from '../brand-options.json';
-    import griffinConfig from './../griffin/griffin-config.json';
+    import griffinConfig from '@Submodule/newgriffin/src/griffin-config.json';
     import {s} from './../store';
     import Notices from './Notices.svelte';
     let palettes = ['default', ...brandOptions.additionalColorPalettes];

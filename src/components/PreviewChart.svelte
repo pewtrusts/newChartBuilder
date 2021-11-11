@@ -1,16 +1,16 @@
 <script context="module">
-    import hash from './../griffin/scripts/hash';
+    import hash from '@Submodule/newgriffin/src/scripts/hash';
     import HCExporting from "highcharts/modules/exporting";
     import HCOfflineExporting from "highcharts/modules/offline-exporting";
-    import "@Submodule/shared-css/styles.css";
+    import "@Submodule/newgriffin/submodules/shared-css/styles.css";
     import { s } from "./../store";
     import { get } from "svelte/store";
     import { afterUpdate } from "svelte";
     import Notices from "./Notices.svelte";
     import { customSettingsNotice } from './../App.svelte';
-    import options from './../griffin/options.json';
+    import options from '@Submodule/newgriffin/src/options.json';
     import cloneDeep from 'lodash.clonedeep';
-    import { initSingleGriffin } from './../griffin/griffin';
+    import { initSingleGriffin } from '@Submodule/newgriffin/src/index.js';
     const _= {cloneDeep};
     HCExporting(Highcharts);
     HCOfflineExporting(Highcharts);

@@ -1,8 +1,8 @@
 import 'normalize-css';
 import 'tippy.js/dist/tippy.css';
 import 'highcharts/css/highcharts.css';
-//import './griffin/css/griffin-variables.css';
-import './griffin/css/griffin-styles.scss';
+//import '@Submodule/newgriffin/src/css/griffin-variables.css';
+import '@Submodule/newgriffin/src/css/griffin-styles.scss';
 import './css/variables.css';
 import './css/styles.css';
 import App from './App.svelte';
@@ -18,7 +18,7 @@ if (module.hot) {
 	module.hot.accept('./css/variables.css', function () {
 		
 	});
-	module.hot.accept('./griffin/griffin.js', function () {
+	module.hot.accept('@Submodule/newgriffin/src/index.js', function () {
 		
 	});
 	module.hot.accept('./App.svelte', function () {

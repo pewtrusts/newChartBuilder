@@ -1,7 +1,7 @@
 //import { DatatableData, XAxisType, NumberFormat } from '../store';
 import { s } from '../store'; 
-//import { extendObj } from './../griffin/griffin';
-import returnPointFormatter from './../griffin/scripts/return-point-formatter';
+//import { extendObj } from '@Submodule/newgriffin/src/index.js';
+import returnPointFormatter from '@Submodule/newgriffin/src/scripts/return-point-formatter';
 import toDate from './coerce-to-date';
 /*
  * TO DO: All of the infered axis types (linear, datetime, categorical) etc need to be

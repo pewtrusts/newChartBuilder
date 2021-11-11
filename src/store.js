@@ -1,12 +1,12 @@
-import hash from './griffin/scripts/hash';
+import hash from '@Submodule/newgriffin/src/scripts/hash';
 import slugger from 'slugger';
 import { writable, derived, get } from 'svelte/store';
 //import baseConfig from './base-chart-config.json';
 import convert from './scripts/unit-conversions';
-import { extendObj } from './griffin/griffin';
-import returnPointFormatter from './griffin/scripts/return-point-formatter';
-import returnNumberFormatter from './griffin/scripts/return-number-formatter';
-import returnLegendFormatter from './griffin/scripts/return-legend-formatter';
+import { extendObj } from '@Submodule/newgriffin/src/index.js';
+import returnPointFormatter from '@Submodule/newgriffin/src/scripts/return-point-formatter';
+import returnNumberFormatter from '@Submodule/newgriffin/src/scripts/return-number-formatter';
+import returnLegendFormatter from '@Submodule/newgriffin/src/scripts/return-legend-formatter';
 import defaultsDeep from 'lodash.defaultsdeep';
 import cloneDeep from 'lodash.clonedeep';
 const _ = { cloneDeep, defaultsDeep };

@@ -1,9 +1,9 @@
 <script context="module">
     import { get } from "svelte/store";
     import { s } from "../store";
-    import addCustomColorProperties from './../griffin/scripts/addCustomColorProperties';
-    import {addCustomPatterns} from './../griffin/scripts/addCustomColorProperties';
-    import hash from './../griffin/scripts/hash';
+    import addCustomColorProperties from '@Submodule/newgriffin/src/scripts/addCustomColorProperties';
+    import {addCustomPatterns} from '@Submodule/newgriffin/src/scripts/addCustomColorProperties';
+    import hash from '@Submodule/newgriffin/src/scripts/hash';
     import Button from './Button.svelte';
     s.PatternColors.subscribe(v => {
         if (v.some(d => !!d && d.length > 1)){
