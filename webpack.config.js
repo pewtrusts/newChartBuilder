@@ -22,29 +22,6 @@ const plugins = [
         from: 'assets/',
         context: 'src',
         to: 'assets/',
-    },{
-        from: 'griffin/assets/',
-        context: 'src',
-        to: 'tester/assets/',
-        ignore: ['Pew/css/**/*.*']
-    },{
-        from: 'griffin/assets/Pew/css/',
-        context: 'src',
-        to: 'tester/assets/Pew/css/',
-        transform(content) {
-            if (process.env.NODE_ENV === 'production') {
-                // this modifies the content of the files being copied; here making sure url('/...') is changed so that it will
-                // work on gitHub pages where oublic path is /{repoName}/
-                // also changes references to 'pew' to refer to 'Pew'
-                return content.toString().replace(/url\("\/([^/])/g, 'url("/' + repoName + '/tester/$1').replace(/\/pew\//g, '/Pew/');
-            } else {
-                return content.toString().replace(/url\("\/([^/])/g, 'url("/tester/$1').replace(/\/pew\//g, '/Pew/');
-            }
-        }
-    },{
-        from: 'griffin/-/',
-        context: 'src',
-        to: 'tester/-/',
     }]),
     new HtmlWebpackPlugin({
         title,
@@ -52,15 +29,6 @@ const plugins = [
         chunks: ['chart-builder'],
         inject: false,
        // scriptLoading: 'defer'
-    }),
-    new HtmlWebpackPlugin({
-        title: 'Griffin Tester',
-        template: './src/griffin/index-100.html',
-        chunks: ['griffin'],
-        filename: './tester/index.html',
-        inject: true,
-        scriptLoading: 'defer',
-        publicPath: publicPath + 'tester/'
     }),
     new MiniCssExtractPlugin({
         filename: '[name].css'
@@ -79,7 +47,6 @@ module.exports = (env) => {
     return {
         entry: {
             'chart-builder': './src/index.js',
-            'griffin': './src/griffin/griffin.js'
         },
         resolve: {
             alias: {

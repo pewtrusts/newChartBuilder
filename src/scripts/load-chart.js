@@ -1,5 +1,5 @@
 import { HCStores, s, resetWritables } from './../store';
-//import addCustomColorProperties from './../griffin/scripts/addCustomColorProperties';
+//import addCustomColorProperties from '@Submodule/newgriffin/src/scripts/addCustomColorProperties';
 function searchObject(key, obj){
     return key.split('.').reduce(function(acc,cur){
         const split = cur.split('[');
