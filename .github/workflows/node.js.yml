@@ -38,6 +38,6 @@ jobs:
       with:
         repository-name: pewtrusts/griffin-chart-builder
         ssh-key: ${{ secrets.GRIFFIN_DEPLOY_KEY }}
-        branch: main # The branch the action should deploy to.
+        branch: PROD # The branch the action should deploy to.
         folder: dist # The folder the action should deploy.
         CLEAN: true # Automatically remove deleted files from the deploy branch
