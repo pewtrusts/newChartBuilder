@@ -1,4 +1,4 @@
 [submodule "submodules/newgriffin"]
 	path = submodules/newgriffin
 	url = https://github.com/pewtrusts/newgriffin.git
-	branch = main
+	branch = v4
