@@ -1,7 +1,5 @@
 <script context="module">
     import hash from '@Submodule/newgriffin/src/scripts/hash';
-    import HCExporting from "highcharts/modules/exporting";
-    import HCOfflineExporting from "highcharts/modules/offline-exporting";
     import "@Submodule/newgriffin/submodules/shared-css/styles.css";
     import { s } from "./../store";
     import { get } from "svelte/store";
@@ -12,16 +10,8 @@
     import cloneDeep from 'lodash.clonedeep';
     import { initSingleGriffin } from '@Submodule/newgriffin/src/index.js';
     const _= {cloneDeep};
-    HCExporting(Highcharts);
-    HCOfflineExporting(Highcharts);
     Highcharts.setOptions(options);
-    //options.legend.labelFormat = "{name}"; // shouldn't be necessary but some charts were tripping up on load
-    /*config.title = config.title || {};
-    config.title.text = undefined;
-    config.exporting = { enabled: false };*/
-   /* export function createChart(node, config) {   
-        return Highcharts.chart(node, config);
-    }*/
+    
     export function clean(userOptions){
         console.log('SHOULD BE ABLE TO DELETE THIS');
         const propsToDelete = ['_id', 'isResponsiveOptions'];

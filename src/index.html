@@ -4,16 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <% for (var css in htmlWebpackPlugin.files.css) { %>
+    <link rel="stylesheet" href="https://code.highcharts.com/9.3/css/highcharts.css">
+    <script defer src="https://code.highcharts.com/9.3/highcharts.js"></script>
+    <script defer src="https://code.highcharts.com/9.3/highcharts-more.js"></script>
+    <script defer src="https://code.highcharts.com/9.3/modules/annotations.js"></script>
+    <script defer src="https://code.highcharts.com/9.3/modules/exporting.js"></script>
+    <script defer src="https://code.highcharts.com/9.3/modules/offline-exporting.js"></script>
+<% for (var css in htmlWebpackPlugin.files.css) { %>
     <link class="emitted-css" href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
-    <% } %>
+<% } %>
 </head>
 
 <body>
     <div id="app-container">
     </div>
     <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-    <script class="emitted-bundle" src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+    <script defer class="emitted-bundle" src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
     <% } %>
 </body>
 

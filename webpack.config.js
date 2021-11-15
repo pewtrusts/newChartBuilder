@@ -48,6 +48,9 @@ module.exports = (env) => {
         entry: {
             'chart-builder': './src/index.js',
         },
+        externals: {
+            Highcharts: "Highcharts"
+        },
         resolve: {
             alias: {
                 svelte: path.resolve('node_modules', 'svelte'),

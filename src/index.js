@@ -1,7 +1,5 @@
 import 'normalize-css';
 import 'tippy.js/dist/tippy.css';
-import 'highcharts/css/highcharts.css';
-//import '@Submodule/newgriffin/src/css/griffin-variables.css';
 import '@Submodule/newgriffin/src/css/griffin-styles.scss';
 import './css/variables.css';
 import './css/styles.css';
