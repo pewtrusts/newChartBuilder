@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.3.0 (15 November 2021)
+
+* Adds option to set the number of decimal places in data labels and tooltips
+* Saved charts display subtitles if there is no title so that they are easier to find and differentiate
+* The chart width selected in the tool now set the max-width of the production chart; charts will be constrained to that width even if they're placed in wider columns
+* Makes Highcharts an external dependency; i.e., it is loaded separately via CDN for faster performance, smaller bundle.
+
 ## Version 1.2.0 (28 October 2021)
 
 * Adds option to define a diagonal hatch pattern as a fill for shapes such as pie segments
