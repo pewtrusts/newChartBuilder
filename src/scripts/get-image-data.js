@@ -20,14 +20,14 @@ export default function _getImageData(){
         chartTop: fullscreenChart.offsetTop,
         chartHeight: fullscreenChart.offsetHeight,
         chartWidth: fullscreenChart.offsetWidth,
-        hedHeight: fsDek.offsetHeight
+        hedHeight: !fsDek ? 0 : fsDek.offsetHeight
     };
     const mb = {
         contHeight: mobileContainer.offsetHeight,
         chartTop: mobileChart.offsetTop,
         chartHeight: mobileChart.offsetHeight,
         chartWidth: mobileChart.offsetWidth,
-        hedHeight: mbDek.offsetHeight
+        hedHeight: !mbDek ? 0 : mbDek.offsetHeight
     }; 
     const fsMargins = `margin-top: -${100 * (( fs.chartTop + fs.hedHeight ) / fs.chartWidth)}%;margin-bottom: -${100 * ((fs.contHeight - (fs.chartTop + fs.chartHeight)) / fs.chartWidth)}%;`;
     const mbMargins = `margin-top: -${100 * (( mb.chartTop + mb.hedHeight ) / mb.chartWidth)}%;margin-bottom: -${100 * ((mb.contHeight - (mb.chartTop + mb.chartHeight)) / mb.chartWidth)}%;`;

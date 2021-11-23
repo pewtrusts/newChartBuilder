@@ -33,10 +33,10 @@
     s.ExportType.subscribe(v => {
         exportType = v;
     });
-    function toggleShowCode(e){
+   /* function toggleShowCode(e){
         e.preventDefault()
         showCode = !showCode;
-    }
+    }*/
     function changeHandler(){
         s.ExportType.set(this.value);
     }
@@ -51,9 +51,18 @@
             }, 1000);
         },500);
     }
-    function copyCode(){
-        navigator.clipboard.writeText(codeExport).then(() => {
+    async function copyCode(attempt = 0){
+       navigator.clipboard.writeText(codeExport).then(() => {
             flashSuccess();
+        }, rej => {
+            attempt++
+            if (attempt < 3){
+                copyCode(attempt);
+            } else {
+                console.log(rej.message);
+                showCode = true;
+                alert('The browser\'s clipboard failed to copy the code; please select the code and copy it manually');
+            }
         });
     }
     function clickHandler(){
@@ -64,8 +73,9 @@
         }
         if ( pictureIsMissingOrOld ){
             s.IsWorking.set(true);
-            requestIdleCallback(function(){
+            requestIdleCallback(() => {
                 getImageData().then(() => {
+                    //this.focus();
                     copyCode();
                     if (!chartHasBeenSaved){
                         dialog = {
@@ -151,7 +161,6 @@
 </style>
 <!-- to do: remove spacing to minimize output -->
 <!--<textarea value="{JSON.stringify(codeExport, null, 2)}"></textarea>-->
-
 <form class="chart-description">
     {#if !chartDescription }
         <div class="form-wrapper">
@@ -177,8 +186,10 @@ when it is scrolled into view.</p>
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="lazy" checked="{exportType == 'lazy' || null}"> Lazy</label>
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked="{exportType == 'static' || null}"> Static</label>
     </div>
-    <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" type="primary" /></div>
-    <Button title="{showCode ? 'Hide' : 'Show'} code" type="secondary" clickHandler="{toggleShowCode}" />
+    <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container">
+        <Button title="Copy to clipboard" type="primary" />
+    </div>
+    <!--<Button title="{showCode ? 'Hide' : 'Show'} code" type="secondary" clickHandler="{toggleShowCode}" />-->
     
 </form>
 <textarea class:showCode class="code-export" value="{codeExport}"></textarea>
