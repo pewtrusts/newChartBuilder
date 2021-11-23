@@ -114,7 +114,7 @@ const appStores = [
     ['PrintHeight', convert.inchesToPixels(convert.picaToInches('39p0')) * 0.5625],
     ['CellBeingEdited', null],
     ['ActiveSection', 'start'],
-    ['ExportType', 'static'],
+    ['ExportType', 'dynamic'],
     ['ChartHasBeenSaved', false],
     ['ImageDataUri', ''],
     ['Indicators', {}],

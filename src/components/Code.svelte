@@ -173,9 +173,9 @@ it will replace the image with a dynamic Highcharts version if you have <strong>
 when it is scrolled into view.</p>
 <form on:submit|preventDefault="{clickHandler}">
     <div class="selectors">
-        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked="{exportType == 'static' || null}"> Static</label>
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="dynamic" checked="{exportType == 'dynamic' || null}"> Dynamic</label>
         <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="lazy" checked="{exportType == 'lazy' || null}"> Lazy</label>
+        <label><input on:change="{changeHandler}" name="static-dynamic" type="radio" value="static" checked="{exportType == 'static' || null}"> Static</label>
     </div>
     <div class:showSuccess class:fadeSuccess bind:this="{container}" class="container"><Button title="Copy to clipboard" type="primary" /></div>
     <Button title="{showCode ? 'Hide' : 'Show'} code" type="secondary" clickHandler="{toggleShowCode}" />
