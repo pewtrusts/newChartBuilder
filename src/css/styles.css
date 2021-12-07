@@ -291,3 +291,18 @@ label {
     font-size: inherit;
 	fill: #333;
 }
+@media print {
+	.banner, .navigation-section, .left-column, .right-column > div:first-child > div:first-child{
+		display: none !important;
+	}
+	div.chart-container > div {
+		display: none;
+	}
+	div.chart-container > div:first-child + div {
+		display: block;
+	}
+	.right-column {
+		border-left-width: 0 !important;
+		height: auto !important;
+	}
+}
