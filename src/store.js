@@ -107,7 +107,8 @@ const GStores = [
     ['LockHeight', true],
     ['YAxisDecimals', undefined],
     ['CustomSettings', {}],
-    ['LabelDecimals', undefined]
+    ['LabelDecimals', undefined],
+    ['WillMigrate', false]
 ];
 const appStores = [
     ['PrintWidth', convert.inchesToPixels(convert.picaToInches('39p0'))],

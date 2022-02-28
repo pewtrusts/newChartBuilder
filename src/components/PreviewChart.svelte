@@ -108,7 +108,11 @@
                     chartResolve(chart);
                 }
                 requestIdleCallback(() => {
-                    parent.querySelector('.griffin-download-btn').addEventListener('click', exportSVG);
+                    const btn = parent.querySelector('.griffin-download-btn');
+                    if (btn){
+                        btn.addEventListener('click', exportSVG);
+
+                    }
                 });
                 console.log(Chart);
             }, {timeout: 1000});

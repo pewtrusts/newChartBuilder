@@ -73,7 +73,7 @@
 <script>
     console.log({gsi: GOOGLE_SHEET_ID, gsk: GOOGLE_SHEET_KEY, GI: GOOGLE_ID});
 import { resetColorIndeces } from './components/ColorPalette.svelte';
-
+    let willMigrate;
 
     let Chart = new Promise(function(){});
     let showDataInput = false;
@@ -126,11 +126,17 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
     s.ChartWidth.subscribe(v => {
         chartWidth = v;
     });
+    s.WillMigrate.subscribe(v => {
+        willMigrate = v;
+    })
     function intersectionHandler(e){
         const intersecting = e.find(_e => _e.isIntersecting);
         if ( intersecting ){
             s.ActiveSection.set({method: 'scroll', value: intersecting.target.dataset.section});
         }
+    }
+    function migrateHandler(){
+        s.WillMigrate.set(this.checked)
     }
     onMount(() => {
         window.requestIdleCallback(function(){
@@ -315,9 +321,10 @@ import { resetColorIndeces } from './components/ColorPalette.svelte';
             <div class:isHidden="{activeSection == 'start' || (activeSection == 'multiple' && buildMode == 'single')  || (enablePrint && activeSection == 'print')}">
                 <div style="padding: 1em;">
                     <ChartTypeSelector chartTypes="{brandOptions.chartTypes}" />
+                    <label><input type="checkbox" checked="{willMigrate}" on:change={migrateHandler}> Migrate</label>
                     <ChartSizeSelector bind:checkHeight {Chart}/>
-                </div>
-                <div class="chart-container">
+                    </div>
+                     <div class="chart-container">
                     <PreviewChart bind:Chart {seriesCountMismatchNotice} {chartWidth} size="fullscreen"/>
                     <PreviewChart {Chart} {seriesCountMismatchNotice} chartWidth="{366}" size="mobile"/>
                 </div>
