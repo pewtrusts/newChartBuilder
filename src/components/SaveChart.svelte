@@ -83,7 +83,7 @@
             }, {timeout: 2000});
             return await promise;
         } else {
-            return saveChart(props).then(reloadCharts);
+            return saveChart(props);
         }
     }
     function reloadCharts(savedChart){
