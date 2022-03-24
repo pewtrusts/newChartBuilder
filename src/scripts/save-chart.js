@@ -34,6 +34,9 @@ export function saveChart({ googleSheetHeaders, userId, userEmail, userName, pro
         );
 }
 export function deletePrevious(loadedChart) {
+    if ( loadedChart.rowIndex === undefined ){
+        return new Promise(resolve => resolve('no index'));
+    }
     return gapi.client.sheets.spreadsheets.batchUpdate({
         spreadsheetId: GOOGLE_SHEET_ID,
         resource: {
