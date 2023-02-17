@@ -12,7 +12,7 @@
 
     }
     .logo {
-        height: calc(var(--banner-height, 75px) - 10px);
+        height: calc(var(--banner-height, 75px) - 26px)
     }
     h1 {
         color: #fff;
