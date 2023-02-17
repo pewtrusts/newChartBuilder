@@ -98,6 +98,7 @@
         });
     }
     function __saveChart(project){
+        // it's possible for userId to be null when s.UserId is set. 
         return _saveChart({googleSheetHeaders, userId, userEmail, userName, project, dek});
     }
     function submitHandler() {

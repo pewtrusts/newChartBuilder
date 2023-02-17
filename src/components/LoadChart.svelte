@@ -18,7 +18,7 @@
         enableMultiple = (v.value == 'multiple');
     });
     s.LoadedMultipleCharts.subscribe(v => {
-        console.log(v);
+        // console.log(v);
     });
     function clickHandler(){
         if (!enableMultiple){

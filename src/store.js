@@ -19,6 +19,12 @@ export function resetWritables(){
         s[store[0]].set(store[1]);
     });
 }
+
+export const userStore = writable({
+    user: {},
+    tokenExp: {},
+  })
+
 function createWritable({ name, value, config }, configType) {
     const map = configType == 'highcharts' ? hMap : configType == 'griffin' ? gMap : null;
     s[name] = writable(value);
@@ -133,6 +139,9 @@ const appStores = [
     ['BuildMode', 'single']
 ];
 s.UserId = writable(undefined);
+s.UserName = writable(undefined);
+s.UserEmail = writable(undefined);
+
 function initWritables(){
     /** WRITABLES */
 

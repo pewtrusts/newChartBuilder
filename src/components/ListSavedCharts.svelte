@@ -5,9 +5,6 @@
     import Login from './Login.svelte';
     import Button from './Button.svelte';
     import { s } from './../store';
-    export function loginHandler(){
-        gapi.auth2.getAuthInstance().signIn();
-    }
 </script>
 <script>
     /* global GOOGLE_SHEET_KEY, GOOGLE_ID */
@@ -20,19 +17,26 @@
     export let userId;
     export let userName;
     export let numberLoaded;
+
+    s.UserName.subscribe(v => {
+        userName = v
+    })
+
+    s.UserId.subscribe(v => {
+        userId = v
+    })
+
+    s.UserEmail.subscribe(v => {
+        userEmail = v
+    })
+
     let currentUserCharts = [];
     let otherUserCharts = [];
     let projectFilter = 'any';
     let typeFilter = 'any';
     let creatorFilter = 'any';
     let selectMultipleEnabled = false;
-    // Array of API discovery doc URLs for APIs used by the quickstart
-    const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
 
-    // Authorization scopes required by the API; multiple scopes can be
-    // included, separated by spaces.
-    const SCOPES = "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email"; 
-    let instance;
     s.ActiveSection.subscribe(v => {
         selectMultipleEnabled = v.value == 'multiple';
     });
@@ -48,60 +52,19 @@
         googleSheetHeaders = sheetsData.googleSheetHeaders;
     }
     function logout(){
-        instance.signOut().then(() => {
-            location.reload();
-        });
+        // instance.signOut().then(() => {
+        //     location.reload();
+        // });
         
     }
-    function initClient() {
-        s.IsWorking.set(true);
-        gapi.client.init({
-            apiKey: GOOGLE_SHEET_KEY,
-            clientId: GOOGLE_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES
-        }).then(function (v) {
-            
-            instance = gapi.auth2.getAuthInstance();
-            instance.isSignedIn.listen(updateSigninStatus);
-            instance.currentUser.listen(updateCurrentUser);
-            const isSignedIn = instance.isSignedIn.get();
-            
-            if (isSignedIn){
-                getSavedCharts();
-                updateCurrentUser();
-            } else {
-                s.IsWorking.set(false);
-            }
-        }, function(error) {
-            
-        });
-    }
+
     /**
      *  Called when the signed in status changes, to update the UI
      *  appropriately. After a sign-in, the API is called.
      */
-    function updateSigninStatus(isSignedIn) {
-        if (isSignedIn) {
-            getSavedCharts();
-            updateCurrentUser();
-        } else {
-           // logout ?
-        }
-    } 
+  
     function listMounted(){
         s.IsWorking.set(false)
-    }
-    function updateCurrentUser(){
-        const user = instance.currentUser.get();
-        const profile = user.getBasicProfile();
-        userEmail = profile.getEmail();
-        userId = profile.getId();
-        userName = profile.getGivenName() + ' ' + profile.getFamilyName();
-        s.UserId.set(userId);
-    }
-    function loadHandler(){
-        gapi.load('client:auth2', initClient);
     }
     function projectFilterHandler(){
         projectFilter = this.value;
@@ -122,7 +85,7 @@
         currentUserCharts = charts.filter(d => d.user_id == userId);
         otherUserCharts = charts.filter(d => d.user_id != userId);
     }
-    
+
     initGetSavedCharts({resolveSaved});
     setHeaders();
     
@@ -193,12 +156,18 @@
     }
 
 </style>
-<svelte:head>
-    <script async defer src="https://apis.google.com/js/api.js" on:load="{loadHandler}"></script>
-</svelte:head>
-<section class="container">
+<!-- <svelte:head>
+    <script async defer src="https://apis.google.com/js/api.js" on:load="{gapiLoadOkay}"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" on:load="{gisLoadOkay}" ></script>
+</svelte:head> -->
+<section class="container"> 
     {#await savedCharts}
-        <Login reason="to load saved charts" />
+       
+    <Login reason="to load saved charts"
+    bind:userEmail
+    bind:userId
+    bind:userName 
+    />
     {:then value}
     <div use:divideCharts="{value.data}">
         <header>
