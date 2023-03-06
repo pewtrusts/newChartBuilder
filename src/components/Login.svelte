@@ -4,11 +4,24 @@
     import { getSavedCharts } from './../scripts/get-saved-charts';
     // import { tokenClient } from "./ListSavedCharts.svelte"
      globalThis.tokenClient = ''
-</script>
+     function revokeToken() {
+      let cred = gapi.client.getToken();
+      if (cred !== null) {
+        google.accounts.oauth2.revoke(cred.access_token, () => {console.log('Revoked: ' + cred.access_token)});
+        gapi.client.setToken('');
+      }
+    }
+     export function logOut() {
+      window.sessionStorage.setItem("store", '')
+      // userStore.set({})
+      revokeToken()
+      location.reload()
+      }
+    </script>
 <script>
-    import { s, userStore } from '../store';
-    import {onMount} from 'svelte'
-
+  import {onMount} from 'svelte'
+  import { s, userStore } from '../store';
+  
 let expired;
 let staleToken; 
 
@@ -26,6 +39,7 @@ let savestore = false
       }
     savestore = true
     expired = typeof $userStore.tokenExp == 'number' ? $userStore.tokenExp < new Date().getTime() : true;
+    console.log($userStore.tokenExp)
     // if token is older than 30 mins, refresh on next save/load
     staleToken = typeof $userStore.tokenExp == 'number' ? ($userStore.tokenExp - new Date().getTime()) < 1_800_000 : true;
   })
@@ -73,6 +87,7 @@ let savestore = false
 //   })
     //   });
       if (!expired) {
+
        await gapi.client.setToken({access_token: $userStore.token.access_token})
        }
         await gisLoadPromise;

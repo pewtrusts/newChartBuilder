@@ -5,6 +5,8 @@
     import Login from './Login.svelte';
     import Button from './Button.svelte';
     import { s } from './../store';
+
+    import {logOut} from './Login.svelte'
 </script>
 <script>
     /* global GOOGLE_SHEET_KEY, GOOGLE_ID */
@@ -55,7 +57,7 @@
         // instance.signOut().then(() => {
         //     location.reload();
         // });
-        
+        console.log('bluhhh')
     }
 
     /**
@@ -196,7 +198,7 @@
                 <option value="{creator}">{creator}</option>
                 {/each}
             </select>
-            <div class="user-info">{userName} ({userEmail}) <Button type="secondary" title="Logout" clickHandler="{logout}" /></div>
+            <div class="user-info">{userName} ({userEmail}) <Button type="secondary" title="Logout" clickHandler="{logOut}" /></div>
         </header>
         {#if currentUserCharts.length > 0 }
         <h3>Your charts</h3>
