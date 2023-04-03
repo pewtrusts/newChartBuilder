@@ -7,15 +7,17 @@
      function revokeToken() {
       let cred = gapi.client.getToken();
       if (cred !== null) {
-        google.accounts.oauth2.revoke(cred.access_token, () => {console.log('Revoked: ' + cred.access_token)});
+        google.accounts.oauth2.revoke(cred.access_token, () => {
+        console.log('Revoked: ' + cred.access_token)
         gapi.client.setToken('');
+        location.reload()
+      });
       }
     }
      export function logOut() {
       window.sessionStorage.setItem("store", '')
       // userStore.set({})
       revokeToken()
-      location.reload()
       }
     </script>
 <script>
